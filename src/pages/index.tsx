@@ -1,10 +1,13 @@
 import Head from 'next/head';
 import { Inter } from '@next/font/google';
 import styled from 'styled-components';
+import Switch from "@mui/material/Switch";
+import DatePicker from '@/modules/components/DateTime/DatePicker';
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
+  const label = { inputProps: { "aria-label": "Switch demo" } };
   return (
     <>
       <Head>
@@ -15,6 +18,14 @@ export default function Home() {
       </Head>
       <main>
         <P>Hello World</P>
+        <Switch {...label} />
+        <DatePicker 
+          date={new Date()}
+          label="Start date"
+          onChange={(date: Date | null) => {
+            debugger;
+          }}
+        />
       </main>
     </>
   )
