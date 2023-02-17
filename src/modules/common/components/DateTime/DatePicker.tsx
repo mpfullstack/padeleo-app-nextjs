@@ -3,7 +3,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import TextField from '@mui/material/TextField';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers';
-import {  DatePicker as MuiDatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DatePicker as MuiDatePicker } from '@mui/x-date-pickers/DatePicker';
 import { Props } from '@/modules/common/components/DateTime/types';
 
 const DatePicker = ({ date, label, onChange }: Props) => {
@@ -19,7 +19,7 @@ const DatePicker = ({ date, label, onChange }: Props) => {
         label={label}
         value={value}
         onChange={handleDateChange}
-        renderInput={(params) => <TextField {...params} />}
+        renderInput={params => <TextField {...params} />}
       />
     </LocalizationProvider>
   );

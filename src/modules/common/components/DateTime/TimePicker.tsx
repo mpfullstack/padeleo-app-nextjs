@@ -19,7 +19,7 @@ const TimePicker = ({ date, label, onChange }: Props) => {
         label={label}
         value={value}
         onChange={handleTimeChange}
-        renderInput={(params) => <TextField {...params} />}
+        renderInput={params => <TextField {...params} />}
       />
     </LocalizationProvider>
   );

@@ -44,22 +44,14 @@ const MatchDateTime = ({ start, end, onChange }: Props) => {
 
   return (
     <>
-      <DatePicker
-        label='Match date'
-        date={selectedStartDate}
-        onChange={(value) => handleDateChange('date', value)}
-      />
+      <DatePicker label="Match date" date={selectedStartDate} onChange={value => handleDateChange('date', value)} />
       <TimePickersWrapper>
         <TimePicker
-          label='Start time'
+          label="Start time"
           date={selectedStartDate}
-          onChange={(value) => handleDateChange('startTime', value)}
+          onChange={value => handleDateChange('startTime', value)}
         />
-        <TimePicker
-          label='End time'
-          date={selectedEndDate}
-          onChange={(value) => handleDateChange('endTime', value)}
-        />
+        <TimePicker label="End time" date={selectedEndDate} onChange={value => handleDateChange('endTime', value)} />
       </TimePickersWrapper>
     </>
   );

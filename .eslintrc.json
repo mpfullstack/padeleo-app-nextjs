@@ -1,3 +1,14 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": ["next/core-web-vitals", "react-app", "plugin:prettier/recommended"],
+  "rules": {
+    "max-lines": ["error", 300],
+    "react/jsx-no-literals": ["error", { "noStrings": false, "allowedStrings": ["©", "&larr;"] }],
+    "react/jsx-key": [
+      2,
+      {
+        "checkFragmentShorthand": false
+      }
+    ],
+    "arrow-parens": "off"
+  }
 }
