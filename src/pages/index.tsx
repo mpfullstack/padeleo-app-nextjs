@@ -1,15 +1,15 @@
 import Head from 'next/head';
 import { Inter } from '@next/font/google';
 import styled from 'styled-components';
-import Switch from "@mui/material/Switch";
+import Switch from '@mui/material/Switch';
 import DatePicker from '@/modules/common/components/DateTime/DatePicker';
 import TimePicker from '@/modules/common/components/DateTime/TimePicker';
 import MatchDateTime, { DateTime } from '@/modules/matches/components/MatchDateTime';
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
-  const label = { inputProps: { "aria-label": "Switch demo" } };
+  const label = { inputProps: { 'aria-label': 'Switch demo' } };
   return (
     <>
       <Head>
@@ -20,22 +20,12 @@ export default function Home() {
       </Head>
       <main>
         <Switch {...label} />
-        <DatePicker
-          date={new Date()}
-          label="Start date"
-          onChange={(date: Date | null) => {}}
-        />
-        <TimePicker
-          date={new Date()}
-          label="Start time"
-          onChange={(date: Date | null) => {}}
-        />
-        <MatchDateTime
-          onChange={(date: DateTime) => {}}
-        />
+        <DatePicker date={new Date()} label="Start date" onChange={(date: Date | null) => {}} />
+        <TimePicker date={new Date()} label="Start time" onChange={(date: Date | null) => {}} />
+        <MatchDateTime onChange={(date: DateTime) => {}} />
       </main>
     </>
-  )
+  );
 }
 
 const P = styled.p`
