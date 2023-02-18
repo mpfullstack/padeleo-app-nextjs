@@ -39,16 +39,9 @@ const Matches = ({ status, loadMatches, updatedOrCreatedMatch }: PropsFromRedux)
           updatedOrCreatedMatch({
             id: v4(),
             club: 'Padel Indoor Lloret',
-            dateAndTime: {
-              start: new Date(),
-              end: new Date(),
-            },
-            players: [
-              {
-                id: v4(),
-                name: 'Marc',
-              },
-            ],
+            startTime: new Date(),
+            duration: 5400,
+            players: [],
           })
         }
       >{`Create match action`}</button>
