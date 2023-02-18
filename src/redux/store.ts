@@ -1,4 +1,5 @@
 import { configureStore, createSlice, createEntityAdapter } from '@reduxjs/toolkit';
+import { v4 as uuidv4 } from 'uuid';
 
 const matchesAdapter = createEntityAdapter();
 
@@ -12,6 +13,13 @@ export const matchesSlice = createSlice({
   reducers: {
     loadMatches(state) {
       state.loading = true;
+    },
+    updatedOrCreatedMatch(state) {
+      const match = {
+        id: uuidv4(),
+        name: 'somename',
+      };
+      matchesAdapter.upsertOne(state, match);
     },
   },
 });

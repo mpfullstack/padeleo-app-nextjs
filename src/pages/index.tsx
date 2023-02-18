@@ -1,6 +1,7 @@
 import { matchesActions, RootState } from '@/redux/store';
 import { connect, ConnectedProps } from 'react-redux';
 import Head from 'next/head';
+import Link from 'next/link';
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
       <main>
         <p>{`Padeleo App`}</p>
         <ConnectedMatches />
+        <Link href="/matches">{`Go to Matches`}</Link>
       </main>
     </>
   );
@@ -26,10 +28,11 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
-const Matches = ({ loading, loadMatches }: PropsFromRedux) => {
+const Matches = ({ loading, loadMatches, updatedOrCreatedMatch }: PropsFromRedux) => {
   return (
     <>
       <button onClick={() => loadMatches()}>{`Load matches action`}</button>
+      <button onClick={() => updatedOrCreatedMatch()}>{`Create match action`}</button>
       <p>{`Is loading: ${loading}`}</p>
     </>
   );
