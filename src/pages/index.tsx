@@ -1,7 +1,9 @@
-import { matchesActions, RootState } from '@/redux/store';
+import { RootState } from '@/modules/common/redux/store';
+import { matchesActions } from '@/modules/matches/redux/matchesSlice';
 import { connect, ConnectedProps } from 'react-redux';
 import Head from 'next/head';
 import Link from 'next/link';
+import { v4 } from 'uuid';
 
 export default function Home() {
   return (
@@ -24,16 +26,33 @@ export default function Home() {
 const mapDispatchToProps = { ...matchesActions };
 const mapStateToProps = (state: RootState) => {
   return {
-    loading: state.matches.loading,
+    status: state.matches.status,
   };
 };
 
-const Matches = ({ loading, loadMatches, updatedOrCreatedMatch }: PropsFromRedux) => {
+const Matches = ({ status, loadMatches, updatedOrCreatedMatch }: PropsFromRedux) => {
   return (
     <>
       <button onClick={() => loadMatches()}>{`Load matches action`}</button>
-      <button onClick={() => updatedOrCreatedMatch()}>{`Create match action`}</button>
-      <p>{`Is loading: ${loading}`}</p>
+      <button
+        onClick={() =>
+          updatedOrCreatedMatch({
+            id: v4(),
+            club: 'Padel Indoor Lloret',
+            dateAndTime: {
+              start: new Date(),
+              end: new Date(),
+            },
+            players: [
+              {
+                id: v4(),
+                name: 'Marc',
+              },
+            ],
+          })
+        }
+      >{`Create match action`}</button>
+      <p>{`Status is: ${status}`}</p>
     </>
   );
 };
