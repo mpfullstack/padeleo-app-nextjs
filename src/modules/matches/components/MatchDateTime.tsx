@@ -2,6 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import DatePicker from '@/modules/common/components/DateTime/DatePicker';
 import TimePicker from '@/modules/common/components/DateTime/TimePicker';
+import { DateTime } from '@/modules/matches/model';
 
 const TimePickersWrapper = styled.div`
   display: flex;
@@ -58,11 +59,6 @@ const MatchDateTime = ({ start, end, onChange }: Props) => {
 };
 
 type Field = 'date' | 'startTime' | 'endTime';
-
-export interface DateTime {
-  start?: Date | null;
-  end?: Date | null;
-}
 
 interface Props extends DateTime {
   onChange: (dateTime: DateTime) => void;
