@@ -1,10 +1,11 @@
 export interface Match {
-  id: string;
+  id?: string;
   club: string;
-  dateAndTime: DateTime;
+  startTime: Date;
+  duration: number;
   level?: string;
   costPerPlayer?: number;
-  players: Player[];
+  players: string[];
 }
 
 export interface Player {
