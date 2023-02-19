@@ -44,7 +44,7 @@ export class AirtableData {
     };
   }
 
-  getMatches(): Promise<Match[]> {
+  getMatches() {
     return new Promise<Match[]>((resolve, reject) => {
       const matches: Match[] = [];
       this.base('Match')
@@ -60,7 +60,7 @@ export class AirtableData {
     });
   }
 
-  getMatch(id: string): Promise<Match> {
+  getMatch(id: string) {
     return new Promise<Match>((resolve, reject) => {
       this.base('Match')
         .find(id)
@@ -69,12 +69,12 @@ export class AirtableData {
     });
   }
 
-  createMatch(data: Match): Promise<Match> {
+  createMatch(data: Match) {
     return new Promise<Match>((resolve, reject) => {
       const match = {
         ...data,
         startTime: data.startTime?.toString(),
-        players: data.players.map(player => player.id),
+        players: data.players.map(player => player.id as string),
       };
       this.base('Match')
         .create(match)
@@ -83,7 +83,7 @@ export class AirtableData {
     });
   }
 
-  getUsers(): Promise<User[]> {
+  getUsers() {
     return new Promise<User[]>((resolve, reject) => {
       const users: User[] = [];
       this.base('User')
@@ -95,6 +95,18 @@ export class AirtableData {
           fetchNextPage();
         })
         .then(() => resolve(users))
+        .catch(reject);
+    });
+  }
+
+  createUser(data: User) {
+    return new Promise<User>((resolve, reject) => {
+      const user = {
+        ...data,
+      };
+      this.base('User')
+        .create(user)
+        .then(record => resolve(this.userMapper(record)))
         .catch(reject);
     });
   }

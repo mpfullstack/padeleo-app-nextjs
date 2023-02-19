@@ -21,6 +21,9 @@ export default function Users() {
         <p>
           <Link href="/">{`Back to Home`}</Link>
         </p>
+        <p>
+          <Link href="/users/create">{`Create User`}</Link>
+        </p>
         {data?.result && (
           <div>
             {data?.result.map(user => {

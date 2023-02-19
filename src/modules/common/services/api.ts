@@ -1,5 +1,5 @@
 import { Match, ResponseMatchData, ResponseSingleMatchData } from '@/modules/matches/model';
-import { ResponseUserData } from '@/modules/users/model';
+import { User, ResponseUserData, ResponseSingleUserData } from '@/modules/users/model';
 
 const api = {
   matchesUrl: '/api/matches',
@@ -19,10 +19,14 @@ const post = async <T, P>(url: string, data?: P): Promise<T> =>
     body: JSON.stringify(data),
   }).then(res => res.json());
 
+// Matches API
 export const getMatches = get<ResponseMatchData>;
 
 export const getMatch = get<ResponseSingleMatchData>;
 
 export const createMatch = (data: Match) => post<ResponseSingleMatchData, Match>(api.matchesUrl, data);
 
+// Users API
 export const getUsers = get<ResponseUserData>;
+
+export const createUser = (data: User) => post<ResponseSingleUserData, User>(api.usersUrl, data);
