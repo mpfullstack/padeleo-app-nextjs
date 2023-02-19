@@ -1,11 +1,12 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import useSWR from 'swr';
+import api, { getMatch } from '@/modules/common/services/api';
 
-export default function Home() {
+export default function EditMatch() {
   const { query } = useRouter();
-  console.log(query);
-  debugger;
+  const { data, isLoading, isValidating } = useSWR(`${api.matchesUrl}/${query.id}`, getMatch);
   return (
     <>
       <Head>
@@ -17,6 +18,12 @@ export default function Home() {
       <main>
         <p>{`Edit Match Route`}</p>
         <Link href="/matches">{`Back to matches`}</Link>
+        {isLoading && <p>{`Loading match...`}</p>}
+        {data?.result && (
+          <div>
+            <p>{data.result.id}</p>
+          </div>
+        )}
       </main>
     </>
   );

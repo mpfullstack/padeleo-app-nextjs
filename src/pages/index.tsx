@@ -17,7 +17,12 @@ export default function Home() {
       <main>
         <p>{`Padeleo App`}</p>
         <ConnectedMatches />
-        <Link href="/matches">{`Go to Matches`}</Link>
+        <p>
+          <Link href="/matches">{`Go to Matches`}</Link>
+        </p>
+        <p>
+          <Link href="/users">{`Go to Users`}</Link>
+        </p>
       </main>
     </>
   );

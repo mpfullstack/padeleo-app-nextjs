@@ -1,6 +1,7 @@
 import Airtable, { FieldSet, Record } from 'airtable';
 import { AirtableBase } from 'airtable/lib/airtable_base';
 import { Match } from '@/modules/matches/model';
+import { User } from '@/modules/users/model';
 
 export class AirtableData {
   private base: AirtableBase;
@@ -14,21 +15,40 @@ export class AirtableData {
   }
 
   private matchMapper(record: Record<FieldSet>): Match {
+    const playerIds = (record.get('players') as string[]) || [];
+    const playersNicknames = (record.get('playersNicknames') as string[]) || [];
+    const playersFirstnames = (record.get('playersFirstnames') as string[]) || [];
+
     return {
       id: record.id,
       club: record.get('club') as string,
       startTime: new Date(record.get('startTime') as string),
       duration: record.get('duration') as number,
-      players: record.get('players') as string[],
+      players: playerIds.map((playerId: string, i: number) => {
+        return {
+          id: playerId,
+          firstname: playersFirstnames[i],
+          nickname: playersNicknames[i],
+        } as User;
+      }),
     };
   }
 
-  async getMatches(): Promise<Match[]> {
-    return await new Promise<Match[]>((resolve, reject) => {
+  private userMapper(record: Record<FieldSet>): User {
+    return {
+      id: record.id,
+      firstname: record.get('firstname') as string,
+      lastname: record.get('lastname') as string,
+      email: record.get('email') as string,
+      nickname: record.get('nickname') as string,
+    };
+  }
+
+  getMatches(): Promise<Match[]> {
+    return new Promise<Match[]>((resolve, reject) => {
       const matches: Match[] = [];
       this.base('Match')
         .select({
-          maxRecords: 10,
           view: 'Grid view',
         })
         .eachPage((records, fetchNextPage) => {
@@ -40,8 +60,8 @@ export class AirtableData {
     });
   }
 
-  async getMatch(id: string): Promise<Match> {
-    return await new Promise<Match>((resolve, reject) => {
+  getMatch(id: string): Promise<Match> {
+    return new Promise<Match>((resolve, reject) => {
       this.base('Match')
         .find(id)
         .then(record => resolve(this.matchMapper(record)))
@@ -49,15 +69,32 @@ export class AirtableData {
     });
   }
 
-  async createMatch(data: Match): Promise<Match> {
-    return await new Promise<Match>((resolve, reject) => {
+  createMatch(data: Match): Promise<Match> {
+    return new Promise<Match>((resolve, reject) => {
       const match = {
         ...data,
         startTime: data.startTime?.toString(),
+        players: data.players.map(player => player.id),
       };
       this.base('Match')
         .create(match)
         .then(record => resolve(this.matchMapper(record)))
+        .catch(reject);
+    });
+  }
+
+  getUsers(): Promise<User[]> {
+    return new Promise<User[]>((resolve, reject) => {
+      const users: User[] = [];
+      this.base('User')
+        .select({
+          view: 'Grid view',
+        })
+        .eachPage((records, fetchNextPage) => {
+          records.forEach(record => users.push(this.userMapper(record)));
+          fetchNextPage();
+        })
+        .then(() => resolve(users))
         .catch(reject);
     });
   }

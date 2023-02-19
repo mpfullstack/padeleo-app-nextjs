@@ -1,8 +1,8 @@
-import { Match } from '@/modules/matches/model';
+import { createMatch } from '@/modules/common/services/api';
 import Head from 'next/head';
 import Link from 'next/link';
 
-export default function Home() {
+export default function CreateMatch() {
   return (
     <>
       <Head>
@@ -15,19 +15,12 @@ export default function Home() {
         <p>{`Create Match Route`}</p>
         <button
           onClick={() => {
-            const match: Match = {
+            createMatch({
               club: 'rec78JW2gR1Vz7Axi',
               startTime: new Date(),
               duration: 5400,
               players: [],
-            };
-            fetch('/api/matches', {
-              method: 'post',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(match),
-            }).then(res => res.json());
+            });
           }}
         >{`Create Match`}</button>
         <Link href="/matches">{`Back to matches`}</Link>
