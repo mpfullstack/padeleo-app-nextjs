@@ -17,7 +17,12 @@ export default function Home() {
       <main>
         <p>{`Padeleo App`}</p>
         <ConnectedMatches />
-        <Link href="/matches">{`Go to Matches`}</Link>
+        <p>
+          <Link href="/matches">{`Go to Matches`}</Link>
+        </p>
+        <p>
+          <Link href="/users">{`Go to Users`}</Link>
+        </p>
       </main>
     </>
   );
@@ -39,16 +44,9 @@ const Matches = ({ status, loadMatches, updatedOrCreatedMatch }: PropsFromRedux)
           updatedOrCreatedMatch({
             id: v4(),
             club: 'Padel Indoor Lloret',
-            dateAndTime: {
-              start: new Date(),
-              end: new Date(),
-            },
-            players: [
-              {
-                id: v4(),
-                name: 'Marc',
-              },
-            ],
+            startTime: new Date(),
+            duration: 5400,
+            players: [],
           })
         }
       >{`Create match action`}</button>

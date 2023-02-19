@@ -1,8 +1,8 @@
-import { createMatch } from '@/modules/common/services/api';
+import { createUser } from '@/modules/common/services/api';
 import Head from 'next/head';
 import Link from 'next/link';
 
-export default function CreateMatch() {
+export default function CreateUser() {
   return (
     <>
       <Head>
@@ -12,18 +12,18 @@ export default function CreateMatch() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <p>{`Create Match Route`}</p>
+        <p>{`Create User Route`}</p>
         <button
           onClick={() => {
-            createMatch({
-              club: 'rec78JW2gR1Vz7Axi',
-              startTime: new Date(),
-              duration: 5400,
-              players: [],
+            createUser({
+              firstname: 'Markkus',
+              lastname: 'Perez',
+              email: 'markkus@gmail.com',
+              nickname: 'markkus',
             });
           }}
-        >{`Create Match`}</button>
-        <Link href="/matches">{`Back to matches`}</Link>
+        >{`Create User`}</button>
+        <Link href="/users">{`Back to users`}</Link>
       </main>
     </>
   );

@@ -1,20 +1,21 @@
+import { ResponseData } from '@/modules/common/model';
+import { User } from '@/modules/users/model';
+
 export interface Match {
-  id: string;
+  id?: string;
   club: string;
-  dateAndTime: DateTime;
+  startTime: Date;
+  duration: number;
   level?: string;
   costPerPlayer?: number;
-  players: Player[];
-}
-
-export interface Player {
-  id: string;
-  name: string;
-  nickname?: string;
-  phone?: string;
+  players: User[];
 }
 
 export interface DateTime {
   start: Date | null;
   end: Date | null;
 }
+
+export type ResponseMatchData = ResponseData<Match[]>;
+
+export type ResponseSingleMatchData = ResponseData<Match>;
