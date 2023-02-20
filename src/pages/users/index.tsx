@@ -1,12 +1,10 @@
 import api, { getUsers } from '@/modules/common/services/api';
-import { ResponseUserData } from '@/modules/users/model';
 import Head from 'next/head';
 import Link from 'next/link';
-import useSWR, { Fetcher } from 'swr';
+import useSWR from 'swr';
 
 export default function Users() {
-  const { data, isLoading, isValidating } = useSWR(api.usersUrl, getUsers);
-  const isLoadingData = isLoading || isValidating;
+  const { data } = useSWR(api.usersUrl, getUsers);
 
   return (
     <>

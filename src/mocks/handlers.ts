@@ -22,6 +22,13 @@ export const handlers = [
       );
     }
 
-    return res(ctx.status(400));
+    ctx.status(400);
+
+    return res(
+      ctx.json({
+        success: false,
+        error: '',
+      })
+    );
   }),
 ];

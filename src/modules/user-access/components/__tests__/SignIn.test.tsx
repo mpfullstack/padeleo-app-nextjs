@@ -19,7 +19,7 @@ describe('SignIn', () => {
     expect(screen.queryByText(/SignIn/)).toBeInTheDocument();
   });
 
-  it('Should SignIn user', async () => {
+  it('Should Sign In user successfully', async () => {
     render(<SignIn />);
 
     const nicknameInput = screen.getByLabelText('Nickname');
@@ -36,6 +36,26 @@ describe('SignIn', () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Sign In success/i)).toBeInTheDocument();
+    });
+  });
+
+  it('Should give error on Sign In user with wrong credentials', async () => {
+    render(<SignIn />);
+
+    const nicknameInput = screen.getByLabelText('Nickname');
+    const passwordInput = screen.getByLabelText('Password');
+
+    fireEvent.change(nicknameInput, { target: { value: 'WrongNickname' } });
+    fireEvent.change(passwordInput, { target: { value: 'WrongPassword' } });
+
+    fireEvent.click(
+      screen.getByRole('button', {
+        name: /Sign In/i,
+      })
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText(/Sign In error/i)).toBeInTheDocument();
     });
   });
 });

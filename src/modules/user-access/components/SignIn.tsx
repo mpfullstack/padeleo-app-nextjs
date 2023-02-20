@@ -1,17 +1,21 @@
 import { ChangeEvent, useState } from 'react';
-import { signIn } from '@/modules/common/services/api';
-import TextField from '@mui/material/TextField';
 import { SignInPayload } from '../model';
+import { signIn } from '@/modules/common/services/api';
+import TextField from '@/modules/common/components/Form/TextField';
 
 const SignIn = () => {
   const [data, setData] = useState<SignInPayload>({
     nickname: '',
     password: '',
   });
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
   if (status === 'success') {
     return <p>{`Sign In success`}</p>;
+  }
+
+  if (status === 'error') {
+    return <p>{`Sign In error`}</p>;
   }
 
   const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, key: keyof SignInPayload) =>
@@ -32,29 +36,20 @@ const SignIn = () => {
           e.preventDefault();
           setStatus('loading');
           const result = await signIn(data as SignInPayload);
-          if (result.success) {
-            setStatus('success');
-          }
+          result.success ? setStatus('success') : setStatus('error');
         }}
       >
-        <TextField
-          id="nickname"
-          label="Nickname"
-          variant="outlined"
-          onChange={e => onChange(e, 'nickname')}
-          value={data.nickname}
-        />
+        <TextField id="nickname" label="Nickname" onChange={e => onChange(e, 'nickname')} value={data.nickname} />
 
         <TextField
           id="password"
           label="Password"
           type="password"
-          variant="outlined"
           onChange={e => onChange(e, 'password')}
           value={data.password}
         />
 
-        <button type="submit" data-testid="signin-button">{`Sign In`}</button>
+        <button type="submit">{`Sign In`}</button>
       </form>
     </div>
   );
