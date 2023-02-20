@@ -3,9 +3,9 @@ import { User } from '@/modules/users/model';
 
 export interface UserRepository {
   getAll(): Promise<User[]>;
-  // getById(id: string): Promise<User>;
+  getByNickname(nickname: string): Promise<User>;
   create(data: User): Promise<User>;
-  // update(cart: User): Promise<User>
+  getBySessionId(id: string): Promise<User>;
 }
 
 export class UserAirtableRepository implements UserRepository {
@@ -19,9 +19,13 @@ export class UserAirtableRepository implements UserRepository {
     return await this.database.getUsers();
   }
 
-  // async getById(id: string): Promise<User> {
-  //   return await this.database.getUser(id);
-  // }
+  async getByNickname(nickname: string): Promise<User> {
+    return await this.database.getUserByNickname(nickname);
+  }
+
+  async getBySessionId(id: string): Promise<User> {
+    return await this.database.getUserBySessionId(id);
+  }
 
   async create(data: User): Promise<User> {
     return await this.database.createUser(data);
