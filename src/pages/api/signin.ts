@@ -15,15 +15,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     try {
       const user = await userRepository.getByNickname(req.body.nickname);
 
-      // TODO: Check for password
-      // If correct password, create session for user and set Cookie
-      const session = await sessionRepository.create(user.id as string);
-      res.setHeader('Set-Cookie', serialize('token', session.id, { path: '/' }));
+      if (req.body.password === process.env.PADELEO_PASSWORD) {
+        const session = await sessionRepository.create(user.id as string);
 
-      return res.status(200).json({
-        success: true,
-        result: user,
-      });
+        res.setHeader(
+          'Set-Cookie',
+          serialize('token', session.id, {
+            path: '/',
+            maxAge: 24 * 30 * 60 * 60, // 30 days
+          })
+        );
+
+        return res.status(200).json({
+          success: true,
+          result: user,
+        });
+      }
     } catch (error: any) {
       let code = 500;
       if (error.message === 'user_not_found') {
