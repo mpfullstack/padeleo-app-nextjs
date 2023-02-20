@@ -53,6 +53,11 @@
     "@types/testing-library__jest-dom": "5.14.5",
     "@types/uuid": "^9.0.0",
     "jest": "28.1.0",
-    "jest-environment-jsdom": "28.1.0"
+    "jest-environment-jsdom": "28.1.0",
+    "msw": "^1.0.1",
+    "whatwg-fetch": "^3.6.2"
+  },
+  "msw": {
+    "workerDirectory": "public"
   }
 }

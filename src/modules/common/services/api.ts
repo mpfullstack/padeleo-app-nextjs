@@ -1,9 +1,12 @@
 import { Match, ResponseMatchData, ResponseSingleMatchData } from '@/modules/matches/model';
+import { SignInPayload } from '@/modules/user-access/model';
 import { User, ResponseUserData, ResponseSingleUserData } from '@/modules/users/model';
+import { ResponseData } from '@/modules/common/model';
 
 const api = {
   matchesUrl: '/api/matches',
   usersUrl: '/api/users',
+  signIn: '/api/signin',
 };
 export default api;
 
@@ -30,3 +33,6 @@ export const createMatch = (data: Match) => post<ResponseSingleMatchData, Match>
 export const getUsers = get<ResponseUserData>;
 
 export const createUser = (data: User) => post<ResponseSingleUserData, User>(api.usersUrl, data);
+
+// SignIn API
+export const signIn = (data: SignInPayload) => post<ResponseData<User>, SignInPayload>(api.signIn, data);

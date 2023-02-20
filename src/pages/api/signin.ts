@@ -5,17 +5,21 @@ import { UserAirtableRepository } from '@/modules/users/repositories/UserAirtabl
 import { SessionAirtableRepository } from '@/modules/sessions/repositories/SessionAirtableRepository';
 import { ResponseData } from '@/modules/common/model';
 import { User } from '@/modules/users/model';
+import { SignInPayload } from '@/modules/user-access/model';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<ResponseData<User>>) {
-  const airtableData = new AirtableData();
-  const userRepository = new UserAirtableRepository(airtableData);
-  const sessionRepository = new SessionAirtableRepository(airtableData);
+interface SignInRequest extends NextApiRequest {
+  body: SignInPayload;
+}
 
+export default async function handler(req: SignInRequest, res: NextApiResponse<ResponseData<User>>) {
   if (req.method === 'POST') {
     try {
+      const airtableData = new AirtableData();
+      const userRepository = new UserAirtableRepository(airtableData);
       const user = await userRepository.getByNickname(req.body.nickname);
 
-      if (req.body.password === process.env.PADELEO_PASSWORD) {
+      if (user && req.body.password === process.env.PADELEO_PASSWORD) {
+        const sessionRepository = new SessionAirtableRepository(airtableData);
         const session = await sessionRepository.create(user.id as string);
 
         res.setHeader(
@@ -34,7 +38,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     } catch (error: any) {
       let code = 500;
       if (error.message === 'user_not_found') {
-        code = 404;
+        code = 400;
       }
       return res.status(code).json({
         success: false,
