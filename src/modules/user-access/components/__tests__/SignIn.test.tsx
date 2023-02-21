@@ -1,6 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import SignIn from '@/modules/user-access/components/SignIn';
+import { SignIn } from '@/modules/user-access/components/SignIn';
 import { setupMSWServer } from '@/mocks/server';
+import { userAccessActions } from '../../redux/userAccessSlice';
 
 const server = setupMSWServer();
 
@@ -14,13 +15,13 @@ afterAll(() => {
 
 describe('SignIn', () => {
   it('Should render SignIn form', () => {
-    render(<SignIn />);
+    render(<SignIn {...userAccessActions} />);
 
     expect(screen.queryByText(/SignIn/)).toBeInTheDocument();
   });
 
   it('Should Sign In user successfully', async () => {
-    render(<SignIn />);
+    render(<SignIn {...userAccessActions} />);
 
     const nicknameInput = screen.getByLabelText('Nickname');
     const passwordInput = screen.getByLabelText('Password');
@@ -40,7 +41,7 @@ describe('SignIn', () => {
   });
 
   it('Should give error on Sign In user with wrong credentials', async () => {
-    render(<SignIn />);
+    render(<SignIn {...userAccessActions} />);
 
     const nicknameInput = screen.getByLabelText('Nickname');
     const passwordInput = screen.getByLabelText('Password');
