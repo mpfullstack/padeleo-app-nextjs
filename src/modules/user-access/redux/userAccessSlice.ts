@@ -3,7 +3,7 @@ import { User } from '@/modules/users/model';
 
 interface InitialState {
   user?: User;
-  isLoggedIn?: boolean;
+  isLoggedIn: boolean;
 }
 
 const initialState: InitialState = {
