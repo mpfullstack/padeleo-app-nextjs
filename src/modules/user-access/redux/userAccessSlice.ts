@@ -4,11 +4,13 @@ import { User } from '@/modules/users/model';
 interface InitialState {
   user?: User;
   isLoggedIn: boolean;
+  goto?: string;
 }
 
 const initialState: InitialState = {
   isLoggedIn: false,
   user: undefined,
+  goto: '',
 };
 
 export const userAccessSlice = createSlice({
@@ -22,6 +24,9 @@ export const userAccessSlice = createSlice({
     userLoggedOut(state) {
       state.user = undefined;
       state.isLoggedIn = false;
+    },
+    setRedirectLink(state, { payload }: PayloadAction<string>) {
+      state.goto = payload;
     },
   },
 });
