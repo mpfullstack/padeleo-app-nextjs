@@ -3,6 +3,8 @@ import { SignIn } from '@/modules/user-access/components/SignIn';
 import { setupMSWServer } from '@/mocks/server';
 import { userAccessActions } from '../../redux/userAccessSlice';
 
+jest.mock('next/router', () => require('next-router-mock'));
+
 const server = setupMSWServer();
 
 beforeAll(() => {
@@ -15,13 +17,13 @@ afterAll(() => {
 
 describe('SignIn', () => {
   it('Should render SignIn form', () => {
-    render(<SignIn {...userAccessActions} />);
+    render(<SignIn isLoggedIn={false} {...userAccessActions} />);
 
     expect(screen.queryByText(/SignIn/)).toBeInTheDocument();
   });
 
   it('Should Sign In user successfully', async () => {
-    render(<SignIn {...userAccessActions} />);
+    render(<SignIn isLoggedIn={false} {...userAccessActions} />);
 
     const nicknameInput = screen.getByLabelText('Nickname');
     const passwordInput = screen.getByLabelText('Password');
@@ -41,7 +43,7 @@ describe('SignIn', () => {
   });
 
   it('Should give error on Sign In user with wrong credentials', async () => {
-    render(<SignIn {...userAccessActions} />);
+    render(<SignIn isLoggedIn={false} {...userAccessActions} />);
 
     const nicknameInput = screen.getByLabelText('Nickname');
     const passwordInput = screen.getByLabelText('Password');
