@@ -26,7 +26,8 @@ export default async function handler(req: SignInRequest, res: NextApiResponse<R
           'Set-Cookie',
           serialize('token', session.id, {
             path: '/',
-            maxAge: 24 * 30 * 60 * 60, // 30 days
+            httpOnly: true,
+            maxAge: 24 * 60 * 60 * 90, // 90 days
           })
         );
 
