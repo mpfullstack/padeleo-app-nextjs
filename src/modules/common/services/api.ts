@@ -6,7 +6,8 @@ import { ResponseData } from '@/modules/common/model';
 const api = {
   matchesUrl: '/api/matches',
   usersUrl: '/api/users',
-  signIn: '/api/signin',
+  signIn: '/api/auth/signin',
+  isAuthenticated: '/api/auth',
 };
 
 export default api;
@@ -53,5 +54,7 @@ export const getUsers = get<ResponseUserData>;
 
 export const createUser = (data: User) => post<ResponseSingleUserData, User>(api.usersUrl, data);
 
-// SignIn API
+// Auth API
+export const isAuthenticated = () => get<ResponseData<boolean>>(api.isAuthenticated);
+
 export const signIn = (data: SignInPayload) => post<ResponseData<User>, SignInPayload>(api.signIn, data);

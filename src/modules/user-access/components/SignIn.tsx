@@ -1,18 +1,23 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { SignInPayload } from '../model';
-import { signIn } from '@/modules/common/services/api';
+import { isAuthenticated, signIn } from '@/modules/common/services/api';
 import TextField from '@/modules/common/components/Form/TextField';
 import { userAccessActions } from '@/modules/user-access/redux/userAccessSlice';
 import { connect, ConnectedProps } from 'react-redux';
 import { User } from '@/modules/users/model';
+import { RootState } from '@/modules/common/redux/store';
 import Link from 'next/link';
-
-const mapDispatchToProps = { ...userAccessActions };
+import { useRouter } from 'next/router';
 
 const SignIn = (props: PropsFromRedux) => {
-  const { userLoggedIn } = props;
+  const router = useRouter();
+  const { isLoggedIn, userLoggedIn } = props;
 
-  const [data, setData] = useState<SignInPayload>({
+  useEffect(() => {
+    isLoggedIn && isAuthenticated().then(() => router.push({ pathname: '/matches' }));
+  }, [isLoggedIn, router]);
+
+  const [formData, setData] = useState<SignInPayload>({
     nickname: '',
     password: '',
   });
@@ -49,7 +54,7 @@ const SignIn = (props: PropsFromRedux) => {
         onSubmit={async e => {
           e.preventDefault();
           setStatus('loading');
-          const result = await signIn(data as SignInPayload);
+          const result = await signIn(formData as SignInPayload);
           if (result.success) {
             userLoggedIn(result.result as User);
             setStatus('success');
@@ -58,14 +63,14 @@ const SignIn = (props: PropsFromRedux) => {
           }
         }}
       >
-        <TextField id="nickname" label="Nickname" onChange={e => onChange(e, 'nickname')} value={data.nickname} />
+        <TextField id="nickname" label="Nickname" onChange={e => onChange(e, 'nickname')} value={formData.nickname} />
 
         <TextField
           id="password"
           label="Password"
           type="password"
           onChange={e => onChange(e, 'password')}
-          value={data.password}
+          value={formData.password}
         />
 
         <button type="submit">{`Sign In`}</button>
@@ -74,7 +79,9 @@ const SignIn = (props: PropsFromRedux) => {
   );
 };
 
-const connector = connect(null, mapDispatchToProps);
+const mapDispatchToProps = { ...userAccessActions };
+const mapStateToProps = (state: RootState) => ({ isLoggedIn: state.userAccess.isLoggedIn });
+const connector = connect(mapStateToProps, mapDispatchToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 const ConnectedSignIn = connector(SignIn);
