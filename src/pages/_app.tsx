@@ -4,6 +4,8 @@ import store, { persistor } from '@/modules/common/redux/store';
 import { PersistGate } from 'redux-persist/integration/react';
 import RouteGuard from '@/modules/common/components/RouteGuard';
 import SWRCustomConfig from '@/modules/common/components/SWRCustomConfig';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from '@/theme/theme';
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -11,7 +13,9 @@ export default function App({ Component, pageProps }: AppProps) {
       <PersistGate loading={null} persistor={persistor}>
         <RouteGuard>
           <SWRCustomConfig>
-            <Component {...pageProps} />
+            <ThemeProvider theme={theme}>
+              <Component {...pageProps} />
+            </ThemeProvider>
           </SWRCustomConfig>
         </RouteGuard>
       </PersistGate>
