@@ -6,12 +6,32 @@ import { ResponseData } from '@/modules/common/model';
 const api = {
   matchesUrl: '/api/matches',
   usersUrl: '/api/users',
-  signIn: '/api/signin',
+  signIn: '/api/auth/signin',
+  isAuthenticated: '/api/auth',
 };
+
 export default api;
 
+class ApiError<T> {
+  status: number;
+  data: ResponseData<T>;
+
+  constructor(status: number, data: ResponseData<T>) {
+    this.status = status;
+    this.data = data;
+  }
+}
+
+const handleResponse = async <T>(res: Response) => {
+  const data = await res.json();
+
+  if (res.ok) return data;
+
+  throw new ApiError<T>(res.status, data);
+};
+
 const get = async <T, P = Record<string, any>>(url: string, params?: P): Promise<T> =>
-  await fetch(url).then(res => res.json());
+  await fetch(url).then(handleResponse<T>);
 
 const post = async <T, P>(url: string, data?: P): Promise<T> =>
   await fetch(url, {
@@ -20,7 +40,7 @@ const post = async <T, P>(url: string, data?: P): Promise<T> =>
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(data),
-  }).then(res => res.json());
+  }).then(handleResponse<P>);
 
 // Matches API
 export const getMatches = get<ResponseMatchData>;
@@ -34,5 +54,7 @@ export const getUsers = get<ResponseUserData>;
 
 export const createUser = (data: User) => post<ResponseSingleUserData, User>(api.usersUrl, data);
 
-// SignIn API
+// Auth API
+export const isAuthenticated = () => get<ResponseData<boolean>>(api.isAuthenticated);
+
 export const signIn = (data: SignInPayload) => post<ResponseData<User>, SignInPayload>(api.signIn, data);

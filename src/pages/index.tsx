@@ -5,13 +5,13 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>{`Padeleo App`}</title>
+        <title>{`Padel Lloret FCP - Padeleo App`}</title>
         <meta name="description" content="" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <p>{`Padeleo App`}</p>
+        <p>{`Padel Indoor Lloret FCP`}</p>
         <SignIn />
       </main>
     </>

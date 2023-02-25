@@ -1,7 +1,7 @@
-import matches from '@/modules/matches/redux/matchesSlice';
+import userAccess from '@/modules/user-access/redux/userAccessSlice';
 
 const reducers = {
-  matches,
+  userAccess,
 };
 
 export default reducers;
