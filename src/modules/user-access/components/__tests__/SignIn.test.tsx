@@ -20,7 +20,7 @@ describe('SignIn', () => {
   it('Should render SignIn form', () => {
     render(<SignIn isLoggedIn={false} {...userAccessActions} />);
 
-    expect(screen.queryByText(/SignIn/)).toBeInTheDocument();
+    expect(screen.queryByText(/Inicio de sesión/)).toBeInTheDocument();
   });
 
   it('Should Sign In user successfully', async () => {
@@ -34,12 +34,12 @@ describe('SignIn', () => {
 
     fireEvent.click(
       screen.getByRole('button', {
-        name: /Sign In/i,
+        name: /Acceder/i,
       })
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/Sign In success/i)).toBeInTheDocument();
+      expect(screen.getByText(/Inicio de sesión correcto/i)).toBeInTheDocument();
     });
   });
 
@@ -65,12 +65,12 @@ describe('SignIn', () => {
 
     fireEvent.click(
       screen.getByRole('button', {
-        name: /Sign In/i,
+        name: /Acceder/i,
       })
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/Sign In error/i)).toBeInTheDocument();
+      expect(screen.getByText(/Se ha producido un error/i)).toBeInTheDocument();
     });
   });
 });

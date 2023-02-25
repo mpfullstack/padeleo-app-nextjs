@@ -1,5 +1,5 @@
 import { createMatch } from '@/modules/common/services/api';
-import Button from '@/modules/common/components/Button';
+import { Button } from '@/modules/common/components/Buttons';
 import Head from 'next/head';
 import Link from 'next/link';
 
@@ -15,7 +15,6 @@ export default function CreateMatch() {
       <main>
         <p>{`Create Match Route`}</p>
         <Button
-          variant="contained"
           onClick={() => {
             createMatch({
               club: 'rec78JW2gR1Vz7Axi',
