@@ -2,6 +2,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { SignIn } from '@/modules/user-access/components/SignIn';
 import { setupMSWServer } from '@/mocks/server';
 import { userAccessActions } from '../../redux/userAccessSlice';
+import mockRouter from 'next-router-mock';
 
 jest.mock('next/router', () => require('next-router-mock'));
 
@@ -39,6 +40,17 @@ describe('SignIn', () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Sign In success/i)).toBeInTheDocument();
+    });
+  });
+
+  it('Should redirect user to matches page when logged in', async () => {
+    render(<SignIn isLoggedIn={true} {...userAccessActions} />);
+
+    await waitFor(() => {
+      expect(mockRouter).toMatchObject({
+        asPath: '/matches',
+        pathname: '/matches',
+      });
     });
   });
 
