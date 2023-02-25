@@ -4,8 +4,7 @@ import useSWR from 'swr';
 import api, { getMatches } from '@/modules/common/services/api';
 
 export default function Matches() {
-  const { data, isLoading, isValidating } = useSWR(api.matchesUrl, getMatches);
-  const isLoadingData = isLoading || isValidating;
+  const { data } = useSWR(api.matchesUrl, getMatches);
   return (
     <>
       <Head>

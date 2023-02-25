@@ -6,7 +6,7 @@ import api, { getMatch } from '@/modules/common/services/api';
 
 export default function EditMatch() {
   const { query } = useRouter();
-  const { data, isLoading, isValidating } = useSWR(`${api.matchesUrl}/${query.id}`, getMatch);
+  const { data, isLoading } = useSWR(`${api.matchesUrl}/${query.id}`, getMatch);
   return (
     <>
       <Head>

@@ -1,4 +1,5 @@
 import { createMatch } from '@/modules/common/services/api';
+import { Button } from '@/modules/common/components/Buttons';
 import Head from 'next/head';
 import Link from 'next/link';
 
@@ -13,7 +14,7 @@ export default function CreateMatch() {
       </Head>
       <main>
         <p>{`Create Match Route`}</p>
-        <button
+        <Button
           onClick={() => {
             createMatch({
               club: 'rec78JW2gR1Vz7Axi',
@@ -22,7 +23,7 @@ export default function CreateMatch() {
               players: [],
             });
           }}
-        >{`Create Match`}</button>
+        >{`Crear partido`}</Button>
         <Link href="/matches">{`Back to matches`}</Link>
       </main>
     </>
