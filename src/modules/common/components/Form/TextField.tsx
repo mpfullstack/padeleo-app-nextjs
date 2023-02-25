@@ -11,7 +11,7 @@ const TextField = (props: TextFieldProps) => {
 
 const TextFieldWrapper = styled.div`
   width: 100%;
-  margin: 2rem 0;
+  margin: 1rem 0;
 `;
 
 export default TextField;

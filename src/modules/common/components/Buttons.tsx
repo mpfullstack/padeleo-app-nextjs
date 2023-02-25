@@ -6,5 +6,5 @@ export const Button = (props: ButtonProps) => {
 };
 
 export const LoadingButton = (props: LoadingButtonProps) => {
-  return <MuiLoadingButton variant="contained" {...props} />;
+  return <MuiLoadingButton variant="contained" fullWidth {...props} />;
 };

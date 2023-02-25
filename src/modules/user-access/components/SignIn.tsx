@@ -75,7 +75,9 @@ const SignIn = (props: PropsFromRedux) => {
             value={formData.password}
           />
 
-          <LoadingButton loading={status === 'loading'} type="submit">{`Acceder`}</LoadingButton>
+          <ButtonWrapper>
+            <LoadingButton loading={status === 'loading'} type="submit">{`Acceder`}</LoadingButton>
+          </ButtonWrapper>
         </Form>
       )}
     </SignInWrapper>
@@ -84,6 +86,7 @@ const SignIn = (props: PropsFromRedux) => {
 
 const SignInWrapper = styled.div`
   width: 100%;
+  max-width: 36rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -94,6 +97,11 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   min-height: 90vh;
+`;
+
+const ButtonWrapper = styled.div`
+  margin-top: 2rem;
+  width: 100%;
 `;
 
 const mapDispatchToProps = { ...userAccessActions };
