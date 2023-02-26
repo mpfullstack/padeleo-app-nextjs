@@ -11,10 +11,7 @@ const Matches = () => {
     <MatchesWrapper>
       <Title>{`Partidos`}</Title>
       <p>
-        <Link href="/">{`Back to Home`}</Link>
-      </p>
-      <p>
-        <Link href="/matches/create">{`Create Matches`}</Link>
+        <Link href="/matches/create">{`Crea tu partido`}</Link>
       </p>
       {data?.result && (
         <div>

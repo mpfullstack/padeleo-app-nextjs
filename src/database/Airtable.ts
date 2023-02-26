@@ -166,6 +166,15 @@ export class AirtableData {
     });
   }
 
+  deleteSession(id: string) {
+    return new Promise<void>((resolve, reject) => {
+      this.base('Session')
+        .destroy([id])
+        .then(() => resolve())
+        .catch(reject);
+    });
+  }
+
   createSession(userId: string) {
     return new Promise<Session>((resolve, reject) => {
       this.base('Session')

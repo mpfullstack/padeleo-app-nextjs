@@ -1,10 +1,15 @@
 import Head from 'next/head';
 import Image from 'next/image';
+import { userAccessActions } from '@/modules/user-access/redux/userAccessSlice';
 import { ReactElement } from 'react';
 import styled from 'styled-components';
 import { styled as muiStyled } from '@mui/material/styles';
+import Link from 'next/link';
+import { connect, ConnectedProps } from 'react-redux';
+import { RootState } from '@/modules/common/redux/store';
+import { logout } from '@/modules/common/services/api';
 
-const Layout = ({ title, children }: Props): JSX.Element => {
+const Layout = ({ title, userLoggedOut, isLoggedIn, children }: Props): JSX.Element => {
   return (
     <>
       <Head>
@@ -21,13 +26,25 @@ const Layout = ({ title, children }: Props): JSX.Element => {
           <Image src="/logo-main.png" width={36} height={36} alt="Padeleo" />
           <Span>{`Padeleo`}</Span>
         </Logo>
+        {isLoggedIn && (
+          <Link
+            href="/"
+            onClick={async e => {
+              e.preventDefault();
+              await logout();
+              userLoggedOut();
+            }}
+          >
+            {`Cerrar sesión`}
+          </Link>
+        )}
       </header>
       <Main>{children}</Main>
     </>
   );
 };
 
-interface Props {
+interface Props extends PropsFromRedux {
   children: ReactElement;
   title: string;
 }
@@ -53,4 +70,13 @@ const Span = muiStyled('span')(({ theme }) => ({
   marginLeft: '.5rem',
 }));
 
-export default Layout;
+const mapDispatchToProps = { ...userAccessActions };
+const mapStateToProps = (state: RootState) => ({ isLoggedIn: state.userAccess.isLoggedIn });
+const connector = connect(mapStateToProps, mapDispatchToProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+const ConnectedLayout = connector(Layout);
+
+export { Layout };
+
+export default ConnectedLayout;
