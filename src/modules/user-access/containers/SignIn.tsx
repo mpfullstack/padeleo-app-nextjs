@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { SignInPayload } from '../model';
 import { isAuthenticated, signIn } from '@/modules/common/services/api';
 import TextField from '@/modules/common/components/Form/TextField';
@@ -35,6 +35,19 @@ const SignIn = (props: PropsFromRedux) => {
       } as SignInPayload;
     });
 
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setStatus('loading');
+
+    const result = await signIn(formData);
+    if (result.success) {
+      userLoggedIn(result.result as User);
+      setStatus('success');
+    } else {
+      setStatus('error');
+    }
+  };
+
   return (
     <SignInWrapper>
       <Title>{`Indoor Lloret FCP`}</Title>
@@ -50,26 +63,17 @@ const SignIn = (props: PropsFromRedux) => {
       {status === 'success' && <Paragraph>{`Inicio de sesión correcto`}</Paragraph>}
 
       {['idle', 'loading'].includes(status) && (
-        <Form
-          noValidate
-          autoComplete="off"
-          onSubmit={async e => {
-            e.preventDefault();
-            setStatus('loading');
-            const result = await signIn(formData);
-            if (result.success) {
-              userLoggedIn(result.result as User);
-              setStatus('success');
-            } else {
-              setStatus('error');
-            }
-          }}
-        >
-          <TextField id="nickname" label="Nickname" onChange={e => onChange(e, 'nickname')} value={formData.nickname} />
+        <Form noValidate autoComplete="off" onSubmit={onSubmit}>
+          <TextField
+            id="nickname"
+            label="Nombre de usuario"
+            onChange={e => onChange(e, 'nickname')}
+            value={formData.nickname}
+          />
 
           <TextField
             id="password"
-            label="Password"
+            label="Contraseña"
             type="password"
             onChange={e => onChange(e, 'password')}
             value={formData.password}

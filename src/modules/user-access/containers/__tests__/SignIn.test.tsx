@@ -26,8 +26,8 @@ describe('SignIn', () => {
   it('Should Sign In user successfully', async () => {
     render(<SignIn isLoggedIn={false} {...userAccessActions} />);
 
-    const nicknameInput = screen.getByLabelText('Nickname');
-    const passwordInput = screen.getByLabelText('Password');
+    const nicknameInput = screen.getByLabelText('Nombre de usuario');
+    const passwordInput = screen.getByLabelText('Contraseña');
 
     fireEvent.change(nicknameInput, { target: { value: 'Nickname' } });
     fireEvent.change(passwordInput, { target: { value: 'Password' } });
@@ -57,8 +57,8 @@ describe('SignIn', () => {
   it('Should give error on Sign In user with wrong credentials', async () => {
     render(<SignIn isLoggedIn={false} {...userAccessActions} />);
 
-    const nicknameInput = screen.getByLabelText('Nickname');
-    const passwordInput = screen.getByLabelText('Password');
+    const nicknameInput = screen.getByLabelText('Nombre de usuario');
+    const passwordInput = screen.getByLabelText('Contraseña');
 
     fireEvent.change(nicknameInput, { target: { value: 'WrongNickname' } });
     fireEvent.change(passwordInput, { target: { value: 'WrongPassword' } });
