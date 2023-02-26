@@ -49,6 +49,7 @@ export class AirtableData {
     return {
       id: record.id,
       userId: record.get('userId') as string,
+      nickname: record.get('nickname') as string,
     };
   }
 
@@ -59,12 +60,14 @@ export class AirtableData {
     };
   }
 
-  getMatches() {
+  getMatches(filterByFormula?: string) {
     return new Promise<Match[]>((resolve, reject) => {
       const matches: Match[] = [];
+      const filters = filterByFormula ? { filterByFormula } : undefined;
       this.base('Match')
         .select({
           view: 'Grid view',
+          ...filters,
         })
         .eachPage((records, fetchNextPage) => {
           records.forEach(record => matches.push(this.matchMapper(record)));

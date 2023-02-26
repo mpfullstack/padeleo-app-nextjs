@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { SignIn } from '@/modules/user-access/components/SignIn';
+import { SignIn } from '@/modules/user-access/containers/SignIn';
 import { setupMSWServer } from '@/mocks/server';
 import { userAccessActions } from '../../redux/userAccessSlice';
 import mockRouter from 'next-router-mock';
