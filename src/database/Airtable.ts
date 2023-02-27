@@ -22,8 +22,9 @@ export class AirtableData {
 
     return {
       id: record.id,
-      club: record.get('club') as string,
-      startTime: new Date(record.get('startTime') as string),
+      clubId: record.get('clubId')?.toString() as string,
+      clubName: record.get('clubName')?.toString() as string,
+      startTime: record.get('startTime') as string,
       duration: record.get('duration') as number,
       players: playerIds.map((playerId: string, i: number) => {
         return {

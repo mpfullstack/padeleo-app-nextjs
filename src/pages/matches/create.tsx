@@ -17,8 +17,10 @@ export default function CreateMatch() {
         <Button
           onClick={() => {
             createMatch({
-              club: 'rec78JW2gR1Vz7Axi',
-              startTime: new Date(),
+              id: '',
+              clubId: 'rec78JW2gR1Vz7Axi',
+              clubName: 'Padel Indoor Lloret',
+              startTime: new Date().toString(),
               duration: 5400,
               players: [],
             });
