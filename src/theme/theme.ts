@@ -15,8 +15,19 @@ export const themeOptions: ThemeOptions = {
     },
   },
   typography: {
+    fontFamily: [
+      'Mulish',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
     h1: {
       fontSize: '2rem',
+      fontWeight: '700',
     },
     h2: {
       fontSize: '1.8rem',

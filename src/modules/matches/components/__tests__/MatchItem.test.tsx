@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import MatchItem from '@/modules/matches/components/MatchItem';
+import MatchItem from '@/modules/matches/components/MatchItem/MatchItem';
 import { match, closedMatch } from '@/mocks/matches/data';
 import { addSeconds } from '@/modules/common/services/dates';
 

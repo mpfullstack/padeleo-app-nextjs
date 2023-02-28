@@ -3,7 +3,7 @@ import Matches from '@/modules/matches/containers/Matches';
 
 export default function MatchesList() {
   return (
-    <Layout title="Tus partidos">
+    <Layout type="interior" title="Tus partidos">
       <Matches />
     </Layout>
   );
