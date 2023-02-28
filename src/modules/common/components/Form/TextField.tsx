@@ -12,6 +12,12 @@ const TextField = (props: TextFieldProps) => {
 const TextFieldWrapper = styled.div`
   width: 100%;
   margin: 1rem 0;
+  label {
+    font-size: 1.5rem;
+  }
+  input {
+    font-size: 1.5rem;
+  }
 `;
 
 export default TextField;

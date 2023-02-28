@@ -38,6 +38,10 @@ export const themeOptions: ThemeOptions = {
     h4: {
       fontSize: '1.4em',
     },
+    button: {
+      fontSize: '1.4rem',
+      fontWeight: '500',
+    },
   },
 };
 

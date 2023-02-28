@@ -83,6 +83,7 @@ const Span = styled.span<{ color: string }>`
 `;
 
 const interiorLayout = css`
+  margin-top: 0;
   align-items: flex-start;
   ${Logo} {
     margin-top: 0.4rem;
@@ -94,7 +95,6 @@ const interiorLayout = css`
 
 const Header = styled.header<{ type: LayoutType }>`
   ${innerContainer};
-  margin-top: 0;
   ${({ type }) => type === 'interior' && interiorLayout}
 `;
 
