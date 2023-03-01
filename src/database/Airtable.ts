@@ -70,12 +70,11 @@ export class AirtableData {
       this.base('Match')
         .select({
           view: 'Grid view',
+          pageSize: 10,
           ...filters,
         })
-        .eachPage((records, fetchNextPage) => {
-          records.forEach(record => matches.push(this.matchMapper(record)));
-          fetchNextPage();
-        })
+        .firstPage()
+        .then(records => records.map(record => matches.push(this.matchMapper(record))))
         .then(() => resolve(matches))
         .catch(reject);
     });
