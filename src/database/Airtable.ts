@@ -33,6 +33,8 @@ export class AirtableData {
           nickname: playersNicknames[i],
         } as User;
       }),
+      courtBooked: record.get('courtBooked') as boolean,
+      maxPlayers: record.get('maxPlayers') as number,
     };
   }
 

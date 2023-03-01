@@ -1,17 +1,20 @@
 import { render, screen } from '@testing-library/react';
-import MatchItem from '@/modules/matches/components/MatchItem/MatchItem';
+import { MatchItem } from '@/modules/matches/components/MatchItem/MatchItem';
 import { match, closedMatch } from '@/mocks/matches/data';
 import { addSeconds } from '@/modules/common/services/dates';
+import { user } from '@/mocks/users/data';
 
 describe('MatchItem', () => {
   it('Should render MatchItem', () => {
-    render(<MatchItem match={match} />);
+    const dispatch = jest.fn();
+    render(<MatchItem match={match} user={user} dispatch={dispatch} />);
 
     expect(screen.queryByText(/Padel Indoor Lloret/)).toBeInTheDocument();
   });
 
-  it.only('Should render correct match start time and duration', () => {
-    const { container } = render(<MatchItem match={match} />);
+  it('Should render correct match start time and duration', () => {
+    const dispatch = jest.fn();
+    const { container } = render(<MatchItem match={match} user={user} dispatch={dispatch} />);
 
     expect(container).toHaveTextContent('miércoles 08/02/2023');
     const date = new Date(match.startTime);
@@ -20,13 +23,15 @@ describe('MatchItem', () => {
   });
 
   it('Should render missing players', () => {
-    const { container } = render(<MatchItem match={match} />);
+    const dispatch = jest.fn();
+    const { container } = render(<MatchItem match={match} user={user} dispatch={dispatch} />);
 
-    expect(container).toHaveTextContent('Faltan 3 !!');
+    expect(container).toHaveTextContent('Faltan3');
   });
 
   it('Should render closed match status', () => {
-    const { container } = render(<MatchItem match={closedMatch} />);
+    const dispatch = jest.fn();
+    const { container } = render(<MatchItem match={closedMatch} user={user} dispatch={dispatch} />);
 
     expect(container).toHaveTextContent('Cerrado');
   });

@@ -10,7 +10,11 @@ export interface Match {
   level?: string;
   costPerPlayer?: number;
   players: User[];
+  courtBooked: boolean;
+  maxPlayers: number;
 }
+
+export type Status = 'opened' | 'closed';
 
 export interface Club {
   id?: string;

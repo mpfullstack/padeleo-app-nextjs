@@ -4,14 +4,20 @@ import { userAccessActions } from '@/modules/user-access/redux/userAccessSlice';
 import { ReactElement } from 'react';
 import styled, { css } from 'styled-components';
 import { useTheme } from '@mui/material/styles';
-import Link from 'next/link';
 import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '@/modules/common/redux/store';
 import { logout } from '@/modules/common/services/api';
+import LogoutIcon from '@/modules/common/icons/Logout';
+import { IconButton } from '@/modules/common/components/Buttons';
 
 const Layout = ({ title, userLoggedOut, isLoggedIn, type = 'common', children }: Props): JSX.Element => {
   const theme = useTheme();
   const logoSize = type === 'interior' ? 28 : 36;
+  const onClickLogout = async (e: any) => {
+    e.preventDefault();
+    await logout();
+    userLoggedOut();
+  };
 
   return (
     <>
@@ -29,21 +35,14 @@ const Layout = ({ title, userLoggedOut, isLoggedIn, type = 'common', children }:
           <Image src="/logo-main.png" width={logoSize} height={logoSize} alt="Padeleo" />
           <Span color={theme.palette.secondary.main}>{`Padeleo`}</Span>
         </Logo>
-      </Header>
-      <div>
         {isLoggedIn && (
-          <Link
-            href="/"
-            onClick={async e => {
-              e.preventDefault();
-              await logout();
-              userLoggedOut();
-            }}
-          >
-            {`Cerrar sesión`}
-          </Link>
+          <Logout>
+            <IconButton onClick={onClickLogout}>
+              <LogoutIcon />
+            </IconButton>
+          </Logout>
         )}
-      </div>
+      </Header>
       <Main>{children}</Main>
     </>
   );
@@ -85,6 +84,7 @@ const Span = styled.span<{ color: string }>`
 const interiorLayout = css`
   margin-top: 0;
   align-items: flex-start;
+  flex-direction: row;
   ${Logo} {
     margin-top: 0.4rem;
   }
@@ -96,6 +96,14 @@ const interiorLayout = css`
 const Header = styled.header<{ type: LayoutType }>`
   ${innerContainer};
   ${({ type }) => type === 'interior' && interiorLayout}
+`;
+
+const Logout = styled.div`
+  margin-left: auto;
+  font-size: 1.4rem;
+  svg {
+    font-size: 2rem;
+  }
 `;
 
 const mapDispatchToProps = { ...userAccessActions };

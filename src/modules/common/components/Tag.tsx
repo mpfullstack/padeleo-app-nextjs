@@ -17,7 +17,7 @@ const StyledTag = styled.div<StyledProps>`
   display: flex;
   border: ${({ color }) => `1px solid ${color}`};
   border-radius: 4px;
-  padding: 0.2rem 0.4rem;
+  padding: 0.1rem 0.4rem;
   text-transform: uppercase;
   align-items: center;
   justify-content: center;
