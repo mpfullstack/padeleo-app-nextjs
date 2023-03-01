@@ -9,6 +9,7 @@
     "lint:js": "eslint --ext tsx --ext ts --ext js src --ignore-path .gitignore",
     "analyze": "ANALYZE=true yarn build",
     "prettier": "prettier --check '**/*.@(tsx|ts|js|md)' --ignore-path .gitignore",
+    "check-types": "tsc",
     "test": "jest",
     "test:ci": "jest --ci"
   },

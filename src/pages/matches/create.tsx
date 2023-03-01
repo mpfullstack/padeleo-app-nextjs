@@ -23,6 +23,8 @@ export default function CreateMatch() {
               startTime: new Date().toString(),
               duration: 5400,
               players: [],
+              courtBooked: false,
+              maxPlayers: 4,
             });
           }}
         >{`Crear partido`}</Button>

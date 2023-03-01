@@ -10,6 +10,7 @@ export const match: Match = {
   duration: 5400,
   players: [user],
   courtBooked: true,
+  maxPlayers: 4,
 };
 
 export const closedMatch = {
