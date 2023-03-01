@@ -22,8 +22,9 @@ export class AirtableData {
 
     return {
       id: record.id,
-      club: record.get('club') as string,
-      startTime: new Date(record.get('startTime') as string),
+      clubId: record.get('clubId')?.toString() as string,
+      clubName: record.get('clubName')?.toString() as string,
+      startTime: record.get('startTime') as string,
       duration: record.get('duration') as number,
       players: playerIds.map((playerId: string, i: number) => {
         return {
@@ -32,6 +33,8 @@ export class AirtableData {
           nickname: playersNicknames[i],
         } as User;
       }),
+      courtBooked: record.get('courtBooked') as boolean,
+      maxPlayers: record.get('maxPlayers') as number,
     };
   }
 
@@ -49,6 +52,7 @@ export class AirtableData {
     return {
       id: record.id,
       userId: record.get('userId') as string,
+      nickname: record.get('nickname') as string,
     };
   }
 
@@ -59,17 +63,18 @@ export class AirtableData {
     };
   }
 
-  getMatches() {
+  getMatches(filterByFormula?: string) {
     return new Promise<Match[]>((resolve, reject) => {
       const matches: Match[] = [];
+      const filters = filterByFormula ? { filterByFormula } : undefined;
       this.base('Match')
         .select({
           view: 'Grid view',
+          pageSize: 10,
+          ...filters,
         })
-        .eachPage((records, fetchNextPage) => {
-          records.forEach(record => matches.push(this.matchMapper(record)));
-          fetchNextPage();
-        })
+        .firstPage()
+        .then(records => records.map(record => matches.push(this.matchMapper(record))))
         .then(() => resolve(matches))
         .catch(reject);
     });
@@ -159,6 +164,15 @@ export class AirtableData {
       this.base('Session')
         .find(id)
         .then(record => resolve(this.sessionMapper(record)))
+        .catch(reject);
+    });
+  }
+
+  deleteSession(id: string) {
+    return new Promise<void>((resolve, reject) => {
+      this.base('Session')
+        .destroy([id])
+        .then(() => resolve())
         .catch(reject);
     });
   }

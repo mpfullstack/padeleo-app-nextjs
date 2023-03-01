@@ -15,17 +15,32 @@ export const themeOptions: ThemeOptions = {
     },
   },
   typography: {
+    fontFamily: [
+      'Mulish',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
     h1: {
-      fontSize: '2.6rem',
+      fontSize: '2rem',
+      fontWeight: '700',
     },
     h2: {
-      fontSize: '2.3rem',
+      fontSize: '1.8rem',
     },
     h3: {
-      fontSize: '2.1rem',
+      fontSize: '1.6rem',
     },
     h4: {
-      fontSize: '1.9rem',
+      fontSize: '1.4em',
+    },
+    button: {
+      fontSize: '1.4rem',
+      fontWeight: '500',
     },
   },
 };

@@ -30,3 +30,17 @@ export const isAuthenticated = async (req: NextApiRequest): Promise<boolean> => 
     return false;
   }
 };
+
+export const deleteSession = async (req: NextApiRequest): Promise<undefined> => {
+  const token = getToken(req);
+
+  if (!token) return undefined;
+
+  try {
+    await new SessionAirtableRepository(new AirtableData()).delete(token);
+  } catch (error: any) {
+    // TODO: Handle error
+  }
+
+  return undefined;
+};

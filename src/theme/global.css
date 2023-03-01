@@ -1,0 +1,13 @@
+html {
+  font-size: 11px;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Mulish, Arial, sans-serif;
+  font-size: 1.6rem;
+}
+
+p {
+  margin: .4rem 0;
+}

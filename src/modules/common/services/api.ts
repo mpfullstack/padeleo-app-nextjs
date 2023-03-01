@@ -7,6 +7,7 @@ const api = {
   matchesUrl: '/api/matches',
   usersUrl: '/api/users',
   signIn: '/api/auth/signin',
+  logout: '/api/auth/logout',
   isAuthenticated: '/api/auth',
 };
 
@@ -58,3 +59,5 @@ export const createUser = (data: User) => post<ResponseSingleUserData, User>(api
 export const isAuthenticated = () => get<ResponseData<boolean>>(api.isAuthenticated);
 
 export const signIn = (data: SignInPayload) => post<ResponseData<User>, SignInPayload>(api.signIn, data);
+
+export const logout = () => post<ResponseData<void>, {}>(api.logout, {});

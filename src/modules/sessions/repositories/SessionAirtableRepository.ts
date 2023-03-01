@@ -22,5 +22,7 @@ export class SessionAirtableRepository implements SessionRepository {
     return await this.database.createSession(userId);
   }
 
-  async delete(id: string) {}
+  async delete(id: string) {
+    return await this.database.deleteSession(id);
+  }
 }
