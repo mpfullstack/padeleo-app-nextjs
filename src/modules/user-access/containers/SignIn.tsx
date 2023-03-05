@@ -14,19 +14,21 @@ import Paragraph from '@/modules/common/components/Paragraph';
 import { useLoading } from '@/modules/common/hooks/useLoading';
 
 const SignIn = (props: PropsFromRedux) => {
+  const { isLoggedIn, userLoggedIn, userLoggedOut } = props;
   const router = useRouter();
-  const { isLoggedIn, userLoggedIn } = props;
+  const [status, setStatus] = useLoading();
 
   useEffect(() => {
-    isLoggedIn && isAuthenticated().then(() => router.push({ pathname: '/matches' }));
-  }, [isLoggedIn, router]);
+    isLoggedIn &&
+      isAuthenticated()
+        .then(() => router.push({ pathname: '/matches' }))
+        .catch(() => userLoggedOut());
+  }, [isLoggedIn, userLoggedOut, router]);
 
   const [formData, setData] = useState<SignInPayload>({
     nickname: '',
     password: '',
   });
-
-  const [status, setStatus] = useLoading();
 
   const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, key: keyof SignInPayload) =>
     setData(state => {

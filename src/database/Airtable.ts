@@ -72,15 +72,17 @@ export class AirtableData {
     };
   }
 
-  getMatches(filterByFormula?: string) {
+  getMatches({ filterByFormula, sort }: { filterByFormula?: string; sort?: any[] } = {}) {
     return new Promise<Match[]>((resolve, reject) => {
       const matches: Match[] = [];
       const filters = filterByFormula ? { filterByFormula } : undefined;
+      const options = sort ? { sort } : undefined;
       this.base('Match')
         .select({
           view: 'Grid view',
           pageSize: 10,
           ...filters,
+          ...options,
         })
         .firstPage()
         .then(records => records.map(record => matches.push(this.mapRecordToMatch(record))))

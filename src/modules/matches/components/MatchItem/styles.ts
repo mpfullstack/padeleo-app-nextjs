@@ -9,6 +9,7 @@ export const Paragraph = styled.p`
 export const Text = styled.span<{ color?: string }>`
   font-size: 1.5rem;
   margin-right: 0.5rem;
+  margin: 0.5rem 0;
   color: ${({ color }) => color || 'inherit'};
 `;
 

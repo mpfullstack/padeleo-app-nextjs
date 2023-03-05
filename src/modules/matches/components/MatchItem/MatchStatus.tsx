@@ -52,15 +52,14 @@ const Players = ({ matchId, players = [], max }: { matchId: string; players: Use
     <PlayersWrapper>
       {playerCouples.map((couple: User[], i: number) => {
         const [playerA, playerB] = [...couple];
-        debugger;
         return (
           <PlayersCouple key={`${i}-${matchId}-couple`}>
             <Player>
-              <PlayerName>{playerA?.firstname || <QuestionMark />}</PlayerName>
+              <PlayerName>{playerA?.nickname || <QuestionMark />}</PlayerName>
             </Player>
             <Divider>{`-`}</Divider>
             <Player>
-              <PlayerName>{playerB?.firstname || <QuestionMark />}</PlayerName>
+              <PlayerName>{playerB?.nickname || <QuestionMark />}</PlayerName>
             </Player>
           </PlayersCouple>
         );
@@ -70,9 +69,10 @@ const Players = ({ matchId, players = [], max }: { matchId: string; players: Use
 };
 
 const Wrapper = styled.span`
-  margin: 1.2rem 0.7rem 0 0;
+  margin: 0.2rem 0.7rem 0 0;
   display: flex;
   align-items: center;
+  min-height: 3rem;
 `;
 
 const PlayersWrapper = styled.div`
@@ -81,6 +81,7 @@ const PlayersWrapper = styled.div`
   margin: 1rem 0;
   align-self: stretch;
   align-items: center;
+  min-width: 12rem;
 `;
 
 const PlayersCouple = styled.div`
@@ -105,6 +106,7 @@ const Divider = styled(Span)`
 
 const TagWrapper = styled.div`
   margin-top: 0.3rem;
+  min-height: 3rem;
 `;
 
 interface Props {

@@ -5,6 +5,8 @@ import { ApiError } from 'next/dist/server/api-utils';
 
 export interface MatchRepository {
   getAll(): Promise<Match[]>;
+  getComing(): Promise<Match[]>;
+  getPast(): Promise<Match[]>;
   getByUserNickname(nickname: string): Promise<Match[]>;
   getById(id: string): Promise<Match>;
   create(data: Match): Promise<Match>;
@@ -20,11 +22,30 @@ export class MatchAirtableRepository implements MatchRepository {
   }
 
   async getAll(): Promise<Match[]> {
-    return await this.database.getMatches();
+    return await this.database.getMatches({
+      sort: [{ field: 'startTime', direction: 'desc' }],
+    });
+  }
+
+  async getComing(): Promise<Match[]> {
+    return await this.database.getMatches({
+      filterByFormula: `IS_AFTER({startTime}, DATEADD(TODAY(), -1, "days"))`,
+      sort: [{ field: 'startTime', direction: 'asc' }],
+    });
+  }
+
+  async getPast(): Promise<Match[]> {
+    return await this.database.getMatches({
+      filterByFormula: `IS_BEFORE({startTime}, TODAY())`,
+      sort: [{ field: 'startTime', direction: 'desc' }],
+    });
   }
 
   async getByUserNickname(nickname: string): Promise<Match[]> {
-    return await this.database.getMatches(`FIND('${nickname}',ARRAYJOIN({players},' '))`);
+    return await this.database.getMatches({
+      filterByFormula: `FIND('${nickname}',ARRAYJOIN({players},' '))`,
+      sort: [{ field: 'startTime', direction: 'desc' }],
+    });
   }
 
   async getById(id: string): Promise<Match> {

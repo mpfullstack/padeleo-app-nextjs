@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { AirtableData } from '@/database/Airtable';
 import { MatchAirtableRepository } from '@/modules/matches/repositories/MatchAirtableRepository';
-import { ResponseMatchData, ResponseSingleMatchData } from '@/modules/matches/model';
+import { Match, ResponseMatchData, ResponseSingleMatchData } from '@/modules/matches/model';
 import { getSession } from '@/modules/sessions/services/sessionService';
 
 export default async function handler(
@@ -14,6 +14,7 @@ export default async function handler(
 
   const matchRepository = new MatchAirtableRepository(new AirtableData());
 
+  // Create Match
   if (req.method === 'POST') {
     try {
       const result = await matchRepository.create(req.body);
@@ -29,9 +30,20 @@ export default async function handler(
     }
   }
 
+  // Get Matches
   if (req.method === 'GET') {
     try {
-      const result = await matchRepository.getAll();
+      const { tab } = req.query;
+      let result: Match[] | undefined;
+      if (tab === 'coming') {
+        result = await matchRepository.getComing();
+      }
+      if (tab === 'past') {
+        result = await matchRepository.getPast();
+      }
+      if (tab === 'all') {
+        result = await matchRepository.getAll();
+      }
       return res.status(200).json({
         success: true,
         result,
