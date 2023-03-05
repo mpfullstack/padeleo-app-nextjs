@@ -1,12 +1,15 @@
 import { AirtableData } from '@/database/Airtable';
 import { Match } from '@/modules/matches/model';
+import { User } from '@/modules/users/model';
+import { ApiError } from 'next/dist/server/api-utils';
 
 export interface MatchRepository {
   getAll(): Promise<Match[]>;
   getByUserNickname(nickname: string): Promise<Match[]>;
   getById(id: string): Promise<Match>;
   create(data: Match): Promise<Match>;
-  // update(cart: Match): Promise<Match>
+  update(data: Match): Promise<Match>;
+  addPlayer(matchId: string, user: User): Promise<Match>;
 }
 
 export class MatchAirtableRepository implements MatchRepository {
@@ -30,5 +33,36 @@ export class MatchAirtableRepository implements MatchRepository {
 
   async create(data: Match): Promise<Match> {
     return await this.database.createMatch(data);
+  }
+
+  async update(data: Match): Promise<Match> {
+    return await this.database.updateMatch(data);
+  }
+
+  async addPlayer(matchId: string, user: User): Promise<Match> {
+    const match = await this.getById(matchId);
+    const isPlayerInMatch = match.players.find((player: User) => player.id === user.id);
+
+    if (!isPlayerInMatch) {
+      if (match.maxPlayers === match.players.length) {
+        return Promise.reject(new ApiError(403, 'Match is already full'));
+      }
+      match.players.push(user);
+      return await this.update(match);
+    }
+
+    return Promise.resolve(match);
+  }
+
+  async removePlayer(matchId: string, user: User): Promise<Match> {
+    const match = await this.getById(matchId);
+    const isPlayerInMatch = match.players.find((player: User) => player.id === user.id);
+
+    if (isPlayerInMatch) {
+      match.players = match.players.filter((player: User) => player.id !== user.id);
+      return await this.update(match);
+    }
+
+    return Promise.resolve(match);
   }
 }

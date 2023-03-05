@@ -9,7 +9,7 @@ import Actions from './Actions';
 import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '@/modules/common/redux/store';
 
-const MatchItem = ({ match, user }: Props) => {
+const MatchItem = ({ match, user, onUpdate }: Props) => {
   return (
     <MatchItemWrapper>
       <Content>
@@ -20,7 +20,7 @@ const MatchItem = ({ match, user }: Props) => {
       </Content>
       <SideContent>
         <MatchStatus match={match} />
-        <Actions match={match} user={user} />
+        <Actions match={match} user={user} onUpdate={onUpdate} />
       </SideContent>
     </MatchItemWrapper>
   );
@@ -65,6 +65,7 @@ const SideContent = styled(Content)`
 
 interface Props extends PropsFromRedux {
   match: Match;
+  onUpdate: (match: Match) => void;
 }
 
 const mapStateToProps = (state: RootState) => ({ user: state.userAccess.user });

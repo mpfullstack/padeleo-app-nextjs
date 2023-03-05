@@ -1,5 +1,6 @@
+import { User } from '@/modules/users/model';
+
 export interface Session {
   id: string;
-  userId: string;
-  nickname: string;
+  user: User;
 }

@@ -11,6 +11,7 @@ import { Title } from '@/modules/common/components/Titles';
 import styled from 'styled-components';
 import { Button, LoadingButton } from '@/modules/common/components/Buttons';
 import Paragraph from '@/modules/common/components/Paragraph';
+import { useLoading } from '@/modules/common/hooks/useLoading';
 
 const SignIn = (props: PropsFromRedux) => {
   const router = useRouter();
@@ -25,7 +26,7 @@ const SignIn = (props: PropsFromRedux) => {
     password: '',
   });
 
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [status, setStatus] = useLoading();
 
   const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, key: keyof SignInPayload) =>
     setData(state => {

@@ -43,12 +43,26 @@ const post = async <T, P>(url: string, data?: P): Promise<T> =>
     body: JSON.stringify(data),
   }).then(handleResponse<P>);
 
+const put = async <T, P>(url: string, data?: P): Promise<T> =>
+  await fetch(url, {
+    method: 'put',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: data && JSON.stringify(data),
+  }).then(handleResponse<P>);
+
 // Matches API
 export const getMatches = get<ResponseMatchData>;
 
 export const getMatch = get<ResponseSingleMatchData>;
 
 export const createMatch = (data: Match) => post<ResponseSingleMatchData, Match>(api.matchesUrl, data);
+
+export const joinMatch = (matchId: string) => put<ResponseSingleMatchData, Match>(`${api.matchesUrl}/${matchId}/join`);
+
+export const leaveMatch = (matchId: string) =>
+  put<ResponseSingleMatchData, Match>(`${api.matchesUrl}/${matchId}/leave`);
 
 // Users API
 export const getUsers = get<ResponseUserData>;

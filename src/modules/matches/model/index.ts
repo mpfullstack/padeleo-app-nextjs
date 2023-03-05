@@ -14,6 +14,11 @@ export interface Match {
   maxPlayers: number;
 }
 
+export interface MatchRecord extends Omit<Match, 'id' | 'players' | 'clubId' | 'clubName'> {
+  players: string[];
+  clubId: string[];
+}
+
 export type Status = 'opened' | 'closed';
 
 export interface Club {
@@ -29,3 +34,5 @@ export interface DateTime {
 export type ResponseMatchData = ResponseData<Match[]>;
 
 export type ResponseSingleMatchData = ResponseData<Match>;
+
+export type Action = 'join' | 'leave';

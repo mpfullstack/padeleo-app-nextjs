@@ -51,26 +51,17 @@ const Players = ({ matchId, players = [], max }: { matchId: string; players: Use
   return (
     <PlayersWrapper>
       {playerCouples.map((couple: User[], i: number) => {
+        const [playerA, playerB] = [...couple];
+        debugger;
         return (
           <PlayersCouple key={`${i}-${matchId}-couple`}>
-            {couple.map((player: User, i: number) => {
-              if (player) {
-                return (
-                  <>
-                    <Player key={`${player.id}-${matchId}`}>{player.firstname}</Player>
-                    {i === 0 && <Span>{`-`}</Span>}
-                  </>
-                );
-              }
-              return (
-                <>
-                  <Player>
-                    <QuestionMark />
-                  </Player>
-                  {i === 0 && <Span>{`-`}</Span>}
-                </>
-              );
-            })}
+            <Player>
+              <PlayerName>{playerA?.firstname || <QuestionMark />}</PlayerName>
+            </Player>
+            <Divider>{`-`}</Divider>
+            <Player>
+              <PlayerName>{playerB?.firstname || <QuestionMark />}</PlayerName>
+            </Player>
           </PlayersCouple>
         );
       })}
@@ -100,10 +91,16 @@ const PlayersCouple = styled.div`
   margin: 0.2rem 0;
 `;
 
-const Player = styled(Span)`
-  font-size: 1.5rem;
+const Player = styled.p`
   font-weight: 500;
-  margin: 0 0.4rem;
+`;
+
+const PlayerName = styled(Span)`
+  font-size: 1.5rem;
+`;
+
+const Divider = styled(Span)`
+  margin: 0 1rem;
 `;
 
 const TagWrapper = styled.div`

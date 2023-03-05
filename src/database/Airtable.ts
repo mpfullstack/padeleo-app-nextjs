@@ -1,6 +1,6 @@
 import Airtable, { FieldSet, Record } from 'airtable';
 import { AirtableBase } from 'airtable/lib/airtable_base';
-import { Match } from '@/modules/matches/model';
+import { Match, MatchRecord } from '@/modules/matches/model';
 import { User } from '@/modules/users/model';
 import { Session } from '@/modules/sessions/model';
 
@@ -15,7 +15,7 @@ export class AirtableData {
     this.base = Airtable.base(process.env.AIRTABLE_BASE as string);
   }
 
-  private matchMapper(record: Record<FieldSet>): Match {
+  private mapRecordToMatch(record: Record<FieldSet>): Match {
     const playerIds = (record.get('players') as string[]) || [];
     const playersNicknames = (record.get('playersNicknames') as string[]) || [];
     const playersFirstnames = (record.get('playersFirstnames') as string[]) || [];
@@ -38,9 +38,19 @@ export class AirtableData {
     };
   }
 
-  private userMapper(record: Record<FieldSet>): User {
+  private mapMatchToRecord(match: Match): MatchRecord {
+    const { id, clubName, ...data } = match;
     return {
-      id: record.id,
+      ...data,
+      startTime: match.startTime?.toString(),
+      clubId: [match.clubId],
+      players: match.players.map((player: User) => player.id) as string[],
+    };
+  }
+
+  private userMapper(record: Record<FieldSet>, userId?: string): User {
+    return {
+      id: userId || record.id,
       firstname: record.get('firstname') as string,
       lastname: record.get('lastname') as string,
       email: record.get('email') as string,
@@ -51,15 +61,14 @@ export class AirtableData {
   private sessionMapper(record: Record<FieldSet>): Session {
     return {
       id: record.id,
-      userId: record.get('userId') as string,
-      nickname: record.get('nickname') as string,
+      user: this.userMapper(record, record.get('userId')?.toString()),
     };
   }
 
   private userSessionMapper(record: Record<FieldSet>): User {
     return {
       ...this.userMapper(record),
-      id: record.get('userId') as string,
+      id: record.get('userId')?.toString() as string,
     };
   }
 
@@ -74,7 +83,7 @@ export class AirtableData {
           ...filters,
         })
         .firstPage()
-        .then(records => records.map(record => matches.push(this.matchMapper(record))))
+        .then(records => records.map(record => matches.push(this.mapRecordToMatch(record))))
         .then(() => resolve(matches))
         .catch(reject);
     });
@@ -84,21 +93,32 @@ export class AirtableData {
     return new Promise<Match>((resolve, reject) => {
       this.base('Match')
         .find(id)
-        .then(record => resolve(this.matchMapper(record)))
+        .then(record => resolve(this.mapRecordToMatch(record)))
         .catch(reject);
     });
   }
 
   createMatch(data: Match) {
     return new Promise<Match>((resolve, reject) => {
-      const match = {
-        ...data,
-        startTime: data.startTime?.toString(),
-        players: data.players.map(player => player.id as string),
-      };
+      const match = this.mapMatchToRecord(data);
       this.base('Match')
-        .create(match)
-        .then(record => resolve(this.matchMapper(record)))
+        .create([{ fields: { ...match } }])
+        .then(records => resolve(this.mapRecordToMatch(records[0])))
+        .catch(reject);
+    });
+  }
+
+  updateMatch(data: Match) {
+    return new Promise<Match>((resolve, reject) => {
+      const matchRecord = this.mapMatchToRecord(data);
+      this.base('Match')
+        .update([
+          {
+            id: data.id as string,
+            fields: { ...matchRecord },
+          },
+        ])
+        .then(records => resolve(this.mapRecordToMatch(records[0])))
         .catch(reject);
     });
   }
