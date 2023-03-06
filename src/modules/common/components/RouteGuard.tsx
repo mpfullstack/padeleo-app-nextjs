@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '@/modules/common/redux/store';
 import { userAccessActions } from '@/modules/user-access/redux/userAccessSlice';
+import styled from 'styled-components';
 
 const publicPaths = ['/'];
 
@@ -35,8 +36,23 @@ const RouteGuard = (props: PropsFromRedux & { children: ReactElement }) => {
     };
   }, [router, router.events, isLoggedIn, setRedirectLink]);
 
-  return authorized ? children : <p>{`Loading...`}</p>;
+  return authorized ? (
+    children
+  ) : (
+    <Loading>
+      <p>{`Loading...`}</p>
+    </Loading>
+  );
 };
+
+const Loading = styled.div`
+  height: 100vh;
+  width: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 5rem;
+`;
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
