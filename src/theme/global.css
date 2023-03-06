@@ -11,3 +11,7 @@ body {
 p {
   margin: .4rem 0;
 }
+
+.MuiTypography-root.MuiTypography-h1 {
+  margin: .3rem 0;
+}

@@ -11,10 +11,10 @@ const MatchesTabs = ({ selected, handleTabChange }: Props) => {
       key: 'past',
       label: 'Pasados',
     },
-    {
-      key: 'all',
-      label: 'Todos',
-    },
+    // {
+    //   key: 'all',
+    //   label: 'Todos',
+    // },
   ];
 
   return (
