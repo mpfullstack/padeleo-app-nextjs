@@ -2,12 +2,13 @@ import styled from 'styled-components';
 import { Match } from '@/modules/matches/model/index';
 import { format } from '@/modules/common/services/dates';
 import { Paragraph } from './styles';
+import { connect, ConnectedProps } from 'react-redux';
+import { RootState } from '@/modules/common/redux/store';
 import MatchStatus from './MatchStatus';
 import MatchTime from './MatchTime';
 import CourtBooked from './CourtBooked';
 import Actions from './Actions';
-import { connect, ConnectedProps } from 'react-redux';
-import { RootState } from '@/modules/common/redux/store';
+import MatchResult from './MatchResult';
 
 const MatchItem = ({ match, user, onUpdate }: Props) => {
   return (
@@ -19,8 +20,19 @@ const MatchItem = ({ match, user, onUpdate }: Props) => {
         <MatchTime startTime={match.startTime} duration={match.duration} />
       </Content>
       <SideContent>
-        <MatchStatus match={match} />
-        <Actions match={match} user={user} onUpdate={onUpdate} />
+        {match.results.length > 0 ? (
+          <MatchResult
+            results={match.results}
+            players={match.players}
+            matchId={match.id}
+            maxPlayers={match.maxPlayers}
+          />
+        ) : (
+          <>
+            <MatchStatus match={match} />
+            <Actions match={match} user={user} onUpdate={onUpdate} />
+          </>
+        )}
       </SideContent>
     </MatchItemWrapper>
   );

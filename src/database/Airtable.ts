@@ -1,6 +1,6 @@
 import Airtable, { FieldSet, Record } from 'airtable';
 import { AirtableBase } from 'airtable/lib/airtable_base';
-import { Match, MatchRecord } from '@/modules/matches/model';
+import { Match, MatchRecord, ResultType } from '@/modules/matches/model';
 import { User } from '@/modules/users/model';
 import { Session } from '@/modules/sessions/model';
 
@@ -19,6 +19,18 @@ export class AirtableData {
     const playerIds = (record.get('players') as string[]) || [];
     const playersNicknames = (record.get('playersNicknames') as string[]) || [];
     const playersFirstnames = (record.get('playersFirstnames') as string[]) || [];
+    const resultIds = (record.get('results') as string[]) || [];
+    const homeResults = (record.get('home') as string[]) || [];
+    const awayResults = (record.get('away') as string[]) || [];
+    const resultTypes = (record.get('resultType') as ResultType[]) || [];
+    const results = resultIds.map((id: string, i: number) => {
+      return {
+        id,
+        type: resultTypes[i],
+        home: Number(homeResults[i]),
+        away: Number(awayResults[i]),
+      };
+    });
 
     return {
       id: record.id,
@@ -35,11 +47,12 @@ export class AirtableData {
       }),
       courtBooked: record.get('courtBooked') as boolean,
       maxPlayers: record.get('maxPlayers') as number,
+      results,
     };
   }
 
   private mapMatchToRecord(match: Match): MatchRecord {
-    const { id, clubName, ...data } = match;
+    const { id, clubName, results, ...data } = match;
     return {
       ...data,
       startTime: match.startTime?.toString(),

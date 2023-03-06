@@ -12,9 +12,10 @@ export interface Match {
   players: User[];
   courtBooked: boolean;
   maxPlayers: number;
+  results: Result[];
 }
 
-export interface MatchRecord extends Omit<Match, 'id' | 'players' | 'clubId' | 'clubName'> {
+export interface MatchRecord extends Omit<Match, 'id' | 'players' | 'clubId' | 'clubName' | 'results'> {
   players: string[];
   clubId: string[];
 }
@@ -30,6 +31,15 @@ export interface DateTime {
   start: Date | null;
   end: Date | null;
 }
+
+export interface Result {
+  id: string;
+  type: ResultType;
+  home: number;
+  away: number;
+}
+
+export type ResultType = 'set' | 'tiebreak';
 
 export type ResponseMatchData = ResponseData<Match[]>;
 
