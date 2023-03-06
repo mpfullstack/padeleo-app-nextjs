@@ -29,14 +29,14 @@ export class MatchAirtableRepository implements MatchRepository {
 
   async getComing(): Promise<Match[]> {
     return await this.database.getMatches({
-      filterByFormula: `IS_AFTER({startTime}, DATEADD(TODAY(), -1, "days"))`,
+      filterByFormula: `DATETIME_DIFF({startTime}, TODAY(), 'hours') >= 0`,
       sort: [{ field: 'startTime', direction: 'asc' }],
     });
   }
 
   async getPast(): Promise<Match[]> {
     return await this.database.getMatches({
-      filterByFormula: `IS_BEFORE({startTime}, TODAY())`,
+      filterByFormula: `DATETIME_DIFF({startTime}, TODAY(), 'hours') < 0`,
       sort: [{ field: 'startTime', direction: 'desc' }],
     });
   }

@@ -8,6 +8,7 @@ import { useLoading } from '@/modules/common/hooks/useLoading';
 
 const Actions = ({ match, user, onUpdate }: Props) => {
   const isClosed = getMatchStatus(match) === 'closed';
+  const isPastMatch = new Date(match.startTime) < new Date();
   const userIsInMatch = isUserInMatch(match, user);
   const [leaveStatus, setLeaveStatus] = useLoading();
   const [joinStatus, setJoinStatus] = useLoading();
@@ -16,14 +17,14 @@ const Actions = ({ match, user, onUpdate }: Props) => {
     try {
       if (action === 'leave') {
         setLeaveStatus('loading');
-        const result = await leaveMatch(match.id as string);
-        onUpdate(result.result as Match);
+        const response = await leaveMatch(match.id);
+        onUpdate(response.result as Match);
         setLeaveStatus('success');
       }
       if (action === 'join') {
         setJoinStatus('loading');
-        const result = await joinMatch(match.id as string);
-        onUpdate(result.result as Match);
+        const response = await joinMatch(match.id);
+        onUpdate(response.result as Match);
         setJoinStatus('success');
       }
     } catch (e: any) {
@@ -38,6 +39,7 @@ const Actions = ({ match, user, onUpdate }: Props) => {
       {userIsInMatch && (
         <LoadingButton
           loading={leaveStatus === 'loading'}
+          disabled={isPastMatch}
           color="secondary"
           variant="contained"
           onClick={() => onClickAction('leave')}
@@ -46,7 +48,12 @@ const Actions = ({ match, user, onUpdate }: Props) => {
         </LoadingButton>
       )}
       {!userIsInMatch && !isClosed && (
-        <LoadingButton loading={joinStatus === 'loading'} variant="contained" onClick={() => onClickAction('join')}>
+        <LoadingButton
+          loading={joinStatus === 'loading'}
+          disabled={isPastMatch}
+          variant="contained"
+          onClick={() => onClickAction('join')}
+        >
           {`Me apunto`}
         </LoadingButton>
       )}

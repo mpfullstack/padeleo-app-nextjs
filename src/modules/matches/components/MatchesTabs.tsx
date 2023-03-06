@@ -25,7 +25,7 @@ const MatchesTabs = ({ selected, handleTabChange }: Props) => {
 };
 
 const TabsWrapper = styled.div`
-  margin-bottom: 10px;
+  margin-bottom: 1rem;
 `;
 
 interface Props {
