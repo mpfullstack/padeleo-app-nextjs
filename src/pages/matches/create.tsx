@@ -25,6 +25,7 @@ export default function CreateMatch() {
               players: [],
               courtBooked: false,
               maxPlayers: 4,
+              results: [],
             });
           }}
         >{`Crear partido`}</Button>
