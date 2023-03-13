@@ -8,7 +8,7 @@ import MatchStatus from './MatchStatus';
 import MatchTime from './MatchTime';
 import CourtBooked from './CourtBooked';
 import Actions from './Actions';
-import MatchResult from './MatchResult';
+import MatchResult from './MatchResult/MatchResult';
 
 const MatchItem = ({ match, user, onUpdate }: Props) => {
   return (
@@ -28,11 +28,9 @@ const MatchItem = ({ match, user, onUpdate }: Props) => {
             maxPlayers={match.maxPlayers}
           />
         ) : (
-          <>
-            <MatchStatus match={match} />
-            <Actions match={match} user={user} onUpdate={onUpdate} />
-          </>
+          <MatchStatus match={match} />
         )}
+        <Actions match={match} user={user} onUpdate={onUpdate} />
       </SideContent>
     </MatchItemWrapper>
   );

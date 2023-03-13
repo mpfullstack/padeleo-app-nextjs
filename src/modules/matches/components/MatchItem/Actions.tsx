@@ -1,15 +1,24 @@
 import styled from 'styled-components';
 import { Action, Match } from '@/modules/matches/model';
 import { getMatchStatus, isUserInMatch } from '../../model/utils';
-import { LoadingButton } from '@mui/lab';
+import { Button, LoadingButton } from '@/modules/common/components/Buttons';
+import Drawer from '@/modules/common/components/Drawer';
 import { User } from '@/modules/users/model';
 import { joinMatch, leaveMatch } from '@/modules/common/services/api';
 import { useLoading } from '@/modules/common/hooks/useLoading';
+import { useState } from 'react';
+import MatchResultsEditor from './MatchResult/MatchResultsEditor';
 
 const Actions = ({ match, user, onUpdate }: Props) => {
   const isClosed = getMatchStatus(match) === 'closed';
   const isPastMatch = new Date(match.startTime) < new Date();
   const userIsInMatch = isUserInMatch(match, user);
+  const canLeave = userIsInMatch && !isPastMatch;
+  const canJoin = !isClosed && !isPastMatch;
+  const canAddOrModifyResult = isPastMatch && userIsInMatch;
+  const addOrModifyResultLabel = match.results?.length ? 'Editar resultado' : 'Añadir resultado';
+
+  const [drawerOpened, setDrawerOpen] = useState<boolean>(false);
   const [leaveStatus, setLeaveStatus] = useLoading();
   const [joinStatus, setJoinStatus] = useLoading();
 
@@ -36,27 +45,20 @@ const Actions = ({ match, user, onUpdate }: Props) => {
 
   return (
     <Wrapper>
-      {userIsInMatch && (
-        <LoadingButton
-          loading={leaveStatus === 'loading'}
-          disabled={isPastMatch}
-          color="secondary"
-          variant="contained"
-          onClick={() => onClickAction('leave')}
-        >
+      {canLeave && (
+        <LoadingButton loading={leaveStatus === 'loading'} color="secondary" onClick={() => onClickAction('leave')}>
           {`Salir`}
         </LoadingButton>
       )}
-      {!userIsInMatch && !isClosed && (
-        <LoadingButton
-          loading={joinStatus === 'loading'}
-          disabled={isPastMatch}
-          variant="contained"
-          onClick={() => onClickAction('join')}
-        >
+      {canJoin && (
+        <LoadingButton loading={joinStatus === 'loading'} onClick={() => onClickAction('join')}>
           {`Me apunto`}
         </LoadingButton>
       )}
+      {canAddOrModifyResult && <Button onClick={() => setDrawerOpen(true)}>{addOrModifyResultLabel}</Button>}
+      <Drawer anchor="bottom" open={drawerOpened} onClose={() => setDrawerOpen(false)}>
+        <MatchResultsEditor match={match} />
+      </Drawer>
     </Wrapper>
   );
 };

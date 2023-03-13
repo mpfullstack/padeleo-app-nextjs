@@ -3,10 +3,12 @@ import { SignInPayload } from '@/modules/user-access/model';
 import { User, ResponseUserData, ResponseSingleUserData } from '@/modules/users/model';
 import { ResponseData } from '@/modules/common/model';
 import { Key } from '@/modules/matches/components/MatchesTabs';
+import { ResponseResultsData, Result } from '@/modules/results/model';
 
 const api = {
   matchesUrl: '/api/matches',
   usersUrl: '/api/users',
+  resultsUrl: '/api/results',
   signIn: '/api/auth/signin',
   logout: '/api/auth/logout',
   isAuthenticated: '/api/auth',
@@ -79,3 +81,6 @@ export const isAuthenticated = () => get<ResponseData<boolean>>(api.isAuthentica
 export const signIn = (data: SignInPayload) => post<ResponseData<User>, SignInPayload>(api.signIn, data);
 
 export const logout = () => post<ResponseData<void>, {}>(api.logout, {});
+
+// Results API
+export const updateResults = (data: Result[]) => post<ResponseResultsData, Result[]>(api.resultsUrl, data);

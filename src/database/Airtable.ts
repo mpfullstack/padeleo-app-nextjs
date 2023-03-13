@@ -1,8 +1,10 @@
 import Airtable, { FieldSet, Record } from 'airtable';
 import { AirtableBase } from 'airtable/lib/airtable_base';
-import { Match, MatchRecord, ResultType } from '@/modules/matches/model';
+import { Match, MatchRecord } from '@/modules/matches/model';
+import { ResultRecord, ResultType } from '@/modules/results/model';
 import { User } from '@/modules/users/model';
 import { Session } from '@/modules/sessions/model';
+import { Result } from '@/modules/results/model';
 
 export class AirtableData {
   private base: AirtableBase;
@@ -23,12 +25,13 @@ export class AirtableData {
     const homeResults = (record.get('home') as string[]) || [];
     const awayResults = (record.get('away') as string[]) || [];
     const resultTypes = (record.get('resultType') as ResultType[]) || [];
-    const results = resultIds.map((id: string, i: number) => {
+    const results: Result[] = resultIds.map((id: string, i: number) => {
       return {
         id,
         type: resultTypes[i],
         home: Number(homeResults[i]),
         away: Number(awayResults[i]),
+        matchId: record.id,
       };
     });
 
@@ -58,6 +61,24 @@ export class AirtableData {
       startTime: match.startTime?.toString(),
       clubId: [match.clubId],
       players: match.players.map((player: User) => player.id) as string[],
+    };
+  }
+
+  private mapRecordToResult(record: Record<FieldSet>): Result {
+    return {
+      id: record.id,
+      type: record.get('type') as ResultType,
+      home: Number(record.get('home')),
+      away: Number(record.get('away')),
+      matchId: record.get('matchId')?.toString() as string,
+    };
+  }
+
+  private mapResultToRecord(result: Result): ResultRecord {
+    const { id, ...data } = result;
+    return {
+      ...data,
+      matchId: [result.matchId],
     };
   }
 
@@ -134,6 +155,33 @@ export class AirtableData {
           },
         ])
         .then(records => resolve(this.mapRecordToMatch(records[0])))
+        .catch(reject);
+    });
+  }
+
+  createResults(data: Result[]) {
+    return new Promise<Result[]>((resolve, reject) => {
+      this.base('Result')
+        .create(data.map(result => ({ fields: { ...this.mapResultToRecord(result) } })))
+        .then(records => resolve(records.map(this.mapRecordToResult)))
+        .catch(reject);
+    });
+  }
+
+  updateResults(data: Result[]) {
+    return new Promise<Result[]>((resolve, reject) => {
+      this.base('Result')
+        .update(data.map(result => ({ id: result.id, fields: { ...this.mapResultToRecord(result) } })))
+        .then(records => resolve(records.map(this.mapRecordToResult)))
+        .catch(reject);
+    });
+  }
+
+  deleteResults(data: Result[]) {
+    return new Promise<Result[]>((resolve, reject) => {
+      this.base('Result')
+        .destroy(data.map(result => result.id))
+        .then(records => resolve(records.map(this.mapRecordToResult)))
         .catch(reject);
     });
   }

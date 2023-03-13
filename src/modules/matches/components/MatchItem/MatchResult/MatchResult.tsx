@@ -1,8 +1,8 @@
-import { Result } from '@/modules/matches/model';
+import { Result } from '@/modules/results/model';
 import { User } from '@/modules/users/model';
 import styled from 'styled-components';
-import Grid from '@mui/material/Grid';
-import { Couple } from './MatchPlayers';
+import Grid from '@/modules/common/components/Grid';
+import { Couple } from '@/modules/matches/components/MatchItem/MatchPlayers';
 
 const MatchResult = ({ players, results }: Props) => {
   const sets = results.length;

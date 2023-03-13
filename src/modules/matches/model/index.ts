@@ -1,5 +1,6 @@
 import { ResponseData } from '@/modules/common/model';
 import { User } from '@/modules/users/model';
+import { Result } from '@/modules/results/model';
 
 export interface Match {
   id: string;
@@ -31,15 +32,6 @@ export interface DateTime {
   start: Date | null;
   end: Date | null;
 }
-
-export interface Result {
-  id: string;
-  type: ResultType;
-  home: number;
-  away: number;
-}
-
-export type ResultType = 'set' | 'tiebreak';
 
 export type ResponseMatchData = ResponseData<Match[]>;
 
