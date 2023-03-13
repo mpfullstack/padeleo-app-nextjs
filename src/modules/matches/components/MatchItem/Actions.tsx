@@ -14,7 +14,7 @@ const Actions = ({ match, user, onUpdate }: Props) => {
   const isPastMatch = new Date(match.startTime) < new Date();
   const userIsInMatch = isUserInMatch(match, user);
   const canLeave = userIsInMatch && !isPastMatch;
-  const canJoin = !isClosed && !isPastMatch;
+  const canJoin = !isClosed && !isPastMatch && !userIsInMatch;
   const canAddOrModifyResult = isPastMatch && userIsInMatch;
   const addOrModifyResultLabel = match.results?.length ? 'Editar resultado' : 'Añadir resultado';
 
