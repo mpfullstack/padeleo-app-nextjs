@@ -2,10 +2,13 @@ import { Match, ResponseMatchData, ResponseSingleMatchData } from '@/modules/mat
 import { SignInPayload } from '@/modules/user-access/model';
 import { User, ResponseUserData, ResponseSingleUserData } from '@/modules/users/model';
 import { ResponseData } from '@/modules/common/model';
+import { Key } from '@/modules/matches/components/MatchesTabs';
+import { ResponseResultsData, Result } from '@/modules/results/model';
 
 const api = {
   matchesUrl: '/api/matches',
   usersUrl: '/api/users',
+  resultsUrl: '/api/results',
   signIn: '/api/auth/signin',
   logout: '/api/auth/logout',
   isAuthenticated: '/api/auth',
@@ -31,8 +34,11 @@ const handleResponse = async <T>(res: Response) => {
   throw new ApiError<T>(res.status, data);
 };
 
-const get = async <T, P = Record<string, any>>(url: string, params?: P): Promise<T> =>
-  await fetch(url).then(handleResponse<T>);
+const get = async <T, P = Record<string, any>>(url: string, params?: P): Promise<T> => {
+  const queryParams = params ? `?` + new URLSearchParams(params) : '';
+  const queryUrl = `${url}${queryParams}`;
+  return await fetch(queryUrl).then(handleResponse<T>);
+};
 
 const post = async <T, P>(url: string, data?: P): Promise<T> =>
   await fetch(url, {
@@ -53,9 +59,11 @@ const put = async <T, P>(url: string, data?: P): Promise<T> =>
   }).then(handleResponse<P>);
 
 // Matches API
-export const getMatches = get<ResponseMatchData>;
+export const getMatches = ([url, tab]: [string, Key]) => get<ResponseMatchData>(url, { tab });
 
 export const getMatch = get<ResponseSingleMatchData>;
+
+export const updateMatch = (data: Match) => put<ResponseSingleMatchData, Match>(api.matchesUrl, data);
 
 export const createMatch = (data: Match) => post<ResponseSingleMatchData, Match>(api.matchesUrl, data);
 
@@ -75,3 +83,6 @@ export const isAuthenticated = () => get<ResponseData<boolean>>(api.isAuthentica
 export const signIn = (data: SignInPayload) => post<ResponseData<User>, SignInPayload>(api.signIn, data);
 
 export const logout = () => post<ResponseData<void>, {}>(api.logout, {});
+
+// Results API
+export const updateResults = (data: Result[]) => post<ResponseResultsData, Result[]>(api.resultsUrl, data);

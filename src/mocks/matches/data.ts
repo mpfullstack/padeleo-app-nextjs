@@ -11,6 +11,7 @@ export const match: Match = {
   players: [user],
   courtBooked: true,
   maxPlayers: 4,
+  results: [],
 };
 
 export const closedMatch = {

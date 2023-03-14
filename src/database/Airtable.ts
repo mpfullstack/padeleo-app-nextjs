@@ -1,8 +1,10 @@
 import Airtable, { FieldSet, Record } from 'airtable';
 import { AirtableBase } from 'airtable/lib/airtable_base';
 import { Match, MatchRecord } from '@/modules/matches/model';
+import { ResultRecord, ResultType } from '@/modules/results/model';
 import { User } from '@/modules/users/model';
 import { Session } from '@/modules/sessions/model';
+import { Result } from '@/modules/results/model';
 
 export class AirtableData {
   private base: AirtableBase;
@@ -19,6 +21,19 @@ export class AirtableData {
     const playerIds = (record.get('players') as string[]) || [];
     const playersNicknames = (record.get('playersNicknames') as string[]) || [];
     const playersFirstnames = (record.get('playersFirstnames') as string[]) || [];
+    const resultIds = (record.get('results') as string[]) || [];
+    const homeResults = (record.get('home') as string[]) || [];
+    const awayResults = (record.get('away') as string[]) || [];
+    const resultTypes = (record.get('resultType') as ResultType[]) || [];
+    const results: Result[] = resultIds.map((id: string, i: number) => {
+      return {
+        id,
+        type: resultTypes[i],
+        home: Number(homeResults[i]),
+        away: Number(awayResults[i]),
+        matchId: record.id,
+      };
+    });
 
     return {
       id: record.id,
@@ -35,16 +50,35 @@ export class AirtableData {
       }),
       courtBooked: record.get('courtBooked') as boolean,
       maxPlayers: record.get('maxPlayers') as number,
+      results,
     };
   }
 
   private mapMatchToRecord(match: Match): MatchRecord {
-    const { id, clubName, ...data } = match;
+    const { id, clubName, results, ...data } = match;
     return {
       ...data,
       startTime: match.startTime?.toString(),
       clubId: [match.clubId],
       players: match.players.map((player: User) => player.id) as string[],
+    };
+  }
+
+  private mapRecordToResult(record: Record<FieldSet>): Result {
+    return {
+      id: record.id,
+      type: record.get('type') as ResultType,
+      home: Number(record.get('home')),
+      away: Number(record.get('away')),
+      matchId: record.get('matchId')?.toString() as string,
+    };
+  }
+
+  private mapResultToRecord(result: Result): ResultRecord {
+    const { id, ...data } = result;
+    return {
+      ...data,
+      matchId: [result.matchId],
     };
   }
 
@@ -72,15 +106,17 @@ export class AirtableData {
     };
   }
 
-  getMatches(filterByFormula?: string) {
+  getMatches({ filterByFormula, sort }: { filterByFormula?: string; sort?: any[] } = {}) {
     return new Promise<Match[]>((resolve, reject) => {
       const matches: Match[] = [];
       const filters = filterByFormula ? { filterByFormula } : undefined;
+      const options = sort ? { sort } : undefined;
       this.base('Match')
         .select({
           view: 'Grid view',
           pageSize: 10,
           ...filters,
+          ...options,
         })
         .firstPage()
         .then(records => records.map(record => matches.push(this.mapRecordToMatch(record))))
@@ -119,6 +155,33 @@ export class AirtableData {
           },
         ])
         .then(records => resolve(this.mapRecordToMatch(records[0])))
+        .catch(reject);
+    });
+  }
+
+  createResults(data: Result[]) {
+    return new Promise<Result[]>((resolve, reject) => {
+      this.base('Result')
+        .create(data.map(result => ({ fields: { ...this.mapResultToRecord(result) } })))
+        .then(records => resolve(records.map(this.mapRecordToResult)))
+        .catch(reject);
+    });
+  }
+
+  updateResults(data: Result[]) {
+    return new Promise<Result[]>((resolve, reject) => {
+      this.base('Result')
+        .update(data.map(result => ({ id: result.id, fields: { ...this.mapResultToRecord(result) } })))
+        .then(records => resolve(records.map(this.mapRecordToResult)))
+        .catch(reject);
+    });
+  }
+
+  deleteResults(data: Result[]) {
+    return new Promise<Result[]>((resolve, reject) => {
+      this.base('Result')
+        .destroy(data.map(result => result.id))
+        .then(records => resolve(records.map(this.mapRecordToResult)))
         .catch(reject);
     });
   }

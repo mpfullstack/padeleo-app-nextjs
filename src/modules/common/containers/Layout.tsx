@@ -62,7 +62,7 @@ const innerContainer = css`
   align-items: center;
   max-width: 64rem;
   width: 96%;
-  margin: 2rem auto 0 auto;
+  margin: 1rem auto 0;
 `;
 
 const Main = styled.main`

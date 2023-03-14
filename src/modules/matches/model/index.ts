@@ -1,5 +1,6 @@
 import { ResponseData } from '@/modules/common/model';
 import { User } from '@/modules/users/model';
+import { Result } from '@/modules/results/model';
 
 export interface Match {
   id: string;
@@ -12,9 +13,10 @@ export interface Match {
   players: User[];
   courtBooked: boolean;
   maxPlayers: number;
+  results: Result[];
 }
 
-export interface MatchRecord extends Omit<Match, 'id' | 'players' | 'clubId' | 'clubName'> {
+export interface MatchRecord extends Omit<Match, 'id' | 'players' | 'clubId' | 'clubName' | 'results'> {
   players: string[];
   clubId: string[];
 }

@@ -1,20 +1,20 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { AirtableData } from '@/database/Airtable';
-import { MatchAirtableRepository } from '@/modules/matches/repositories/MatchAirtableRepository';
-import { ResponseSingleMatchData } from '@/modules/matches/model';
 import { getSession } from '@/modules/sessions/services/sessionService';
+import { ResultAirtableRepository } from '@/modules/results/repositories/ResultAirtableRepository';
+import { ResponseResultsData } from '@/modules/results/model';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<ResponseSingleMatchData>) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<ResponseResultsData>) {
   const session = await getSession(req);
 
   if (!session) return res.status(401).json({ success: false });
 
-  const matchRepository = new MatchAirtableRepository(new AirtableData());
+  const resultRepository = new ResultAirtableRepository(new AirtableData());
 
-  // Get Match
-  if (req.method === 'GET') {
+  // Create Results
+  if (req.method === 'POST') {
     try {
-      const result = await matchRepository.getById(req.query.id as string);
+      const result = await resultRepository.updateResults(req.body);
       return res.status(200).json({
         success: true,
         result,
