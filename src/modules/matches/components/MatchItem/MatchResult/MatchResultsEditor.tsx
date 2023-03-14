@@ -6,9 +6,13 @@ import styled from 'styled-components';
 import Grid from '@/modules/common/components/Grid';
 import { useState } from 'react';
 import MatchResultEditor from './MatchResultEditor';
+import { LoadingButton } from '@/modules/common/components/Buttons';
+import { useLoading } from '@/modules/common/hooks/useLoading';
+import { updateMatch, updateResults } from '@/modules/common/services/api';
 
-const MatchResultsEditor = ({ match }: Props) => {
+const MatchResultsEditor = ({ match, onUpdate }: Props) => {
   const { players, results } = match;
+  const [saveStatus, setSaveStatus] = useLoading();
   const [resultState, setResultState] = useState<ResultState>({ players, results });
   const playerOptions = resultState.players.map(
     (player: User): Option => ({
@@ -50,6 +54,33 @@ const MatchResultsEditor = ({ match }: Props) => {
         results: [...results],
       };
     });
+  };
+
+  const onSave = async () => {
+    try {
+      setSaveStatus('loading');
+      const matchToUpdate = {
+        ...match,
+        players: resultState.players,
+      };
+      const [matchResponse, resultsResponse] = await Promise.all([
+        updateMatch(matchToUpdate),
+        updateResults(resultState.results),
+      ]);
+      const updatedMatch = matchResponse.result as Match;
+      const updatedResults = resultsResponse.result as Result[];
+      setResultState((currentState: ResultState) => ({ ...currentState, results: updatedResults }));
+      onUpdate({
+        ...updatedMatch,
+        results: updatedResults,
+      });
+      setSaveStatus('success');
+    } catch (e: any) {
+      // TODO: Handle ApiError, show Toast message
+      // e.status
+      // e.data.message
+      setSaveStatus('error');
+    }
   };
 
   return (
@@ -106,6 +137,11 @@ const MatchResultsEditor = ({ match }: Props) => {
           </Grid>
         </Grid>
       </Grid>
+      <Grid container className="actions">
+        <Grid item>
+          <LoadingButton loading={saveStatus === 'loading'} onClick={onSave}>{`Guardar`}</LoadingButton>
+        </Grid>
+      </Grid>
     </MatchResultsEditorWrapper>
   );
 };
@@ -123,9 +159,12 @@ const MatchResultsEditorWrapper = styled.div`
   .player-selector {
     margin: 0.4rem 0;
   }
-
   .results-editor {
     display: flex;
+  }
+  .actions {
+    display: flex;
+    justify-content: flex-end;
   }
 `;
 
@@ -136,6 +175,7 @@ interface ResultState {
 
 interface Props {
   match: Match;
+  onUpdate: (match: Match) => void;
 }
 
 export default MatchResultsEditor;

@@ -11,10 +11,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
   const matchRepository = new MatchAirtableRepository(new AirtableData());
 
-  if (req.method === 'POST') {
-    // TODO: Implement
-  }
-
+  // Get Match
   if (req.method === 'GET') {
     try {
       const result = await matchRepository.getById(req.query.id as string);

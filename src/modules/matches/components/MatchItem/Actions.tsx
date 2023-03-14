@@ -15,7 +15,7 @@ const Actions = ({ match, user, onUpdate }: Props) => {
   const userIsInMatch = isUserInMatch(match, user);
   const canLeave = userIsInMatch && !isPastMatch;
   const canJoin = !isClosed && !isPastMatch && !userIsInMatch;
-  const canAddOrModifyResult = isPastMatch && userIsInMatch;
+  const canAddOrModifyResult = isPastMatch && userIsInMatch && isClosed;
   const addOrModifyResultLabel = match.results?.length ? 'Editar resultado' : 'Añadir resultado';
 
   const [drawerOpened, setDrawerOpen] = useState<boolean>(false);
@@ -57,15 +57,15 @@ const Actions = ({ match, user, onUpdate }: Props) => {
       )}
       {canAddOrModifyResult && <Button onClick={() => setDrawerOpen(true)}>{addOrModifyResultLabel}</Button>}
       <Drawer anchor="bottom" open={drawerOpened} onClose={() => setDrawerOpen(false)}>
-        <MatchResultsEditor match={match} />
+        <MatchResultsEditor match={match} onUpdate={onUpdate} />
       </Drawer>
     </Wrapper>
   );
 };
 
-const Wrapper = styled.span`
+const Wrapper = styled.div`
   display: flex;
-  margin-top: auto;
+  margin-top: 1rem;
   button {
     font-size: 1.3rem;
   }

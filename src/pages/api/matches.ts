@@ -30,6 +30,22 @@ export default async function handler(
     }
   }
 
+  // Update match
+  if (req.method === 'PUT') {
+    try {
+      const result = await matchRepository.update(req.body);
+      return res.status(200).json({
+        success: true,
+        result,
+      });
+    } catch (error: any) {
+      return res.status(500).json({
+        success: false,
+        error,
+      });
+    }
+  }
+
   // Get Matches
   if (req.method === 'GET') {
     try {

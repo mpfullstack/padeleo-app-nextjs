@@ -63,6 +63,8 @@ export const getMatches = ([url, tab]: [string, Key]) => get<ResponseMatchData>(
 
 export const getMatch = get<ResponseSingleMatchData>;
 
+export const updateMatch = (data: Match) => put<ResponseSingleMatchData, Match>(api.matchesUrl, data);
+
 export const createMatch = (data: Match) => post<ResponseSingleMatchData, Match>(api.matchesUrl, data);
 
 export const joinMatch = (matchId: string) => put<ResponseSingleMatchData, Match>(`${api.matchesUrl}/${matchId}/join`);
