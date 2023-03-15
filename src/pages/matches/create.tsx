@@ -1,5 +1,5 @@
 import { createMatch } from '@/modules/common/services/api';
-import { Button } from '@/modules/common/components/Buttons';
+import { Button } from '@/modules/common/components/Buttons/Buttons';
 import Head from 'next/head';
 import Link from 'next/link';
 

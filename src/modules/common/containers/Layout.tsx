@@ -8,7 +8,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '@/modules/common/redux/store';
 import { logout } from '@/modules/common/services/api';
 import LogoutIcon from '@/modules/common/icons/Logout';
-import { IconButton } from '@/modules/common/components/Buttons';
+import { IconButton } from '@/modules/common/components/Buttons/Buttons';
 
 const Layout = ({ title, userLoggedOut, isLoggedIn, type = 'common', children }: Props): JSX.Element => {
   const theme = useTheme();

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Action, Match } from '@/modules/matches/model';
 import { getMatchStatus, isUserInMatch } from '../../model/utils';
-import { Button, LoadingButton } from '@/modules/common/components/Buttons';
+import { Button, LoadingButton } from '@/modules/common/components/Buttons/Buttons';
 import Drawer from '@/modules/common/components/Drawer';
 import { User } from '@/modules/users/model';
 import { joinMatch, leaveMatch } from '@/modules/common/services/api';

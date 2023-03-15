@@ -2,13 +2,12 @@ import styled from 'styled-components';
 import { Match } from '@/modules/matches/model/index';
 import { format } from '@/modules/common/services/dates';
 import { Paragraph } from './styles';
-import { connect, ConnectedProps } from 'react-redux';
-import { RootState } from '@/modules/common/redux/store';
 import MatchStatus from './MatchStatus';
 import MatchTime from './MatchTime';
 import CourtBooked from './CourtBooked';
 import Actions from './Actions';
 import MatchResult from './MatchResult/MatchResult';
+import { User } from '@/modules/users/model';
 
 const MatchItem = ({ match, user, onUpdate }: Props) => {
   return (
@@ -73,17 +72,10 @@ const SideContent = styled(Content)`
   align-self: stretch;
 `;
 
-interface Props extends PropsFromRedux {
+interface Props {
   match: Match;
   onUpdate: (match: Match) => void;
+  user?: User;
 }
 
-const mapStateToProps = (state: RootState) => ({ user: state.userAccess.user });
-const connector = connect(mapStateToProps);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-const ConnectedMatchItem = connector(MatchItem);
-
-export { MatchItem };
-
-export default ConnectedMatchItem;
+export default MatchItem;
