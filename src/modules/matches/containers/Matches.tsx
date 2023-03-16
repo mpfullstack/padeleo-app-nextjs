@@ -10,10 +10,12 @@ import MatchesTabs, { Key } from '@/modules/matches/components/MatchesTabs';
 import FloatingAddButton from '@/modules/common/components/Buttons/FloatingAddButton';
 import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '@/modules/common/redux/store';
+import { useRouter } from 'next/router';
 
 const Matches = ({ user }: PropsFromRedux) => {
   const [tab, setTab] = useState<Key>('coming');
   const { data, mutate } = useSWR([api.matchesUrl, tab], getMatches);
+  const router = useRouter();
 
   const onUpdatedMatch = useCallback(
     (updatedMatch: Match) => {
@@ -41,7 +43,7 @@ const Matches = ({ user }: PropsFromRedux) => {
           ))}
         </div>
       )}
-      <FloatingAddButton onClick={() => {}} />
+      <FloatingAddButton onClick={() => router.push(`/matches/create`)} />
     </MatchesWrapper>
   );
 };

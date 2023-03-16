@@ -1,36 +1,15 @@
-import { createMatch } from '@/modules/common/services/api';
-import { Button } from '@/modules/common/components/Buttons/Buttons';
-import Head from 'next/head';
-import Link from 'next/link';
+import Layout from '@/modules/common/containers/Layout';
+import { Title } from '@/modules/common/components/Titles';
+import MatchDetail from '@/modules/matches/containers/MatchDetail';
+import { Match } from '@/modules/matches/model';
 
-export default function CreateMatch() {
+export default function CreateMatchPage() {
   return (
-    <>
-      <Head>
-        <title>{`Padeleo App`}</title>
-        <meta name="description" content="" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <main>
-        <p>{`Create Match Route`}</p>
-        <Button
-          onClick={() => {
-            createMatch({
-              id: '',
-              clubId: 'rec78JW2gR1Vz7Axi',
-              clubName: 'Padel Indoor Lloret',
-              startTime: new Date().toString(),
-              duration: 5400,
-              players: [],
-              courtBooked: false,
-              maxPlayers: 4,
-              results: [],
-            });
-          }}
-        >{`Crear partido`}</Button>
-        <Link href="/matches">{`Back to matches`}</Link>
-      </main>
-    </>
+    <Layout type="interior" title="Crear partido">
+      <>
+        <Title>{`Crear partido`}</Title>
+        <MatchDetail match={{} as Match} />
+      </>
+    </Layout>
   );
 }

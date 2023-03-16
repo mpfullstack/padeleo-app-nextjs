@@ -13,7 +13,7 @@ const FloatingAddButton = ({ onClick }: Props) => {
 };
 
 const FloatingButtonWrapper = styled.div`
-  position: absolute;
+  position: fixed;
   bottom: 1rem;
   right: 1rem;
 `;
