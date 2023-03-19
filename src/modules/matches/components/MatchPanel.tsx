@@ -1,21 +1,26 @@
 import { ReactElement } from 'react';
 import styled from 'styled-components';
-// import { IconButton, EditIcon } from '../../common/components/Icon';
+import { useTheme, Theme } from '@mui/material/styles';
+import EditIcon from '@/modules/common/icons/Edit';
+import { IconButton } from '@/modules/common/components/Buttons/Buttons';
 import Panel from '@/modules/common/components/Panel';
 import { Row, Col } from '@/modules/common/components/Layout';
 // import Tooltip from '../../common/components/Tooltip';
 
 const MatchPanel = ({ title, onEdit, editLabel = 'Edit', children }: Props) => {
+  const theme = useTheme();
+
   return (
-    <RowPanel>
+    <RowPanel theme={theme}>
       <Col>
         <Panel
           title={title}
           action={
             onEdit && (
-              <p>{`Edit`}</p>
               // <Tooltip title={editLabel}>
-              //   <IconButton color="primary" size="small" aria-label={editLabel} onClick={onEdit}><EditIcon /></IconButton>
+              <IconButton color="primary" aria-label={editLabel} onClick={onEdit}>
+                <EditIcon />
+              </IconButton>
               // </Tooltip>
             )
           }
@@ -27,7 +32,7 @@ const MatchPanel = ({ title, onEdit, editLabel = 'Edit', children }: Props) => {
   );
 };
 
-const RowPanel = styled(Row)`
+const RowPanel = styled(Row)<{ theme: Theme }>`
   width: 100%;
   margin-top: 1rem;
   margin-bottom: 1rem;
@@ -38,6 +43,7 @@ const RowPanel = styled(Row)`
   .MuiCardHeader-title {
     font-size: 1.5rem;
     font-weight: 400;
+    color: ${({ theme }) => theme.palette.grey[900]};
   }
   .MuiCardContent-root {
     padding: 0.5rem 1.6rem;

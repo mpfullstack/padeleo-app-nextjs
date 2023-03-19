@@ -3,3 +3,8 @@ export type ResponseData<T> = {
   error?: any;
   result?: T;
 };
+
+export interface Option {
+  key: string;
+  label: string;
+}

@@ -5,6 +5,7 @@ import { ResultRecord, ResultType } from '@/modules/results/model';
 import { User } from '@/modules/users/model';
 import { Session } from '@/modules/sessions/model';
 import { Result } from '@/modules/results/model';
+import { Club } from '@/modules/clubs/model';
 
 export class AirtableData {
   private base: AirtableBase;
@@ -103,6 +104,13 @@ export class AirtableData {
     return {
       ...this.userMapper(record),
       id: record.get('userId')?.toString() as string,
+    };
+  }
+
+  private mapRecordToClub(record: Record<FieldSet>): Club {
+    return {
+      id: record.id,
+      name: record.get('name') as string,
     };
   }
 
@@ -267,6 +275,22 @@ export class AirtableData {
           userId: [userId],
         })
         .then(record => resolve(this.sessionMapper(record)))
+        .catch(reject);
+    });
+  }
+
+  getClubs() {
+    return new Promise<Club[]>((resolve, reject) => {
+      const clubs: Club[] = [];
+      this.base('Club')
+        .select({
+          view: 'Grid view',
+        })
+        .eachPage((records, fetchNextPage) => {
+          records.forEach(record => clubs.push(this.mapRecordToClub(record)));
+          fetchNextPage();
+        })
+        .then(() => resolve(clubs))
         .catch(reject);
     });
   }

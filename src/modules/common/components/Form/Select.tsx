@@ -1,12 +1,10 @@
 import MenuItem from '@mui/material/MenuItem';
 import MuiSelect, { SelectProps, SelectChangeEvent } from '@mui/material/Select';
 import styled from 'styled-components';
-import { FormControl } from '@mui/material';
+import FormControl from '@mui/material/FormControl';
 
 const Select = ({ options, onChange, value, className }: Props) => {
-  const handleChange = (event: SelectChangeEvent) => {
-    onChange && onChange(event.target.value as string);
-  };
+  const handleChange = (event: SelectChangeEvent) => onChange && onChange(event.target.value as string);
 
   return (
     <FormControl fullWidth>

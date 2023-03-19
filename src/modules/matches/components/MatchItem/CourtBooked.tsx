@@ -12,6 +12,7 @@ const CourtBooked = ({ booked }: { booked: boolean }) => {
 };
 
 const CourtBookedText = styled(Text)`
+  font-weight: 400;
   margin: 0.3rem 0 0.4rem 0;
 `;
 
