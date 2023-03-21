@@ -1,9 +1,10 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import { Option } from '@/modules/common/components/Form/Select';
 import ClubField, { ClubValue } from '@/modules/matches/components/MatchForm/ClubField';
 import { Match } from '@/modules/matches/model';
 import { Button } from '@/modules/common/components/Buttons/Buttons';
-import { useState } from 'react';
+import MatchDateTime, { DateTimeValue } from '@/modules/matches/components/MatchForm/MatchDateTime';
 
 const MatchForm = ({ field, value, options, onFinish }: Props) => {
   const [formData, setFormData] = useState<FormData>(value);
@@ -20,6 +21,8 @@ const MatchForm = ({ field, value, options, onFinish }: Props) => {
       }}
     >
       {field === 'clubName' && <ClubField value={formData as ClubValue} options={options} onChange={handleChange} />}
+
+      {field === 'startTime' && <MatchDateTime value={formData as DateTimeValue} onChange={handleChange} />}
 
       <Button type="submit" color="primary">{`Guardar`}</Button>
     </StyledForm>

@@ -53,7 +53,7 @@ export interface ClubValue {
 interface Props {
   value: ClubValue;
   options: Option[];
-  onChange: (val: any) => any;
+  onChange: (value: ClubValue) => void;
 }
 
 export default ClubField;

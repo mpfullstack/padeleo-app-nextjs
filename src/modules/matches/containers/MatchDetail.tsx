@@ -3,7 +3,6 @@ import useSWR from 'swr';
 import MatchPanel from '@/modules/matches/components/MatchPanel';
 import MatchForm, { FormData } from '@/modules/matches/components/MatchForm/MatchForm';
 import { Match } from '@/modules/matches/model';
-import { format } from '@/modules/common/services/dates';
 import styled from 'styled-components';
 import MatchPlayers from '@/modules/matches/components/MatchItem/MatchPlayers';
 import Drawer from '@/modules/common/components/Drawer';
@@ -12,6 +11,8 @@ import { Club } from '@/modules/clubs/model';
 import { User } from '@/modules/users/model';
 import { Option } from '@/modules/common/components/Form/Select';
 import CourtBooked from '@/modules/matches/components/MatchItem/CourtBooked';
+import MatchTime from '@/modules/matches/components/MatchItem/MatchTime';
+import MatchDate from '@/modules/matches/components/MatchItem/MatchDate';
 
 const MatchDetail = ({ match }: Props) => {
   const [matchData, setMatchData] = useState<Match>(match);
@@ -53,7 +54,8 @@ const MatchDetail = ({ match }: Props) => {
       mapClubsToOptions(clubs?.result || [])
     );
 
-  const editStartime = () => startEditing('startTime', { startTime: matchData.startTime });
+  const editStartime = () =>
+    startEditing('startTime', { startTime: matchData.startTime, duration: matchData.duration });
 
   const editPlayers = () =>
     startEditing('players', { players: matchData.players }, mapPlayersToOptions(players?.result || []));
@@ -77,8 +79,8 @@ const MatchDetail = ({ match }: Props) => {
         <MatchPanel title="Fecha y hora" onEdit={editStartime} editLabel="Fecha y hora">
           {matchData.startTime ? (
             <>
-              <p className="text">{format(matchData.startTime, 'EEEE dd/MM/yyyy')}</p>
-              <p className="text"></p>
+              <MatchDate date={matchData.startTime} />
+              <MatchTime startTime={matchData.startTime} duration={matchData.duration} />
             </>
           ) : (
             <p>{`---`}</p>

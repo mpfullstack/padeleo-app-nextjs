@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { Match } from '@/modules/matches/model/index';
-import { format } from '@/modules/common/services/dates';
 import { Paragraph } from './styles';
 import MatchStatus from './MatchStatus';
 import MatchTime from './MatchTime';
@@ -8,6 +7,7 @@ import CourtBooked from './CourtBooked';
 import Actions from './Actions';
 import MatchResult from './MatchResult/MatchResult';
 import { User } from '@/modules/users/model';
+import MatchDate from './MatchDate';
 
 const MatchItem = ({ match, user, onUpdate }: Props) => {
   return (
@@ -15,7 +15,7 @@ const MatchItem = ({ match, user, onUpdate }: Props) => {
       <Content>
         <ClubName>{match.clubName || `Sin definir`}</ClubName>
         <CourtBooked booked={match.courtBooked} />
-        <Paragraph>{match.startTime ? format(match.startTime, 'EEEE dd/MM/yyyy') : `Fecha sin definir`}</Paragraph>
+        {match.startTime ? <MatchDate date={match.startTime} /> : <Paragraph>{`Fecha sin definir`}</Paragraph>}
         <MatchTime startTime={match.startTime} duration={match.duration} />
       </Content>
       <SideContent>
