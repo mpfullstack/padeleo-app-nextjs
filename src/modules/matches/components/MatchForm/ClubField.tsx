@@ -1,9 +1,23 @@
 import styled from 'styled-components';
+import useSWR from 'swr';
+import api, { getClubs } from '@/modules/common/services/api';
 import { Row, Col } from '@/modules/common/components/Layout';
 import Select, { Option } from '@/modules/common/components/Form/Select';
 import Checkbox from '@/modules/common/components/Form/Checkbox';
+import { Club } from '@/modules/clubs/model';
 
-const ClubField = ({ value: fieldValue, options, onChange }: Props) => {
+const ClubField = ({ value: fieldValue, onChange }: Props) => {
+  const { data } = useSWR(api.clubsUrl, getClubs);
+
+  if (!data?.result) {
+    return null;
+  }
+
+  const options = data.result.map((club: Club) => ({
+    id: club.id as string,
+    value: club.name,
+  }));
+
   const handleChange = (value: ClubValue) => {
     const club = options.find((option: Option) => option.id === value.clubId);
     onChange({
@@ -39,6 +53,7 @@ const ClubField = ({ value: fieldValue, options, onChange }: Props) => {
 };
 
 const StyledRow = styled(Row)`
+  margin: 1rem;
   &.MuiGrid-container:first-child {
     margin-bottom: 0px;
   }
@@ -52,7 +67,6 @@ export interface ClubValue {
 
 interface Props {
   value: ClubValue;
-  options: Option[];
   onChange: (value: ClubValue) => void;
 }
 

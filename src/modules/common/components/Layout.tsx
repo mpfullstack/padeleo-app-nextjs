@@ -18,7 +18,7 @@ const Row = ({ children, ...rest }: Props) => {
 };
 
 interface Props {
-  children: ReactElement;
+  children: ReactElement | ReactElement[];
   xs?: number;
 }
 

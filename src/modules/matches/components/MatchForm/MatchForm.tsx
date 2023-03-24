@@ -5,6 +5,7 @@ import ClubField, { ClubValue } from '@/modules/matches/components/MatchForm/Clu
 import { Match } from '@/modules/matches/model';
 import { Button } from '@/modules/common/components/Buttons/Buttons';
 import MatchDateTime, { DateTimeValue } from '@/modules/matches/components/MatchForm/MatchDateTime';
+import PlayersField, { PlayersValue } from '@/modules/matches/components/MatchForm/PlayersField';
 
 const MatchForm = ({ field, value, options, onFinish }: Props) => {
   const [formData, setFormData] = useState<FormData>(value);
@@ -20,9 +21,11 @@ const MatchForm = ({ field, value, options, onFinish }: Props) => {
         e.stopPropagation();
       }}
     >
-      {field === 'clubName' && <ClubField value={formData as ClubValue} options={options} onChange={handleChange} />}
+      {field === 'clubName' && <ClubField value={formData as ClubValue} onChange={handleChange} />}
 
       {field === 'startTime' && <MatchDateTime value={formData as DateTimeValue} onChange={handleChange} />}
+
+      {field === 'players' && <PlayersField value={formData as PlayersValue} onChange={handleChange} />}
 
       <Button type="submit" color="primary">{`Guardar`}</Button>
     </StyledForm>

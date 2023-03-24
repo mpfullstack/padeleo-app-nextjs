@@ -56,12 +56,13 @@ export class AirtableData {
   }
 
   private mapMatchToRecord(match: Match): MatchRecord {
-    const { id, clubName, results, ...data } = match;
+    const { id, clubName, results, maxPlayers, players = [], ...data } = match;
     return {
       ...data,
+      maxPlayers: maxPlayers || 4,
       startTime: match.startTime?.toString(),
       clubId: [match.clubId],
-      players: match.players.map((player: User) => player.id) as string[],
+      players: players.map((player: User) => player.id) as string[],
     };
   }
 

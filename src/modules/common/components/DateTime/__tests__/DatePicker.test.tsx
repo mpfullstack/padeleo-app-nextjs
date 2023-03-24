@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import DatePicker from '../DatePicker';
 import TimePicker from '../TimePicker';
 
-describe('DatePicker and DatePicker', () => {
+describe('DatePicker and TimePicker', () => {
   it('Should render DatePicker label', () => {
     render(<DatePicker label="Match date" date={new Date()} onChange={() => null} />);
 
@@ -15,6 +15,6 @@ describe('DatePicker and DatePicker', () => {
     time.setMinutes(21);
     render(<TimePicker label="Match time" date={time} onChange={() => null} />);
 
-    expect(screen.queryByLabelText(/10:21 PM/)).toBeInTheDocument();
+    expect(screen.queryByLabelText(/22:21/)).toBeInTheDocument();
   });
 });

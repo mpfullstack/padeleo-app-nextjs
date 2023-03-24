@@ -1,26 +1,33 @@
 import { useState } from 'react';
-import useSWR from 'swr';
 import MatchPanel from '@/modules/matches/components/MatchPanel';
 import MatchForm, { FormData } from '@/modules/matches/components/MatchForm/MatchForm';
 import { Match } from '@/modules/matches/model';
 import styled from 'styled-components';
 import MatchPlayers from '@/modules/matches/components/MatchItem/MatchPlayers';
 import Drawer from '@/modules/common/components/Drawer';
-import api, { getClubs, getUsers } from '@/modules/common/services/api';
-import { Club } from '@/modules/clubs/model';
-import { User } from '@/modules/users/model';
+import { createMatch } from '@/modules/common/services/api';
 import { Option } from '@/modules/common/components/Form/Select';
 import CourtBooked from '@/modules/matches/components/MatchItem/CourtBooked';
 import MatchTime from '@/modules/matches/components/MatchItem/MatchTime';
 import MatchDate from '@/modules/matches/components/MatchItem/MatchDate';
+import { LoadingButton } from '@/modules/common/components/Buttons/Buttons';
+import { useRouter } from 'next/router';
 
 const MatchDetail = ({ match }: Props) => {
+  const router = useRouter();
   const [matchData, setMatchData] = useState<Match>(match);
   const [editing, setEditing] = useState<Editing>({ status: 'idle', field: 'clubName', value: {}, options: [] });
-  const { data: players } = useSWR(api.usersUrl, getUsers);
-  const { data: clubs } = useSWR(api.clubsUrl, getClubs);
   const { field, value, options } = editing;
   const isEditing = editing.status === 'editing';
+
+  const saveMatch = async () => {
+    try {
+      await createMatch(matchData);
+      router.push({ pathname: '/matches' });
+    } catch (e: any) {
+      // TODO: Handle error
+    }
+  };
 
   const startEditing = (field: keyof Match, value: FormData, options: Option[] = []) => {
     setEditing({
@@ -32,39 +39,24 @@ const MatchDetail = ({ match }: Props) => {
   };
   const stopEditing = () => setEditing({ status: 'idle', field: 'clubName', value: {}, options: [] });
 
-  const mapClubsToOptions = (clubs: Club[]): Option[] =>
-    clubs.map((club: Club) => ({
-      id: club.id as string,
-      value: club.name,
-    }));
-  const mapPlayersToOptions = (players: User[]): Option[] =>
-    players.map((player: User) => ({
-      id: player.id as string,
-      value: player.nickname as string,
-    }));
-
   const editClub = () =>
-    startEditing(
-      'clubName',
-      {
-        clubId: matchData.clubId,
-        clubName: matchData.clubName,
-        courtBooked: matchData.courtBooked,
-      },
-      mapClubsToOptions(clubs?.result || [])
-    );
+    startEditing('clubName', {
+      clubId: matchData.clubId,
+      clubName: matchData.clubName,
+      courtBooked: matchData.courtBooked,
+    });
 
   const editStartime = () =>
     startEditing('startTime', { startTime: matchData.startTime, duration: matchData.duration });
 
-  const editPlayers = () =>
-    startEditing('players', { players: matchData.players }, mapPlayersToOptions(players?.result || []));
+  const editPlayers = () => startEditing('players', { players: matchData.players || [] });
 
   const updatedOrCreatedMatch = (data: Partial<Match>) => {
     setMatchData((state: Match) => ({
       ...state,
       ...data,
     }));
+    stopEditing();
   };
 
   return (
@@ -89,6 +81,7 @@ const MatchDetail = ({ match }: Props) => {
         <MatchPanel title="Jugadores" onEdit={editPlayers} editLabel="Jugadores">
           <MatchPlayers matchId={matchData.id} players={matchData.players} max={4} />
         </MatchPanel>
+        <LoadingButton onClick={() => saveMatch()}>{`Guardar`}</LoadingButton>
       </PanelWrapper>
       <Drawer anchor="bottom" open={isEditing} onClose={() => stopEditing()}>
         <div

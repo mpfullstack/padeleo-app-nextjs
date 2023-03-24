@@ -40,11 +40,13 @@ const MatchDateTime = ({ value, onChange }: Props) => {
 
   return (
     <>
-      <DatePicker
-        label="Fecha del partido"
-        date={new Date(selectedStartTime)}
-        onChange={value => handleStartDateChange(value as Date)}
-      />
+      <DatePickersWrapper>
+        <DatePicker
+          label="Fecha del partido"
+          date={new Date(selectedStartTime)}
+          onChange={value => handleStartDateChange(value as Date)}
+        />
+      </DatePickersWrapper>
       <TimePickersWrapper>
         <TimePicker
           label="Hora inicio"
@@ -57,13 +59,18 @@ const MatchDateTime = ({ value, onChange }: Props) => {
   );
 };
 
+const DatePickersWrapper = styled.div`
+  margin: 1rem 0;
+`;
+
 const TimePickersWrapper = styled.div`
   display: flex;
+  margin: 1rem 0;
   & > div:first-child {
-    margin-right: 10px;
+    margin-right: 1rem;
   }
   & > div:last-child {
-    margin-left: 10px;
+    margin-left: 1rem;
   }
 `;
 

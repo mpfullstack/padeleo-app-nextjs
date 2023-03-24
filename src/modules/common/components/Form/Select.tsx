@@ -2,13 +2,15 @@ import MenuItem from '@mui/material/MenuItem';
 import MuiSelect, { SelectProps, SelectChangeEvent } from '@mui/material/Select';
 import styled from 'styled-components';
 import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
 
-const Select = ({ options, onChange, value, className }: Props) => {
+const Select = ({ options, onChange, value, className, label }: Props) => {
   const handleChange = (event: SelectChangeEvent) => onChange && onChange(event.target.value as string);
 
   return (
     <FormControl fullWidth>
-      <MuiSelect value={value} onChange={handleChange} className={className}>
+      {label && <InputLabel id={label}>{label}</InputLabel>}
+      <MuiSelect label={label || ''} labelId={label || ''} value={value} onChange={handleChange} className={className}>
         {options.map((option: Option) => {
           return (
             <MenuItem key={option.id} value={option.id}>
@@ -33,6 +35,7 @@ export interface Option {
 
 interface Props extends Omit<SelectProps, 'onChange'> {
   options: Option[];
+  label?: string;
   value?: string;
   onChange?: (value: string) => void;
 }

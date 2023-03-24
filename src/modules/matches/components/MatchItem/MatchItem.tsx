@@ -8,6 +8,7 @@ import Actions from './Actions';
 import MatchResult from './MatchResult/MatchResult';
 import { User } from '@/modules/users/model';
 import MatchDate from './MatchDate';
+import { hasResults } from '@/modules/matches/utils';
 
 const MatchItem = ({ match, user, onUpdate }: Props) => {
   return (
@@ -19,7 +20,7 @@ const MatchItem = ({ match, user, onUpdate }: Props) => {
         <MatchTime startTime={match.startTime} duration={match.duration} />
       </Content>
       <SideContent>
-        {match.results.length > 0 ? (
+        {hasResults(match) ? (
           <MatchResult
             results={match.results}
             players={match.players}
