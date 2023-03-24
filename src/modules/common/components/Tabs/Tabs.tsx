@@ -1,6 +1,7 @@
 import { useState, SyntheticEvent } from 'react';
 import MuiTabs from '@mui/material/Tabs';
 import MuiTab from '@mui/material/Tab';
+import { Option } from '@/modules/common/model';
 
 const Tabs = ({ options = [], selected, handleTabChange }: Props) => {
   const [value, setValue] = useState(selected);
@@ -27,11 +28,6 @@ interface Props {
   options: Option[];
   selected: string;
   handleTabChange: (option: string) => void;
-}
-
-interface Option {
-  key: string;
-  label: string;
 }
 
 export default Tabs;

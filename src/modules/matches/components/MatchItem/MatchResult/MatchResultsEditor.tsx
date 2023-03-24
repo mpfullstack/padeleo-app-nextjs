@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import Grid from '@/modules/common/components/Grid';
 import { useState } from 'react';
 import MatchResultEditor from './MatchResultEditor';
-import { LoadingButton } from '@/modules/common/components/Buttons';
+import { LoadingButton } from '@/modules/common/components/Buttons/Buttons';
 import { useLoading } from '@/modules/common/hooks/useLoading';
 import { updateMatch, updateResults } from '@/modules/common/services/api';
 

@@ -8,3 +8,5 @@ export const updateMatch = (matches: Match[], matchToUpate: Match) => {
     return match;
   });
 };
+
+export const hasResults = (match: Match): boolean => !!match.results?.length;

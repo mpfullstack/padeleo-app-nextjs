@@ -8,7 +8,8 @@ import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '@/modules/common/redux/store';
 import { logout } from '@/modules/common/services/api';
 import LogoutIcon from '@/modules/common/icons/Logout';
-import { IconButton } from '@/modules/common/components/Buttons';
+import { IconButton } from '@/modules/common/components/Buttons/Buttons';
+import Link from 'next/link';
 
 const Layout = ({ title, userLoggedOut, isLoggedIn, type = 'common', children }: Props): JSX.Element => {
   const theme = useTheme();
@@ -32,8 +33,10 @@ const Layout = ({ title, userLoggedOut, isLoggedIn, type = 'common', children }:
       </Head>
       <Header type={type}>
         <Logo>
-          <Image src="/logo-main.png" width={logoSize} height={logoSize} alt="Padeleo" />
-          <Span color={theme.palette.secondary.main}>{`Padeleo`}</Span>
+          <Link href="/matches">
+            <Image src="/logo-main.png" width={logoSize} height={logoSize} alt="Padeleo" />
+            <Span color={theme.palette.secondary.main}>{`Padeleo`}</Span>
+          </Link>
         </Logo>
         {isLoggedIn && (
           <Logout>

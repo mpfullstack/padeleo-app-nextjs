@@ -23,11 +23,6 @@ export interface MatchRecord extends Omit<Match, 'id' | 'players' | 'clubId' | '
 
 export type Status = 'opened' | 'closed';
 
-export interface Club {
-  id?: string;
-  name: string;
-}
-
 export interface DateTime {
   start: Date | null;
   end: Date | null;

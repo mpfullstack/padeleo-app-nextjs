@@ -9,7 +9,7 @@ import { RootState } from '@/modules/common/redux/store';
 import { useRouter } from 'next/router';
 import { Title } from '@/modules/common/components/Titles';
 import styled from 'styled-components';
-import { Button, LoadingButton } from '@/modules/common/components/Buttons';
+import { Button, LoadingButton } from '@/modules/common/components/Buttons/Buttons';
 import Paragraph from '@/modules/common/components/Paragraph';
 import { useLoading } from '@/modules/common/hooks/useLoading';
 

@@ -27,11 +27,11 @@ export const Couple = ({ couple, display }: { couple: User[]; display: Display }
   return (
     <PlayersCouple display={display}>
       <Player>
-        <PlayerName>{playerA?.nickname || <QuestionMark />}</PlayerName>
+        <PlayerName>{playerA?.nickname || <QuestionMark fontSize="small" />}</PlayerName>
       </Player>
       {display === 'row' && <Divider>{`-`}</Divider>}
       <Player>
-        <PlayerName>{playerB?.nickname || <QuestionMark />}</PlayerName>
+        <PlayerName>{playerB?.nickname || <QuestionMark fontSize="small" />}</PlayerName>
       </Player>
     </PlayersCouple>
   );

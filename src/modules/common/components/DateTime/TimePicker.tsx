@@ -5,6 +5,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { TimePicker as MuiTimePicker } from '@mui/x-date-pickers/TimePicker';
 import { Props } from '@/modules/common/components/DateTime/types';
+import 'dayjs/locale/es';
 
 const TimePicker = ({ date, label, onChange }: Props) => {
   const [value, setValue] = useState<Dayjs | null>(date && dayjs(date));
@@ -14,7 +15,7 @@ const TimePicker = ({ date, label, onChange }: Props) => {
   };
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es">
       <MuiTimePicker
         label={label}
         value={value}

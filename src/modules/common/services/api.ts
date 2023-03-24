@@ -1,4 +1,5 @@
 import { Match, ResponseMatchData, ResponseSingleMatchData } from '@/modules/matches/model';
+import { ResponseClubData } from '@/modules/clubs/model';
 import { SignInPayload } from '@/modules/user-access/model';
 import { User, ResponseUserData, ResponseSingleUserData } from '@/modules/users/model';
 import { ResponseData } from '@/modules/common/model';
@@ -12,6 +13,7 @@ const api = {
   signIn: '/api/auth/signin',
   logout: '/api/auth/logout',
   isAuthenticated: '/api/auth',
+  clubsUrl: '/api/clubs',
 };
 
 export default api;
@@ -86,3 +88,6 @@ export const logout = () => post<ResponseData<void>, {}>(api.logout, {});
 
 // Results API
 export const updateResults = (data: Result[]) => post<ResponseResultsData, Result[]>(api.resultsUrl, data);
+
+// Clubs API
+export const getClubs = get<ResponseClubData>;

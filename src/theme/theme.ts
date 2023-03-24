@@ -25,6 +25,7 @@ export const themeOptions: ThemeOptions = {
       '"Segoe UI Emoji"',
       '"Segoe UI Symbol"',
     ].join(','),
+    fontSize: 22,
     h1: {
       fontSize: '2rem',
       fontWeight: '700',
