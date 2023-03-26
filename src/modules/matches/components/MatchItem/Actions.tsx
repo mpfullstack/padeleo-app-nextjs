@@ -4,13 +4,13 @@ import { getMatchStatus, isUserInMatch } from '../../model/utils';
 import { Button, LoadingButton } from '@/modules/common/components/Buttons/Buttons';
 import Drawer from '@/modules/common/components/Drawer';
 import { User } from '@/modules/users/model';
-import { joinMatch, leaveMatch } from '@/modules/common/services/api';
+import { joinMatch, leaveMatch, deleteMatch } from '@/modules/common/services/api';
 import { useLoading } from '@/modules/common/hooks/useLoading';
 import { useState } from 'react';
 import MatchResultsEditor from './MatchResult/MatchResultsEditor';
 import { useRouter } from 'next/router';
 
-const Actions = ({ match, user, onUpdate }: Props) => {
+const Actions = ({ match, user, onUpdate, onDelete }: Props) => {
   const router = useRouter();
   const isClosed = getMatchStatus(match) === 'closed';
   const isPastMatch = new Date(match.startTime) < new Date();
@@ -19,11 +19,13 @@ const Actions = ({ match, user, onUpdate }: Props) => {
   const canJoin = !isClosed && !isPastMatch && !userIsInMatch;
   const canAddOrModifyResult = isPastMatch && userIsInMatch && isClosed;
   const canEdit = !isPastMatch && user?.admin;
+  const canDelete = user?.admin;
   const addOrModifyResultLabel = match.results?.length ? 'Editar resultado' : 'Añadir resultado';
 
   const [drawerOpened, setDrawerOpen] = useState<boolean>(false);
   const [leaveStatus, setLeaveStatus] = useLoading();
   const [joinStatus, setJoinStatus] = useLoading();
+  const [deleteStatus, setDeleteStatus] = useLoading();
 
   const onClickAction = async (action: Action) => {
     try {
@@ -51,6 +53,19 @@ const Actions = ({ match, user, onUpdate }: Props) => {
     onUpdate(match);
   };
 
+  const onDeleteMatch = async (id: string) => {
+    try {
+      setDeleteStatus('loading');
+      await deleteMatch(id);
+      onDelete(id);
+      setDeleteStatus('success');
+    } catch (e: any) {
+      // TODO: Handle ApiError, show Toast message
+      // e.status
+      // e.data.message
+    }
+  };
+
   return (
     <Wrapper>
       {canLeave && (
@@ -65,6 +80,11 @@ const Actions = ({ match, user, onUpdate }: Props) => {
       )}
       {canAddOrModifyResult && <Button onClick={() => setDrawerOpen(true)}>{addOrModifyResultLabel}</Button>}
       {canEdit && <Button onClick={() => router.push({ pathname: `/matches/${match.id}` })}>{`Editar`}</Button>}
+      {canDelete && (
+        <LoadingButton color="error" loading={deleteStatus === 'loading'} onClick={() => onDeleteMatch(match.id)}>
+          {`Eliminar`}
+        </LoadingButton>
+      )}
       <Drawer anchor="bottom" open={drawerOpened} onClose={() => setDrawerOpen(false)}>
         <MatchResultsEditor match={match} onUpdate={onResultAdded} />
       </Drawer>
@@ -86,6 +106,7 @@ const Wrapper = styled.div`
 interface Props {
   match: Match;
   onUpdate: (match: Match) => void;
+  onDelete: (matchId: string) => void;
   user?: User;
 }
 

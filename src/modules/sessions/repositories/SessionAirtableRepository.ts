@@ -1,4 +1,4 @@
-import { AirtableData } from '@/database/Airtable';
+import { AirtableData } from '@/database/Airtable/Airtable';
 import { Session } from '@/modules/sessions/model';
 
 export interface SessionRepository {

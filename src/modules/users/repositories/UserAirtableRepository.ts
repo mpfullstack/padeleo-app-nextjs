@@ -1,4 +1,4 @@
-import { AirtableData } from '@/database/Airtable';
+import { AirtableData } from '@/database/Airtable/Airtable';
 import { User } from '@/modules/users/model';
 
 export interface UserRepository {

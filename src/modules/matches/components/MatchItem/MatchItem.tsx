@@ -10,7 +10,7 @@ import { User } from '@/modules/users/model';
 import MatchDate from './MatchDate';
 import { hasResults } from '@/modules/matches/utils';
 
-const MatchItem = ({ match, user, onUpdate }: Props) => {
+const MatchItem = ({ match, user, onUpdate, onDelete }: Props) => {
   return (
     <MatchItemWrapper>
       <MainContent>
@@ -33,7 +33,7 @@ const MatchItem = ({ match, user, onUpdate }: Props) => {
           )}
         </SideContent>
       </MainContent>
-      <Actions match={match} user={user} onUpdate={onUpdate} />
+      <Actions match={match} user={user} onUpdate={onUpdate} onDelete={onDelete} />
     </MatchItemWrapper>
   );
 };
@@ -82,6 +82,7 @@ const SideContent = styled(Content)`
 interface Props {
   match: Match;
   onUpdate: (match: Match) => void;
+  onDelete: (matchId: string) => void;
   user?: User;
 }
 

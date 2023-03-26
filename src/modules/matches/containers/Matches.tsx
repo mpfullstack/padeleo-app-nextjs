@@ -5,7 +5,7 @@ import api, { getMatches } from '@/modules/common/services/api';
 import MatchItem from '@/modules/matches/components/MatchItem';
 import { useCallback, useState } from 'react';
 import { Match, ResponseMatchData } from '@/modules/matches/model';
-import { updateMatch } from '@/modules/matches/utils';
+import { updateMatch, removeMatch } from '@/modules/matches/utils';
 import MatchesTabs, { Key } from '@/modules/matches/components/MatchesTabs';
 import FloatingAddButton from '@/modules/common/components/Buttons/FloatingAddButton';
 import { connect, ConnectedProps } from 'react-redux';
@@ -17,13 +17,28 @@ const Matches = ({ user }: PropsFromRedux) => {
   const { data, mutate } = useSWR([api.matchesUrl, tab], getMatches);
   const router = useRouter();
 
-  const onUpdatedMatch = useCallback(
+  const onMatchUpdated = useCallback(
     (updatedMatch: Match) => {
       mutate(
         async currentData => {
           return {
             ...currentData,
             result: updateMatch(currentData?.result as Match[], updatedMatch),
+          } as ResponseMatchData;
+        },
+        { revalidate: false }
+      );
+    },
+    [mutate]
+  );
+
+  const onMatchDeleted = useCallback(
+    (matchId: string) => {
+      mutate(
+        async currentData => {
+          return {
+            ...currentData,
+            result: removeMatch(currentData?.result as Match[], matchId),
           } as ResponseMatchData;
         },
         { revalidate: false }
@@ -39,7 +54,7 @@ const Matches = ({ user }: PropsFromRedux) => {
       {data?.result && (
         <div>
           {data?.result.map(match => (
-            <MatchItem key={match.id} match={match} onUpdate={onUpdatedMatch} user={user} />
+            <MatchItem key={match.id} match={match} onUpdate={onMatchUpdated} onDelete={onMatchDeleted} user={user} />
           ))}
         </div>
       )}

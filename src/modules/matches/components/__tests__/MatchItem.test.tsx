@@ -6,13 +6,13 @@ import { user } from '@/mocks/users/data';
 
 describe('MatchItem', () => {
   it('Should render MatchItem', () => {
-    render(<MatchItem match={match} user={user} onUpdate={() => null} />);
+    render(<MatchItem match={match} user={user} onUpdate={() => null} onDelete={() => null} />);
 
     expect(screen.queryByText(/Padel Indoor Lloret/)).toBeInTheDocument();
   });
 
   it('Should render correct match start time and duration', () => {
-    const { container } = render(<MatchItem match={match} user={user} onUpdate={() => null} />);
+    const { container } = render(<MatchItem match={match} user={user} onUpdate={() => null} onDelete={() => null} />);
 
     expect(container).toHaveTextContent('miércoles 08/02/2023');
     const date = new Date(match.startTime);
@@ -21,13 +21,15 @@ describe('MatchItem', () => {
   });
 
   it('Should render missing players', () => {
-    const { container } = render(<MatchItem match={match} user={user} onUpdate={() => null} />);
+    const { container } = render(<MatchItem match={match} user={user} onUpdate={() => null} onDelete={() => null} />);
 
     expect(container).toHaveTextContent('Faltan3');
   });
 
   it('Should render closed match status', () => {
-    const { container } = render(<MatchItem match={closedMatch} user={user} onUpdate={() => null} />);
+    const { container } = render(
+      <MatchItem match={closedMatch} user={user} onUpdate={() => null} onDelete={() => null} />
+    );
 
     expect(container).toHaveTextContent('Cerrado');
   });

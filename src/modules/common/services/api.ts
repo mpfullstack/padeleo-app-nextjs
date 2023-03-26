@@ -60,6 +60,11 @@ const put = async <T, P>(url: string, data?: P): Promise<T> =>
     body: data && JSON.stringify(data),
   }).then(handleResponse<P>);
 
+const del = async <T, P>(url: string): Promise<T> =>
+  await fetch(url, {
+    method: 'delete',
+  }).then(handleResponse<P>);
+
 // Matches API
 export const getMatches = ([url, tab]: [string, Key]) => get<ResponseMatchData>(url, { tab });
 
@@ -68,6 +73,8 @@ export const getMatch = get<ResponseSingleMatchData>;
 export const updateMatch = (data: Match) => put<ResponseSingleMatchData, Match>(api.matchesUrl, data);
 
 export const createMatch = (data: Match) => post<ResponseSingleMatchData, Match>(api.matchesUrl, data);
+
+export const deleteMatch = (matchId: string) => del<ResponseData<boolean>, null>(`${api.matchesUrl}/${matchId}`);
 
 export const joinMatch = (matchId: string) => put<ResponseSingleMatchData, Match>(`${api.matchesUrl}/${matchId}/join`);
 

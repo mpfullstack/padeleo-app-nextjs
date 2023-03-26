@@ -1,4 +1,4 @@
-import { AirtableData } from '@/database/Airtable';
+import { AirtableData } from '@/database/Airtable/Airtable';
 import { Match } from '@/modules/matches/model';
 import { User } from '@/modules/users/model';
 import { ApiError } from 'next/dist/server/api-utils';
@@ -10,6 +10,7 @@ export interface MatchRepository {
   getByUserNickname(nickname: string): Promise<Match[]>;
   getById(id: string): Promise<Match>;
   create(data: Match): Promise<Match>;
+  deleteById(id: string): Promise<void>;
   update(data: Match): Promise<Match>;
   addPlayer(matchId: string, user: User): Promise<Match>;
 }
@@ -54,6 +55,10 @@ export class MatchAirtableRepository implements MatchRepository {
 
   async create(data: Match): Promise<Match> {
     return await this.database.createMatch(data);
+  }
+
+  async deleteById(matchId: string): Promise<void> {
+    return await this.database.deleteMatch(matchId);
   }
 
   async update(data: Match): Promise<Match> {

@@ -1,5 +1,5 @@
 import type { NextApiRequest } from 'next';
-import { AirtableData } from '@/database/Airtable';
+import { AirtableData } from '@/database/Airtable/Airtable';
 import { SessionAirtableRepository } from '@/modules/sessions/repositories/SessionAirtableRepository';
 import { Session } from '@/modules/sessions/model';
 

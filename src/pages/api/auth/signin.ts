@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { serialize } from 'cookie';
-import { AirtableData } from '@/database/Airtable';
+import { AirtableData } from '@/database/Airtable/Airtable';
 import { UserAirtableRepository } from '@/modules/users/repositories/UserAirtableRepository';
 import { SessionAirtableRepository } from '@/modules/sessions/repositories/SessionAirtableRepository';
 import { ResponseData } from '@/modules/common/model';

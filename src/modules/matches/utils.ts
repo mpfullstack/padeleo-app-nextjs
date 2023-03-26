@@ -9,4 +9,7 @@ export const updateMatch = (matches: Match[], matchToUpate: Match) => {
   });
 };
 
+export const removeMatch = (matches: Match[], matchId: string) =>
+  matches.filter((match: Match) => match.id !== matchId);
+
 export const hasResults = (match: Match): boolean => !!match.results?.length;
