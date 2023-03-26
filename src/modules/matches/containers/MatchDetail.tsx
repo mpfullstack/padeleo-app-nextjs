@@ -5,7 +5,7 @@ import { Match } from '@/modules/matches/model';
 import styled from 'styled-components';
 import MatchPlayers from '@/modules/matches/components/MatchItem/MatchPlayers';
 import Drawer from '@/modules/common/components/Drawer';
-import { createMatch } from '@/modules/common/services/api';
+import { createMatch, updateMatch } from '@/modules/common/services/api';
 import { Option } from '@/modules/common/components/Form/Select';
 import CourtBooked from '@/modules/matches/components/MatchItem/CourtBooked';
 import MatchTime from '@/modules/matches/components/MatchItem/MatchTime';
@@ -22,8 +22,11 @@ const MatchDetail = ({ match }: Props) => {
 
   const saveMatch = async () => {
     try {
-      debugger;
-      await createMatch(matchData);
+      if (matchData.id) {
+        await updateMatch(matchData);
+      } else {
+        await createMatch(matchData);
+      }
       router.push({ pathname: '/matches' });
     } catch (e: any) {
       // TODO: Handle error

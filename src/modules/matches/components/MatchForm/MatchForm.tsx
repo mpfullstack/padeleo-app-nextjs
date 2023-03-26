@@ -16,7 +16,6 @@ const MatchForm = ({ field, value, options, onFinish }: Props) => {
       noValidate
       autoComplete="off"
       onSubmit={e => {
-        debugger;
         onFinish(formData);
         e.preventDefault();
         e.stopPropagation();

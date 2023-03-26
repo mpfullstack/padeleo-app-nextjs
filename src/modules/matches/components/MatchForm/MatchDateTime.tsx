@@ -21,7 +21,6 @@ const MatchDateTime = ({ value, onChange }: Props) => {
   };
 
   const handleStartTimeChange = (date: Date) => {
-    debugger;
     const currentSelectedDate = new Date(selectedStartTime);
     currentSelectedDate.setHours(new Date(date)?.getHours());
     currentSelectedDate.setMinutes(new Date(date)?.getMinutes());
