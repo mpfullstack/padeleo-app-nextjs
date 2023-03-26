@@ -1,26 +1,38 @@
 import Select, { Option } from '@/modules/common/components/Form/Select';
 
 const Duration = ({ value, onChange }: Props) => {
+  const HALF_AN_HOUR = 1800; // Seconds
+  const ONE_HOUR = HALF_AN_HOUR * 2;
+  const ONE_AND_A_HALF_HOUR = HALF_AN_HOUR * 3;
+  const TWO_HOURS = HALF_AN_HOUR * 4;
+
   const durations: Option[] = [
     {
-      id: 1800,
+      id: HALF_AN_HOUR,
       value: '30 min',
     },
     {
-      id: 3600,
+      id: ONE_HOUR,
       value: '1h',
     },
     {
-      id: 5400,
+      id: ONE_AND_A_HALF_HOUR,
       value: '1h30',
     },
     {
-      id: 7200,
+      id: TWO_HOURS,
       value: '2h',
     },
   ];
 
-  return <Select value={value?.toString()} options={durations} onChange={onChange} />;
+  return (
+    <Select
+      label="Duración"
+      value={value?.toString() || ONE_AND_A_HALF_HOUR.toString()}
+      options={durations}
+      onChange={onChange}
+    />
+  );
 };
 
 interface Props {

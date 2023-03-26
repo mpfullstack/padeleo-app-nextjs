@@ -84,16 +84,7 @@ const MatchDetail = ({ match }: Props) => {
         <LoadingButton onClick={() => saveMatch()}>{`Guardar`}</LoadingButton>
       </PanelWrapper>
       <Drawer anchor="bottom" open={isEditing} onClose={() => stopEditing()}>
-        <div
-          style={{
-            maxWidth: '520px',
-            width: '96%',
-            minHeight: '30rem',
-            margin: '0 auto',
-          }}
-        >
-          <MatchForm field={field} value={value} options={options} onFinish={data => updatedOrCreatedMatch(data)} />
-        </div>
+        <MatchForm field={field} value={value} options={options} onFinish={data => updatedOrCreatedMatch(data)} />
       </Drawer>
     </>
   );

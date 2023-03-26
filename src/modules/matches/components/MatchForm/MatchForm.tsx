@@ -33,10 +33,14 @@ const MatchForm = ({ field, value, options, onFinish }: Props) => {
 };
 
 const StyledForm = styled.form`
-  width: 90%;
+  width: 96%;
   margin: 1rem auto 0;
+  padding: 1rem;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  max-width: 52rem;
+  min-height: 30rem;
   .submit {
     margin-top: 2rem;
   }
