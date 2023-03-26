@@ -33,7 +33,7 @@ const Matches = ({ user }: PropsFromRedux) => {
   );
 
   return (
-    <MatchesWrapper>
+    <MatchesWrapper admin={!!user?.admin}>
       <Title>{`Partidos`}</Title>
       <MatchesTabs selected={tab} handleTabChange={(key: string) => setTab(key as Key)} />
       {data?.result && (
@@ -43,13 +43,14 @@ const Matches = ({ user }: PropsFromRedux) => {
           ))}
         </div>
       )}
-      <FloatingAddButton onClick={() => router.push(`/matches/create`)} />
+      {user?.admin && <FloatingAddButton onClick={() => router.push(`/matches/create`)} />}
     </MatchesWrapper>
   );
 };
 
-const MatchesWrapper = styled.div`
+const MatchesWrapper = styled.div<{ admin: boolean }>`
   width: 100%;
+  padding-bottom: ${({ admin }) => (admin ? '5rem' : '0')};
 `;
 
 const mapStateToProps = (state: RootState) => ({ user: state.userAccess.user });

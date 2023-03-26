@@ -38,19 +38,22 @@ const MatchDateTime = ({ value, onChange }: Props) => {
     });
   };
 
+  const currentDate = new Date();
+  currentDate.setMinutes(0);
+
   return (
     <>
       <DatePickersWrapper>
         <DatePicker
           label="Fecha del partido"
-          date={new Date(selectedStartTime)}
+          date={selectedStartTime ? new Date(selectedStartTime) : currentDate}
           onChange={value => handleStartDateChange(value as Date)}
         />
       </DatePickersWrapper>
       <TimePickersWrapper>
         <TimePicker
           label="Hora inicio"
-          date={new Date(selectedStartTime)}
+          date={selectedStartTime ? new Date(selectedStartTime) : currentDate}
           onChange={value => handleStartTimeChange(value as Date)}
         />
         {<Duration value={duration} onChange={handleDurationChange} />}

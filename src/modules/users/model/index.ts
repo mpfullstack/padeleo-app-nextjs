@@ -7,6 +7,7 @@ export interface User {
   email: string;
   nickname?: string;
   phone?: string;
+  admin?: boolean;
 }
 
 export type ResponseUserData = ResponseData<User[]>;

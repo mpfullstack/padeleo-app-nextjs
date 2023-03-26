@@ -77,6 +77,9 @@ const Logo = styled.h1`
   align-items: center;
   justify-content: center;
   margin: 0;
+  a {
+    display: flex;
+  }
 `;
 
 const Span = styled.span<{ color: string }>`

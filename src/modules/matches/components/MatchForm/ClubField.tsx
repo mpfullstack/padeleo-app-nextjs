@@ -32,6 +32,7 @@ const ClubField = ({ value: fieldValue, onChange }: Props) => {
       <StyledRow>
         <Col>
           <Select
+            label="Club"
             value={fieldValue.clubId}
             options={options}
             onChange={clubId => handleChange({ ...fieldValue, clubId })}

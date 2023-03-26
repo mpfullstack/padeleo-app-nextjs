@@ -17,7 +17,7 @@ const MatchStatus = ({ match }: Props) => {
     return (
       <>
         <TagWrapper>
-          <Tag icon={<Done fontSize="large" color="primary" />} label={`Cerrado`} />
+          <Tag icon={<Done fontSize="medium" color="primary" />} label={`Cerrado`} />
         </TagWrapper>
         <MatchPlayers players={match.players} matchId={match.id} max={match.maxPlayers} />
       </>
@@ -29,7 +29,7 @@ const MatchStatus = ({ match }: Props) => {
       <>
         <Wrapper>
           <Text>{`Faltan`}</Text>
-          <Badge value={<Span>{missingPlayers}</Span>} icon={<People fontSize="large" />} />
+          <Badge value={<Span>{missingPlayers}</Span>} icon={<People fontSize="medium" />} />
         </Wrapper>
         <MatchPlayers players={match.players} matchId={match.id} max={match.maxPlayers} />
       </>

@@ -91,6 +91,7 @@ export class AirtableData {
       lastname: record.get('lastname') as string,
       email: record.get('email') as string,
       nickname: record.get('nickname') as string,
+      admin: record.get('admin') as boolean,
     };
   }
 

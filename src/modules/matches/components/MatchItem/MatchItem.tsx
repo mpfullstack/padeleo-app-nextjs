@@ -13,25 +13,27 @@ import { hasResults } from '@/modules/matches/utils';
 const MatchItem = ({ match, user, onUpdate }: Props) => {
   return (
     <MatchItemWrapper>
-      <Content>
-        <ClubName>{match.clubName || `Sin definir`}</ClubName>
-        <CourtBooked booked={match.courtBooked} />
-        {match.startTime ? <MatchDate date={match.startTime} /> : <Paragraph>{`Fecha sin definir`}</Paragraph>}
-        <MatchTime startTime={match.startTime} duration={match.duration} />
-      </Content>
-      <SideContent>
-        {hasResults(match) ? (
-          <MatchResult
-            results={match.results}
-            players={match.players}
-            matchId={match.id}
-            maxPlayers={match.maxPlayers}
-          />
-        ) : (
-          <MatchStatus match={match} />
-        )}
-        <Actions match={match} user={user} onUpdate={onUpdate} />
-      </SideContent>
+      <MainContent>
+        <Content>
+          <ClubName>{match.clubName || `Sin definir`}</ClubName>
+          <CourtBooked booked={match.courtBooked} />
+          {match.startTime ? <MatchDate date={match.startTime} /> : <Paragraph>{`Fecha sin definir`}</Paragraph>}
+          <MatchTime startTime={match.startTime} duration={match.duration} />
+        </Content>
+        <SideContent>
+          {hasResults(match) ? (
+            <MatchResult
+              results={match.results}
+              players={match.players}
+              matchId={match.id}
+              maxPlayers={match.maxPlayers}
+            />
+          ) : (
+            <MatchStatus match={match} />
+          )}
+        </SideContent>
+      </MainContent>
+      <Actions match={match} user={user} onUpdate={onUpdate} />
     </MatchItemWrapper>
   );
 };
@@ -45,10 +47,14 @@ const MatchItemWrapper = styled.div`
     0px 1px 3px 0px rgb(0 0 0 / 12%);
   box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
   display: flex;
+  flex-direction: column;
   justify-content: flex-start;
-  align-items: center;
   box-sizing: border-box;
   border-radius: 4px;
+`;
+
+const MainContent = styled.div`
+  display: flex;
 `;
 
 const Content = styled.div`
