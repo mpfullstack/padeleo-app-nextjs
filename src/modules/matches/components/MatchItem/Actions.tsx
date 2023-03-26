@@ -12,14 +12,15 @@ import { useRouter } from 'next/router';
 
 const Actions = ({ match, user, onUpdate, onDelete }: Props) => {
   const router = useRouter();
+  const isUserAdmin = !!user?.admin;
   const isClosed = getMatchStatus(match) === 'closed';
   const isPastMatch = new Date(match.startTime) < new Date();
   const userIsInMatch = isUserInMatch(match, user);
   const canLeave = userIsInMatch && !isPastMatch;
   const canJoin = !isClosed && !isPastMatch && !userIsInMatch;
-  const canAddOrModifyResult = isPastMatch && userIsInMatch && isClosed;
-  const canEdit = !isPastMatch && user?.admin;
-  const canDelete = user?.admin;
+  const canAddOrModifyResult = isPastMatch && isClosed && (userIsInMatch || isUserAdmin);
+  const canEdit = !isPastMatch && isUserAdmin;
+  const canDelete = isUserAdmin;
   const addOrModifyResultLabel = match.results?.length ? 'Editar resultado' : 'Añadir resultado';
 
   const [drawerOpened, setDrawerOpen] = useState<boolean>(false);
