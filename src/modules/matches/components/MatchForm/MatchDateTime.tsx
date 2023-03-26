@@ -2,12 +2,14 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import DatePicker from '@/modules/common/components/DateTime/DatePicker';
 import TimePicker from '@/modules/common/components/DateTime/TimePicker';
-import Duration from '@/modules/matches/components/MatchForm/Duration';
+import Duration, { ONE_AND_A_HALF_HOUR } from '@/modules/matches/components/MatchForm/Duration';
 
 const MatchDateTime = ({ value, onChange }: Props) => {
   const { startTime, duration } = value;
-  const [selectedStartTime, setSelectedStartTime] = useState<string>(startTime);
-  const [selectedDuration, setDuration] = useState<number>(duration);
+  const currentDate = new Date();
+  currentDate.setMinutes(0);
+  const [selectedStartTime, setSelectedStartTime] = useState<string>(startTime || currentDate.toJSON());
+  const [selectedDuration, setDuration] = useState<number>(duration || ONE_AND_A_HALF_HOUR);
 
   const handleStartDateChange = (date: Date) => {
     setSelectedStartTime(date.toJSON());
@@ -19,6 +21,7 @@ const MatchDateTime = ({ value, onChange }: Props) => {
   };
 
   const handleStartTimeChange = (date: Date) => {
+    debugger;
     const currentSelectedDate = new Date(selectedStartTime);
     currentSelectedDate.setHours(new Date(date)?.getHours());
     currentSelectedDate.setMinutes(new Date(date)?.getMinutes());
@@ -38,25 +41,22 @@ const MatchDateTime = ({ value, onChange }: Props) => {
     });
   };
 
-  const currentDate = new Date();
-  currentDate.setMinutes(0);
-
   return (
     <>
       <DatePickersWrapper>
         <DatePicker
           label="Fecha del partido"
-          date={selectedStartTime ? new Date(selectedStartTime) : currentDate}
+          date={new Date(selectedStartTime)}
           onChange={value => handleStartDateChange(value as Date)}
         />
       </DatePickersWrapper>
       <TimePickersWrapper>
         <TimePicker
           label="Hora inicio"
-          date={selectedStartTime ? new Date(selectedStartTime) : currentDate}
+          date={new Date(selectedStartTime)}
           onChange={value => handleStartTimeChange(value as Date)}
         />
-        {<Duration value={duration} onChange={handleDurationChange} />}
+        {<Duration value={selectedDuration} onChange={handleDurationChange} />}
       </TimePickersWrapper>
     </>
   );

@@ -1,11 +1,6 @@
 import Select, { Option } from '@/modules/common/components/Form/Select';
 
 const Duration = ({ value, onChange }: Props) => {
-  const HALF_AN_HOUR = 1800; // Seconds
-  const ONE_HOUR = HALF_AN_HOUR * 2;
-  const ONE_AND_A_HALF_HOUR = HALF_AN_HOUR * 3;
-  const TWO_HOURS = HALF_AN_HOUR * 4;
-
   const durations: Option[] = [
     {
       id: HALF_AN_HOUR,
@@ -39,5 +34,10 @@ interface Props {
   value: number;
   onChange: (value: string) => void;
 }
+
+export const HALF_AN_HOUR = 1800; // Seconds
+export const ONE_HOUR = HALF_AN_HOUR * 2;
+export const ONE_AND_A_HALF_HOUR = HALF_AN_HOUR * 3;
+export const TWO_HOURS = HALF_AN_HOUR * 4;
 
 export default Duration;

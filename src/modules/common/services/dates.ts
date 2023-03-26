@@ -11,6 +11,7 @@ export const format = (date: string, strFormat: string, language: string = 'es')
   if (language === 'es') {
     locale = es;
   }
+  debugger;
   return dateFNSformat(new Date(date), strFormat, { locale });
 };
 

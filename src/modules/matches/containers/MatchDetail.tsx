@@ -22,6 +22,7 @@ const MatchDetail = ({ match }: Props) => {
 
   const saveMatch = async () => {
     try {
+      debugger;
       await createMatch(matchData);
       router.push({ pathname: '/matches' });
     } catch (e: any) {
