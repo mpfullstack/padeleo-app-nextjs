@@ -15,7 +15,9 @@ import {
   mapRecordToClub,
   userMapper,
   userSessionMapper,
+  mapRecordToLineUp,
 } from '@/database/Airtable/helpers';
+import { LineUp } from '@/modules/lineups/model';
 
 export class AirtableData {
   private base: AirtableBase;
@@ -214,6 +216,25 @@ export class AirtableData {
           fetchNextPage();
         })
         .then(() => resolve(clubs))
+        .catch(reject);
+    });
+  }
+
+  getLineUps({ filterByFormula, sort }: { filterByFormula?: string; sort?: any[] } = {}) {
+    return new Promise<LineUp[]>((resolve, reject) => {
+      const lineUps: LineUp[] = [];
+      const filters = filterByFormula ? { filterByFormula } : undefined;
+      const options = sort ? { sort } : undefined;
+      this.base('LineUp')
+        .select({
+          view: 'Grid view',
+          pageSize: 10,
+          ...filters,
+          ...options,
+        })
+        .firstPage()
+        .then(records => records.map(record => lineUps.push(mapRecordToLineUp(record))))
+        .then(() => resolve(lineUps))
         .catch(reject);
     });
   }
