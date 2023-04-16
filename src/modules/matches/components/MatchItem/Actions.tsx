@@ -9,6 +9,7 @@ import { useLoading } from '@/modules/common/hooks/useLoading';
 import { useState } from 'react';
 import MatchResultsEditor from './MatchResult/MatchResultsEditor';
 import { useRouter } from 'next/router';
+import AlertDialog from '@/modules/common/components/Dialog/AlertDialog';
 
 const Actions = ({ match, user, onUpdate, onDelete }: Props) => {
   const router = useRouter();
@@ -27,6 +28,7 @@ const Actions = ({ match, user, onUpdate, onDelete }: Props) => {
   const [leaveStatus, setLeaveStatus] = useLoading();
   const [joinStatus, setJoinStatus] = useLoading();
   const [deleteStatus, setDeleteStatus] = useLoading();
+  const [dialogOpen, setDialogOpen] = useState<'delete' | ''>('');
 
   const onClickAction = async (action: Action) => {
     try {
@@ -56,6 +58,7 @@ const Actions = ({ match, user, onUpdate, onDelete }: Props) => {
 
   const onDeleteMatch = async (id: string) => {
     try {
+      setDialogOpen('');
       setDeleteStatus('loading');
       await deleteMatch(id);
       onDelete(id);
@@ -82,9 +85,17 @@ const Actions = ({ match, user, onUpdate, onDelete }: Props) => {
       {canAddOrModifyResult && <Button onClick={() => setDrawerOpen(true)}>{addOrModifyResultLabel}</Button>}
       {canEdit && <Button onClick={() => router.push({ pathname: `/matches/${match.id}` })}>{`Editar`}</Button>}
       {canDelete && (
-        <LoadingButton color="error" loading={deleteStatus === 'loading'} onClick={() => onDeleteMatch(match.id)}>
-          {`Eliminar`}
-        </LoadingButton>
+        <>
+          <LoadingButton color="error" loading={deleteStatus === 'loading'} onClick={() => setDialogOpen('delete')}>
+            {`Eliminar`}
+          </LoadingButton>
+          <AlertDialog
+            title="Eliminar partido"
+            content="¿Estas seguro que quieres eliminar el partido?"
+            open={dialogOpen === 'delete'}
+            onClose={(confirm: boolean) => (confirm ? onDeleteMatch(match.id) : setDialogOpen(''))}
+          />
+        </>
       )}
       <Drawer anchor="bottom" open={drawerOpened} onClose={() => setDrawerOpen(false)}>
         <MatchResultsEditor match={match} onUpdate={onResultAdded} />
