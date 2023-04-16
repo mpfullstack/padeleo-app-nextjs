@@ -32,7 +32,7 @@ const PlayersField = ({ value: fieldValue, onChange }: Props) => {
     });
 
     onChange({
-      players: newPlayers,
+      players: newPlayers.filter((player: User) => player.id),
     });
   };
 
