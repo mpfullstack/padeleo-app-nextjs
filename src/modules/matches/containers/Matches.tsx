@@ -51,13 +51,10 @@ const Matches = ({ user }: PropsFromRedux) => {
     <MatchesWrapper admin={!!user?.admin}>
       <Title>{`Partidos`}</Title>
       <MatchesTabs selected={tab} handleTabChange={(key: string) => setTab(key as Key)} />
-      {data?.result && (
-        <div>
-          {data?.result.map(match => (
-            <MatchItem key={match.id} match={match} onUpdate={onMatchUpdated} onDelete={onMatchDeleted} user={user} />
-          ))}
-        </div>
-      )}
+      {data?.result &&
+        data?.result.map(match => (
+          <MatchItem key={match.id} match={match} onUpdate={onMatchUpdated} onDelete={onMatchDeleted} user={user} />
+        ))}
       {user?.admin && <FloatingAddButton onClick={() => router.push(`/matches/create`)} />}
     </MatchesWrapper>
   );
