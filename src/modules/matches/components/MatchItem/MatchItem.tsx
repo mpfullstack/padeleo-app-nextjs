@@ -7,13 +7,14 @@ import CourtBooked from './CourtBooked';
 import Actions from './Actions';
 import MatchResult from './MatchResult/MatchResult';
 import { User } from '@/modules/users/model';
-import MatchDate from './MatchDate';
 import { hasResults } from '@/modules/matches/utils';
+import Item from '@/modules/common/components/Item';
+import MatchDate from '@/modules/common/components/Date';
 
 const MatchItem = ({ match, user, onUpdate, onDelete }: Props) => {
   return (
-    <MatchItemWrapper>
-      <MainContent>
+    <Item actions={<Actions match={match} user={user} onUpdate={onUpdate} onDelete={onDelete} />}>
+      <>
         <Content>
           <ClubName>{match.clubName || `Sin definir`}</ClubName>
           <CourtBooked booked={match.courtBooked} />
@@ -32,30 +33,10 @@ const MatchItem = ({ match, user, onUpdate, onDelete }: Props) => {
             <MatchStatus match={match} />
           )}
         </SideContent>
-      </MainContent>
-      <Actions match={match} user={user} onUpdate={onUpdate} onDelete={onDelete} />
-    </MatchItemWrapper>
+      </>
+    </Item>
   );
 };
-
-const MatchItemWrapper = styled.div`
-  width: 100%;
-  padding: 1.2rem 1.2rem;
-  margin-bottom: 2rem;
-  text-transform: inherit;
-  -webkit-box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%),
-    0px 1px 3px 0px rgb(0 0 0 / 12%);
-  box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  box-sizing: border-box;
-  border-radius: 4px;
-`;
-
-const MainContent = styled.div`
-  display: flex;
-`;
 
 const Content = styled.div`
   display: flex;
