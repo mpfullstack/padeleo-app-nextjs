@@ -1,7 +1,7 @@
 {
   "name": "Padeleo App",
   "short_name": "Padeleo",
-  "start_url": "/?user_mode=app",
+  "start_url": "/matches?user_mode=app",
   "background_color": "#ffffff",
   "theme_color": "#5ec7ac",
   "display": "standalone",
