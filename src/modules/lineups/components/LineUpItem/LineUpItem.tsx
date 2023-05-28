@@ -3,10 +3,12 @@ import { User } from '@/modules/users/model';
 import { LineUp } from '@/modules/lineups/model';
 import Item from '@/modules/common/components/Item';
 import MatchDate from '@/modules/common/components/Date';
+import LineUpPlayers from '@/modules/lineups/components/LineUpPlayers';
+import Actions from '@/modules/lineups/components/LineUpItem/Actions';
 
 const LineUpItem = ({ lineUp, user, onUpdate, onDelete }: Props) => {
   return (
-    <Item>
+    <Item actions={<Actions lineUp={lineUp} user={user} />}>
       <>
         <Content>
           <Teams>{`${lineUp.homeTeam} - ${lineUp.awayTeam}`}</Teams>
@@ -15,6 +17,7 @@ const LineUpItem = ({ lineUp, user, onUpdate, onDelete }: Props) => {
             {lineUp.clubName}
           </Location>
           <MatchDate date={lineUp.date} format="EEEE dd/MM/yyyy - HH:mm'h'" />
+          <LineUpPlayers players={lineUp.players} />
         </Content>
       </>
     </Item>

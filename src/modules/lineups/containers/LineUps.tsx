@@ -19,10 +19,9 @@ const LineUps = ({ user }: PropsFromRedux) => {
     <ContentWrapper admin={!!user?.admin}>
       <Title>{`Convocatorias`}</Title>
       <LineUpsTabs selected={tab} handleTabChange={(key: string) => setTab(key as Key)} />
-      {data?.result &&
-        data?.result.map(lineUp => (
-          <LineUpItem key={lineUp.id} lineUp={lineUp} onUpdate={() => {}} onDelete={() => {}} user={user} />
-        ))}
+      {data?.result?.map(lineUp => (
+        <LineUpItem key={lineUp.id} lineUp={lineUp} onUpdate={() => {}} onDelete={() => {}} user={user} />
+      ))}
       {user?.admin && <FloatingAddButton onClick={() => router.push(`/lineups/create`)} />}
     </ContentWrapper>
   );

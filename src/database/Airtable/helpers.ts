@@ -5,7 +5,7 @@ import { User } from '@/modules/users/model';
 import { Session } from '@/modules/sessions/model';
 import { Result } from '@/modules/results/model';
 import { Club } from '@/modules/clubs/model';
-import { LineUp } from '@/modules/lineups/model';
+import { LineUp, LineUpPlayer } from '@/modules/lineups/model';
 
 export const mapRecordToMatch = (record: Record<FieldSet>): Match => {
   const playerIds = (record.get('players') as string[]) || [];
@@ -119,7 +119,7 @@ export const mapRecordToLineUp = (record: Record<FieldSet>): LineUp => {
       return {
         id: playerId,
         nickname: playersNicknames[i],
-      } as User;
+      } as LineUpPlayer;
     }),
   };
 };

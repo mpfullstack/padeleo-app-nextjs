@@ -1,5 +1,4 @@
 import { ResponseData } from '@/modules/common/model';
-import { User } from '@/modules/users/model';
 
 export interface LineUp {
   id: string;
@@ -8,12 +7,17 @@ export interface LineUp {
   homeTeam: string;
   awayTeam: string;
   date: string;
-  players: User[];
+  players: LineUpPlayer[];
 }
 
 export interface LineUpRecord extends Omit<LineUp, 'id' | 'players' | 'clubId' | 'clubName'> {
   players: string[];
   clubId: string[];
+}
+
+export interface LineUpPlayer {
+  id: string;
+  nickname: string;
 }
 
 export type ResponseLineUpData = ResponseData<LineUp[]>;
