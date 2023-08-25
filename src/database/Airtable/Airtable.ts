@@ -35,7 +35,7 @@ export class AirtableData {
       this.base('Match')
         .select({
           view: 'Grid view',
-          pageSize: 10,
+          pageSize: 50,
           ...filters,
           ...options,
         })
