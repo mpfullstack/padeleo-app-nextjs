@@ -8,6 +8,7 @@ import { Match, ResponseMatchData } from '@/modules/matches/model';
 import { updateMatch, removeMatch } from '@/modules/matches/utils';
 import MatchesTabs, { Key } from '@/modules/matches/components/MatchesTabs';
 import FloatingAddButton from '@/modules/common/components/Buttons/FloatingAddButton';
+import FloatingDownloadButton from '@/modules/common/components/Buttons/FloatingDownloadButton';
 import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '@/modules/common/redux/store';
 import { useRouter } from 'next/router';
@@ -51,11 +52,15 @@ const Matches = ({ user }: PropsFromRedux) => {
     <MatchesWrapper admin={!!user?.admin}>
       <Title>{`Partidos`}</Title>
       <MatchesTabs selected={tab} handleTabChange={(key: string) => setTab(key as Key)} />
-      {data?.result &&
-        data?.result.map(match => (
-          <MatchItem key={match.id} match={match} onUpdate={onMatchUpdated} onDelete={onMatchDeleted} user={user} />
-        ))}
-      {user?.admin && <FloatingAddButton onClick={() => router.push(`/matches/create`)} />}
+      {data?.result?.map(match => (
+        <MatchItem key={match.id} match={match} onUpdate={onMatchUpdated} onDelete={onMatchDeleted} user={user} />
+      ))}
+      {user?.admin && (
+        <>
+          <FloatingDownloadButton onClick={() => null} />
+          <FloatingAddButton onClick={() => router.push(`/matches/create`)} />
+        </>
+      )}
     </MatchesWrapper>
   );
 };
