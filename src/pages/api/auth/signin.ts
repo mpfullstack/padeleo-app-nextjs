@@ -1,3 +1,4 @@
+import { serverConfig } from '@/config';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { serialize } from 'cookie';
 import { AirtableData } from '@/database/Airtable/Airtable';
@@ -18,7 +19,7 @@ export default async function handler(req: SignInRequest, res: NextApiResponse<R
       const userRepository = new UserAirtableRepository(airtableData);
       const user = await userRepository.getByNickname(req.body.nickname);
 
-      if (user && req.body.password === process.env.PADELEO_PASSWORD) {
+      if (user && req.body.password === serverConfig.padeleoPassword) {
         const sessionRepository = new SessionAirtableRepository(airtableData);
         const session = await sessionRepository.create(user.id as string);
 
@@ -37,6 +38,7 @@ export default async function handler(req: SignInRequest, res: NextApiResponse<R
         });
       }
     } catch (error: any) {
+      console.log(error);
       let code = 500;
       if (error.message === 'user_not_found') {
         code = 400;

@@ -1,5 +1,13 @@
+require('dotenv').config();
+
 let nextConfig = {
   reactStrictMode: true,
+  serverRuntimeConfig: {
+    // Will only be available on the server side
+    airtableToken: process.env.AIRTABLE_ACCESS_TOKEN,
+    airtableBase: process.env.AIRTABLE_BASE,
+    padeleoPassword: process.env.PADELEO_PASSWORD,
+  },
 };
 
 const analyzeBundleEnabled = process.env.ANALYZE === 'true';
