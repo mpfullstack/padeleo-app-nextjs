@@ -7,13 +7,14 @@ import { Result, Side } from '@/modules/results/model';
 export class AirtableReporter implements Reporter {
   exporter: Exporter;
   private gamesToWinSet = 6;
+  private setsToWinMatch = 2;
 
   constructor(exporter: Exporter) {
     this.exporter = exporter;
   }
 
   generate({ users, matchesByUser }: SourceData): Report[] {
-    const reports = matchesByUser.map((matches: Match[], i: number) => {
+    return matchesByUser.map((matches: Match[], i: number) => {
       const user = users[i];
       return {
         username: user.nickname as string,
@@ -25,7 +26,6 @@ export class AirtableReporter implements Reporter {
         lostGames: this.getLostGames(matches, user),
       };
     });
-    return reports;
   }
 
   export<T>(data: Report[]): T {
@@ -68,9 +68,12 @@ export class AirtableReporter implements Reporter {
 
   isMatchWon(match: Match, player: User): boolean {
     const playerSide = this.getPlayerSide(match.players, player);
-    return match.results.every((result: Result) => {
-      return result[playerSide] >= this.gamesToWinSet;
-    });
+    const otherSide = playerSide === 'home' ? 'away' : 'home';
+    return (
+      match.results.filter((result: Result) => {
+        return result[playerSide] >= this.gamesToWinSet && result[playerSide] > result[otherSide];
+      })?.length >= this.setsToWinMatch
+    );
   }
 
   getWonGames(matches: Match[], user: User): number {
