@@ -1,3 +1,4 @@
+import { serverConfig } from '@/config';
 import Airtable from 'airtable';
 import { AirtableBase } from 'airtable/lib/airtable_base';
 import { Match } from '@/modules/matches/model';
@@ -22,9 +23,9 @@ export class AirtableData {
   constructor() {
     Airtable.configure({
       endpointUrl: 'https://api.airtable.com',
-      apiKey: process.env.AIRTABLE_ACCESS_TOKEN,
+      apiKey: serverConfig.airtableToken,
     });
-    this.base = Airtable.base(process.env.AIRTABLE_BASE as string);
+    this.base = Airtable.base(serverConfig.airtableBase as string);
   }
 
   getMatches({ filterByFormula, sort }: { filterByFormula?: string; sort?: any[] } = {}) {

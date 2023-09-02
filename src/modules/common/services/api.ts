@@ -14,15 +14,16 @@ const api = {
   logout: '/api/auth/logout',
   isAuthenticated: '/api/auth',
   clubsUrl: '/api/clubs',
+  reportsUrl: '/api/reports',
 };
 
 export default api;
 
 class ApiError<T> {
   status: number;
-  data: ResponseData<T>;
+  data: ResponseData<T> | string;
 
-  constructor(status: number, data: ResponseData<T>) {
+  constructor(status: number, data: ResponseData<T> | string) {
     this.status = status;
     this.data = data;
   }
@@ -36,10 +37,26 @@ const handleResponse = async <T>(res: Response) => {
   throw new ApiError<T>(res.status, data);
 };
 
-const get = async <T, P = Record<string, any>>(url: string, params?: P): Promise<T> => {
+const handleTextResponse = async (res: Response) => {
+  const data = await res.text();
+
+  if (res.ok) return data;
+
+  throw new ApiError(res.status, data);
+};
+
+const getQueryUrl = <T>(url: string, params?: T): string => {
   const queryParams = params ? `?` + new URLSearchParams(params) : '';
   const queryUrl = `${url}${queryParams}`;
-  return await fetch(queryUrl).then(handleResponse<T>);
+  return queryUrl;
+};
+
+const get = async <T, P = Record<string, any>>(url: string, params?: P): Promise<T> => {
+  return await fetch(getQueryUrl<P>(url, params)).then(handleResponse<T>);
+};
+
+const getText = async <P = Record<string, any>>(url: string, params?: P): Promise<string> => {
+  return await fetch(getQueryUrl<P>(url, params)).then(handleTextResponse);
 };
 
 const post = async <T, P>(url: string, data?: P): Promise<T> =>
@@ -98,3 +115,6 @@ export const updateResults = (data: Result[]) => post<ResponseResultsData, Resul
 
 // Clubs API
 export const getClubs = get<ResponseClubData>;
+
+// Reports API
+export const getReport = () => getText(api.reportsUrl);
