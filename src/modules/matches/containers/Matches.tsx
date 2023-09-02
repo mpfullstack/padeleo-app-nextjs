@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Title } from '@/modules/common/components/Titles';
 import useSWR from 'swr';
-import api, { getMatches } from '@/modules/common/services/api';
+import api, { getMatches, getReport } from '@/modules/common/services/api';
 import MatchItem from '@/modules/matches/components/MatchItem';
 import { useCallback, useState } from 'react';
 import { Match, ResponseMatchData } from '@/modules/matches/model';
@@ -57,7 +57,7 @@ const Matches = ({ user }: PropsFromRedux) => {
       ))}
       {user?.admin && (
         <>
-          <FloatingDownloadButton onClick={() => null} />
+          <FloatingDownloadButton onClick={async () => await getReport()} />
           <FloatingAddButton onClick={() => router.push(`/matches/create`)} />
         </>
       )}

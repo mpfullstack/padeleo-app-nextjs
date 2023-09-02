@@ -5,6 +5,7 @@ import { User, ResponseUserData, ResponseSingleUserData } from '@/modules/users/
 import { ResponseData } from '@/modules/common/model';
 import { Key } from '@/modules/matches/components/MatchesTabs';
 import { ResponseResultsData, Result } from '@/modules/results/model';
+import { ResponseReportData } from '@/modules/reports/model';
 
 const api = {
   matchesUrl: '/api/matches',
@@ -14,6 +15,7 @@ const api = {
   logout: '/api/auth/logout',
   isAuthenticated: '/api/auth',
   clubsUrl: '/api/clubs',
+  reportsUrl: '/api/reports',
 };
 
 export default api;
@@ -98,3 +100,6 @@ export const updateResults = (data: Result[]) => post<ResponseResultsData, Resul
 
 // Clubs API
 export const getClubs = get<ResponseClubData>;
+
+// Reports API
+export const getReport = () => get<ResponseReportData>(api.reportsUrl);
