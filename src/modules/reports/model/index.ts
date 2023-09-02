@@ -12,4 +12,4 @@ export interface Report {
   lostGames: number;
 }
 
-export type ResponseReportData = ResponseData<Report[]>;
+export type ResponseReportData = ResponseData<Report[] | string>;

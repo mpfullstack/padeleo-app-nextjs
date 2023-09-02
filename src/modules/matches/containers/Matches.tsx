@@ -5,7 +5,7 @@ import api, { getMatches, getReport } from '@/modules/common/services/api';
 import MatchItem from '@/modules/matches/components/MatchItem';
 import { useCallback, useState } from 'react';
 import { Match, ResponseMatchData } from '@/modules/matches/model';
-import { updateMatch, removeMatch } from '@/modules/matches/utils';
+import { updateMatch, removeMatch, downloadBlob } from '@/modules/matches/utils';
 import MatchesTabs, { Key } from '@/modules/matches/components/MatchesTabs';
 import FloatingAddButton from '@/modules/common/components/Buttons/FloatingAddButton';
 import FloatingDownloadButton from '@/modules/common/components/Buttons/FloatingDownloadButton';
@@ -57,7 +57,12 @@ const Matches = ({ user }: PropsFromRedux) => {
       ))}
       {user?.admin && (
         <>
-          <FloatingDownloadButton onClick={async () => await getReport()} />
+          <FloatingDownloadButton
+            onClick={async () => {
+              const csvText = await getReport();
+              downloadBlob(new Blob([csvText], { type: 'text/csv' }), 'report.csv');
+            }}
+          />
           <FloatingAddButton onClick={() => router.push(`/matches/create`)} />
         </>
       )}

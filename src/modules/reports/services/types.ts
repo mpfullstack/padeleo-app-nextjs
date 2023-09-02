@@ -26,12 +26,6 @@ export interface Reporter {
   getPlayerSide: (players: User[], player: User) => Side;
 }
 
-export class CSVExport implements Exporter {
-  export(data: Report[]) {
-    return [];
-  }
-}
-
 export class JSONExport implements Exporter {
   export(data: Report[]): Report[] {
     return data;
