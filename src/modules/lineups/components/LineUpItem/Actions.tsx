@@ -48,6 +48,9 @@ const Actions = ({ lineUp, user, onUpdate }: Props) => {
           {`Me apunto`}
         </LoadingButton>
       )}
+      {/**
+       * TODO: If admin implement add/remove any player to the line up and also pick the ones for the final line up
+       */}
     </Wrapper>
   );
 };

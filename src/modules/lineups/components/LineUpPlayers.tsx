@@ -3,30 +3,28 @@ import { LineUpPlayer } from '@/modules/lineups/model';
 
 const LineUpPlayers = ({ players }: Props) => {
   return (
-    <LineUpPlayersWrapper>
-      <p>
-        <strong>{`Apuntados`}</strong>
-      </p>
-      {players.map((player: LineUpPlayer) => {
-        return <LineUpPlayerItem key={player.id}>{player.nickname}</LineUpPlayerItem>;
-      })}
-    </LineUpPlayersWrapper>
+    <>
+      <Title>{`Apuntados`}</Title>
+      <LineUpPlayersWrapper>
+        {players.map((player: LineUpPlayer) => {
+          return <LineUpPlayerItem key={player.id}>{player.nickname}</LineUpPlayerItem>;
+        })}
+      </LineUpPlayersWrapper>
+    </>
   );
 };
 
-const LineUpPlayersWrapper = styled.ul`
+const Title = styled.p`
+  font-weight: bold;
+`;
+
+const LineUpPlayersWrapper = styled.ol`
   margin: 0;
-  padding: 0;
-  list-style-type: none;
+  padding-left: 1.5rem;
 `;
 
 const LineUpPlayerItem = styled.li`
-  margin: 0;
-  padding: 0;
-  &:before {
-    content: '-';
-    margin-right: 0.3rem;
-  }
+  margin: 0.4rem 0;
 `;
 
 interface Props {
