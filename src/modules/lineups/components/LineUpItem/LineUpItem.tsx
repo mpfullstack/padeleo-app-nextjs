@@ -8,7 +8,7 @@ import Actions from '@/modules/lineups/components/LineUpItem/Actions';
 
 const LineUpItem = ({ lineUp, user, onUpdate, onDelete }: Props) => {
   return (
-    <Item actions={<Actions lineUp={lineUp} user={user} />}>
+    <Item actions={<Actions lineUp={lineUp} user={user} onUpdate={onUpdate} />}>
       <>
         <Content>
           <Teams>{`${lineUp.homeTeam} - ${lineUp.awayTeam}`}</Teams>

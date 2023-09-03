@@ -5,7 +5,7 @@ import { User } from '@/modules/users/model';
 import { Session } from '@/modules/sessions/model';
 import { Result } from '@/modules/results/model';
 import { Club } from '@/modules/clubs/model';
-import { LineUp, LineUpPlayer } from '@/modules/lineups/model';
+import { LineUp, LineUpPlayer, LineUpRecord } from '@/modules/lineups/model';
 
 export const mapRecordToMatch = (record: Record<FieldSet>): Match => {
   const playerIds = (record.get('players') as string[]) || [];
@@ -121,5 +121,15 @@ export const mapRecordToLineUp = (record: Record<FieldSet>): LineUp => {
         nickname: playersNicknames[i],
       } as LineUpPlayer;
     }),
+  };
+};
+
+export const mapLineUpToRecord = (lineUp: LineUp): LineUpRecord => {
+  const { id, players = [], clubName, ...data } = lineUp;
+  return {
+    ...data,
+    date: lineUp.date?.toString(),
+    clubId: [lineUp.clubId],
+    players: players.map((player: LineUpPlayer) => player.id) as string[],
   };
 };

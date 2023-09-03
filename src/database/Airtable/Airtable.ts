@@ -16,6 +16,7 @@ import {
   userMapper,
   userSessionMapper,
   mapRecordToLineUp,
+  mapLineUpToRecord,
 } from '@/database/Airtable/helpers';
 import { LineUp } from '@/modules/lineups/model';
 
@@ -228,13 +229,37 @@ export class AirtableData {
       this.base('LineUp')
         .select({
           view: 'Grid view',
-          pageSize: 10,
+          pageSize: 50,
           ...filters,
           ...options,
         })
         .firstPage()
         .then(records => records.map(record => lineUps.push(mapRecordToLineUp(record))))
         .then(() => resolve(lineUps))
+        .catch(reject);
+    });
+  }
+
+  getLineUp(id: string) {
+    return new Promise<LineUp>((resolve, reject) => {
+      this.base('LineUp')
+        .find(id)
+        .then(record => resolve(mapRecordToLineUp(record)))
+        .catch(reject);
+    });
+  }
+
+  updateLineUp(data: LineUp) {
+    return new Promise<LineUp>((resolve, reject) => {
+      const lineUpRecord = mapLineUpToRecord(data);
+      this.base('LineUp')
+        .update([
+          {
+            id: data.id as string,
+            fields: { ...lineUpRecord },
+          },
+        ])
+        .then(records => resolve(mapRecordToLineUp(records[0])))
         .catch(reject);
     });
   }

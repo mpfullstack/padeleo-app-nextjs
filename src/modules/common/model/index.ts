@@ -8,3 +8,5 @@ export interface Option {
   key: string;
   label: string;
 }
+
+export type Action = 'join' | 'leave';

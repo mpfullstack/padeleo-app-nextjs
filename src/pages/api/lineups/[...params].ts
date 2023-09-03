@@ -1,34 +1,34 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { AirtableData } from '@/database/Airtable/Airtable';
-import { MatchAirtableRepository } from '@/modules/matches/repositories/MatchAirtableRepository';
-import { Match, ResponseSingleMatchData } from '@/modules/matches/model';
+import { LineUpAirtableRepository } from '@/modules/lineups/repositories/LineUpAirtableRepository';
 import { getSession } from '@/modules/sessions/services/sessionService';
 import { Action } from '@/modules/common/model';
+import { LineUp, ResponseSingleLineUpData } from '@/modules/lineups/model';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<ResponseSingleMatchData>) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<ResponseSingleLineUpData>) {
   const session = await getSession(req);
 
   if (!session) return res.status(401).json({ success: false });
 
   const { params } = req.query;
-  const [matchId, action] = params as [string, Action];
-  const matchRepository = new MatchAirtableRepository(new AirtableData());
+  const [lineUpId, action] = params as [string, Action];
+  const lineUpRepository = new LineUpAirtableRepository(new AirtableData());
 
-  let match: Match | undefined;
+  let lineUp: LineUp | undefined;
   if (req.method === 'PUT') {
     try {
       switch (action) {
         case 'join':
-          match = await matchRepository.addPlayer(matchId, session.user);
+          lineUp = await lineUpRepository.addPlayer(lineUpId, session.user);
           break;
         case 'leave':
-          match = await matchRepository.removePlayer(matchId, session.user);
+          lineUp = await lineUpRepository.removePlayer(lineUpId, session.user);
           break;
       }
-      if (match) {
+      if (lineUp) {
         return res.status(200).json({
           success: true,
-          result: match,
+          result: lineUp,
         });
       }
     } catch (e: any) {

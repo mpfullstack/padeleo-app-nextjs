@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import { Action, Match } from '@/modules/matches/model';
+import { Match } from '@/modules/matches/model';
+import { Action } from '@/modules/common/model';
 import { getMatchStatus, isUserInMatch } from '../../model/utils';
 import { Button, LoadingButton } from '@/modules/common/components/Buttons/Buttons';
 import Drawer from '@/modules/common/components/Drawer';
