@@ -1,3 +1,4 @@
+import { NextConfig } from 'next';
 import getConfig from 'next/config';
 
 interface ServerConfig {
@@ -6,8 +7,13 @@ interface ServerConfig {
   padeleoPassword: string;
 }
 
-const { serverRuntimeConfig } = getConfig();
+interface PublicConfig {
+  appTitle: string;
+}
+
+const { publicRuntimeConfig, serverRuntimeConfig } = getConfig();
 
 const serverConfig: ServerConfig = serverRuntimeConfig;
+const publicConfig: PublicConfig = publicRuntimeConfig;
 
-export { serverConfig };
+export { serverConfig, publicConfig };

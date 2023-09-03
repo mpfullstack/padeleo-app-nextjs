@@ -8,6 +8,9 @@ let nextConfig = {
     airtableBase: process.env.AIRTABLE_BASE,
     padeleoPassword: process.env.PADELEO_PASSWORD,
   },
+  publicRuntimeConfig: {
+    appTitle: process.env.APP_TITLE,
+  }
 };
 
 const analyzeBundleEnabled = process.env.ANALYZE === 'true';
