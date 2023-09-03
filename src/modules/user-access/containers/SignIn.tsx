@@ -1,4 +1,5 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { publicConfig } from '@/config';
 import { SignInPayload } from '../model';
 import { isAuthenticated, signIn } from '@/modules/common/services/api';
 import TextField from '@/modules/common/components/Form/TextField';
@@ -53,7 +54,7 @@ const SignIn = (props: PropsFromRedux) => {
 
   return (
     <SignInWrapper>
-      <Title>{`Indoor Lloret FCP`}</Title>
+      <Title>{publicConfig.appTitle}</Title>
       <Paragraph>{`Inicio de sesión`}</Paragraph>
 
       {status === 'error' && (
