@@ -1,34 +1,22 @@
 import styled from 'styled-components';
 import { Action } from '@/modules/common/model';
-import { LoadingButton } from '@/modules/common/components/Buttons/Buttons';
 import { User } from '@/modules/users/model';
-import { useLoading } from '@/modules/common/hooks/useLoading';
 import { LineUp } from '@/modules/lineups/model';
 import { isUserInLineUp } from '@/modules/lineups/model/utils';
 import { joinLineUp, leaveLineUp } from '@/modules/common/services/api';
+import JoinLeaveActionButton from '@/modules/common/components/Buttons/JoinLeaveActionButton';
 
 const Actions = ({ lineUp, user, onUpdate }: Props) => {
   const userIsInLineUp = isUserInLineUp(lineUp, user);
   const canJoin = !userIsInLineUp;
   const isPastLineUp = new Date(lineUp.date) < new Date();
   const canLeave = userIsInLineUp && !isPastLineUp;
-  const [joinStatus, setJoinStatus] = useLoading();
-  const [leaveStatus, setLeaveStatus] = useLoading();
 
-  const onClickAction = async (action: Action) => {
+  const onJoinLeaveAction = async (action: Action, onSuccess: () => void) => {
     try {
-      if (action === 'leave') {
-        setLeaveStatus('loading');
-        const response = await leaveLineUp(lineUp.id);
-        onUpdate(response.result as LineUp);
-        setLeaveStatus('success');
-      }
-      if (action === 'join') {
-        setJoinStatus('loading');
-        const response = await joinLineUp(lineUp.id);
-        onUpdate(response.result as LineUp);
-        setJoinStatus('success');
-      }
+      const response = action === 'leave' ? await leaveLineUp(lineUp.id) : await joinLineUp(lineUp.id);
+      onUpdate(response.result as LineUp);
+      onSuccess();
     } catch (e: any) {
       // TODO: Handle ApiError, show Toast message
       // e.status
@@ -38,21 +26,14 @@ const Actions = ({ lineUp, user, onUpdate }: Props) => {
 
   return (
     <Wrapper>
-      {canLeave && (
-        <LoadingButton loading={leaveStatus === 'loading'} color="secondary" onClick={() => onClickAction('leave')}>
-          {`Salir`}
-        </LoadingButton>
+      {(canLeave || canJoin) && (
+        <JoinLeaveActionButton canJoin={canJoin} canLeave={canLeave} onClick={onJoinLeaveAction} />
       )}
-      {canJoin && (
-        <LoadingButton loading={joinStatus === 'loading'} onClick={() => onClickAction('join')}>
-          {`Me apunto`}
-        </LoadingButton>
-      )}
-      {/**
-       * TODO: If admin implement add/remove any player to the line up and also pick the ones for the final line up
-       */}
     </Wrapper>
   );
+  /**
+   * TODO: If admin implement add/remove any player to the line up and also pick the ones for the final line up
+   */
 };
 
 const Wrapper = styled.div`
