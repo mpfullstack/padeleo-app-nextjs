@@ -1,26 +1,37 @@
 import styled from 'styled-components';
 import { LineUpPlayer } from '@/modules/lineups/model';
 
-const LineUpPlayers = ({ players }: Props) => {
+const LineUpPlayers = ({ players, totalPlayersAvailable }: Props) => {
   return (
-    <>
-      <Title>{`Apuntados`}</Title>
+    <Wrapper>
+      <Title>
+        {`Apuntados`}
+        <Span>{` (${players.length} de ${totalPlayersAvailable})`}</Span>
+      </Title>
       <LineUpPlayersWrapper>
         {players.map((player: LineUpPlayer) => {
           return <LineUpPlayerItem key={player.id}>{player.nickname}</LineUpPlayerItem>;
         })}
       </LineUpPlayersWrapper>
-    </>
+    </Wrapper>
   );
 };
+
+const Wrapper = styled.div`
+  margin-bottom: 1rem;
+`;
 
 const Title = styled.p`
   font-weight: bold;
 `;
 
+const Span = styled.span`
+  font-weight: normal;
+`;
+
 const LineUpPlayersWrapper = styled.ol`
   margin: 0;
-  padding-left: 1.5rem;
+  padding-left: 2.5rem;
 `;
 
 const LineUpPlayerItem = styled.li`
@@ -29,6 +40,7 @@ const LineUpPlayerItem = styled.li`
 
 interface Props {
   players: LineUpPlayer[];
+  totalPlayersAvailable: number;
 }
 
 export default LineUpPlayers;

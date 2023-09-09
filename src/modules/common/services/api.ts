@@ -124,8 +124,8 @@ export const getReport = () => getText(api.reportsUrl);
 // LineUps API
 export const getLineUps = ([url, tab]: [string, Key]) => get<ResponseLineUpData>(url, { tab });
 
-export const joinLineUp = (lineUpId: string) =>
-  put<ResponseSingleLineUpData, LineUp>(`${api.lineUpsUrl}/${lineUpId}/join`);
+export const joinLineUp = (lineUpId: string, playerId?: string) =>
+  put<ResponseSingleLineUpData, LineUp>(`${api.lineUpsUrl}/${lineUpId}/join${playerId ? `/${playerId}` : ''}`);
 
-export const leaveLineUp = (lineUpId: string) =>
-  put<ResponseSingleLineUpData, LineUp>(`${api.lineUpsUrl}/${lineUpId}/leave`);
+export const leaveLineUp = (lineUpId: string, playerId?: string) =>
+  put<ResponseSingleLineUpData, LineUp>(`${api.lineUpsUrl}/${lineUpId}/leave${playerId ? `/${playerId}` : ''}`);

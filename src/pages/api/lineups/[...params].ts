@@ -4,6 +4,7 @@ import { LineUpAirtableRepository } from '@/modules/lineups/repositories/LineUpA
 import { getSession } from '@/modules/sessions/services/sessionService';
 import { Action } from '@/modules/common/model';
 import { LineUp, ResponseSingleLineUpData } from '@/modules/lineups/model';
+import { UserAirtableRepository } from '@/modules/users/repositories/UserAirtableRepository';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ResponseSingleLineUpData>) {
   const session = await getSession(req);
@@ -11,18 +12,33 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   if (!session) return res.status(401).json({ success: false });
 
   const { params } = req.query;
-  const [lineUpId, action] = params as [string, Action];
-  const lineUpRepository = new LineUpAirtableRepository(new AirtableData());
+  const [lineUpId, action, playerNickname] = params as [string, Action, string];
+
+  if (playerNickname && !session.user?.admin) {
+    return res.status(401).json({ success: false });
+  }
+
+  const airtableData = new AirtableData();
+  const lineUpRepository = new LineUpAirtableRepository(airtableData);
+
+  let player = session.user;
+  if (playerNickname) {
+    const userRepository = new UserAirtableRepository(airtableData);
+    player = await userRepository.getByNickname(playerNickname);
+    if (!player) {
+      return res.status(400).json({ success: false });
+    }
+  }
 
   let lineUp: LineUp | undefined;
   if (req.method === 'PUT') {
     try {
       switch (action) {
         case 'join':
-          lineUp = await lineUpRepository.addPlayer(lineUpId, session.user);
+          lineUp = await lineUpRepository.addPlayer(lineUpId, player);
           break;
         case 'leave':
-          lineUp = await lineUpRepository.removePlayer(lineUpId, session.user);
+          lineUp = await lineUpRepository.removePlayer(lineUpId, player);
           break;
       }
       if (lineUp) {
