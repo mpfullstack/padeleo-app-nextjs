@@ -8,6 +8,7 @@ import LineUpPlayers from '@/modules/lineups/components/LineUpPlayers';
 import Actions from '@/modules/lineups/components/LineUpItem/Actions';
 import api, { getUsers, joinLineUp } from '@/modules/common/services/api';
 import PlayerSelector from '@/modules/users/components/PlayerSelector';
+import { isAdmin } from '@/modules/users/utils';
 
 const LineUpItem = ({ lineUp, user, onUpdate, onDelete }: Props) => {
   const { data } = useSWR(api.usersUrl, getUsers);
@@ -24,23 +25,21 @@ const LineUpItem = ({ lineUp, user, onUpdate, onDelete }: Props) => {
 
   return (
     <Item actions={<Actions lineUp={lineUp} user={user} onUpdate={onUpdate} />}>
-      <>
-        <Content>
-          <Teams>{`${lineUp.homeTeam} - ${lineUp.awayTeam}`}</Teams>
-          <Location>
-            <Club>{`Club: `}</Club>
-            {lineUp.clubName}
-          </Location>
-          <MatchDate date={lineUp.date} format="EEEE dd/MM/yyyy - HH:mm'h'" />
-          <LineUpPlayers players={lineUp.players} totalPlayersAvailable={players.length} />
-          {user?.admin && (
-            <>
-              <p>{`Añadir jugador`}</p>
-              <PlayerSelector players={availablePlayers} onChange={addPlayer} />
-            </>
-          )}
-        </Content>
-      </>
+      <Content>
+        <Teams>{`${lineUp.homeTeam} - ${lineUp.awayTeam}`}</Teams>
+        <Location>
+          <Club>{`Club: `}</Club>
+          {lineUp.clubName}
+        </Location>
+        <MatchDate date={lineUp.date} format="EEEE dd/MM/yyyy - HH:mm'h'" />
+        <LineUpPlayers user={user as User} lineUp={lineUp} totalPlayersAvailable={players.length} onUpdate={onUpdate} />
+        {isAdmin(user) && (
+          <>
+            <p>{`Añadir jugador`}</p>
+            <PlayerSelector players={availablePlayers} onChange={addPlayer} />
+          </>
+        )}
+      </Content>
     </Item>
   );
 };
@@ -51,6 +50,7 @@ const Content = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-self: flex-start;
+  width: 100%;
 `;
 
 const Teams = styled.p`

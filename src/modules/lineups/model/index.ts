@@ -8,11 +8,13 @@ export interface LineUp {
   awayTeam: string;
   date: string;
   players: LineUpPlayer[];
+  convokedPlayers: LineUpPlayer[];
 }
 
-export interface LineUpRecord extends Omit<LineUp, 'id' | 'players' | 'clubId' | 'clubName'> {
+export interface LineUpRecord extends Omit<LineUp, 'id' | 'players' | 'clubId' | 'clubName' | 'convokedPlayers'> {
   players: string[];
   clubId: string[];
+  convokedPlayers: string[];
 }
 
 export interface LineUpPlayer {

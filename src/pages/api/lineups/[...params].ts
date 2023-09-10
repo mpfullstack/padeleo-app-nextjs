@@ -2,9 +2,10 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { AirtableData } from '@/database/Airtable/Airtable';
 import { LineUpAirtableRepository } from '@/modules/lineups/repositories/LineUpAirtableRepository';
 import { getSession } from '@/modules/sessions/services/sessionService';
-import { Action } from '@/modules/common/model';
+import { Action, LineUpAction } from '@/modules/common/model';
 import { LineUp, ResponseSingleLineUpData } from '@/modules/lineups/model';
 import { UserAirtableRepository } from '@/modules/users/repositories/UserAirtableRepository';
+import { isAdmin } from '@/modules/users/utils';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ResponseSingleLineUpData>) {
   const session = await getSession(req);
@@ -12,9 +13,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   if (!session) return res.status(401).json({ success: false });
 
   const { params } = req.query;
-  const [lineUpId, action, playerNickname] = params as [string, Action, string];
+  const [lineUpId, action, playerNickname] = params as [string, Action | LineUpAction, string];
 
-  if (playerNickname && !session.user?.admin) {
+  if (playerNickname && !isAdmin(session.user)) {
     return res.status(401).json({ success: false });
   }
 
@@ -40,7 +41,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         case 'leave':
           lineUp = await lineUpRepository.removePlayer(lineUpId, player);
           break;
+        case 'callin':
+          lineUp = await lineUpRepository.callInPlayer(lineUpId, player);
+          break;
+        case 'calloff':
+          lineUp = await lineUpRepository.callOffPlayer(lineUpId, player);
+          break;
       }
+
       if (lineUp) {
         return res.status(200).json({
           success: true,

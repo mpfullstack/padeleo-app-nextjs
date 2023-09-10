@@ -1,6 +1,7 @@
 import { AirtableData } from '@/database/Airtable/Airtable';
 import { LineUp, LineUpPlayer } from '@/modules/lineups/model';
 import { User } from '@/modules/users/model';
+import { isUserConvoked } from '../model/utils';
 
 export interface LineUpRepository {
   getAll(): Promise<LineUp[]>;
@@ -8,6 +9,9 @@ export interface LineUpRepository {
   getById(id: string): Promise<LineUp>;
   update(data: LineUp): Promise<LineUp>;
   addPlayer(lineUpId: string, user: User): Promise<LineUp>;
+  removePlayer(lineUpId: string, user: User): Promise<LineUp>;
+  callInPlayer(lineUpId: string, user: User): Promise<LineUp>;
+  callOffPlayer(lineUpId: string, user: User): Promise<LineUp>;
 }
 
 export class LineUpAirtableRepository implements LineUpRepository {
@@ -56,6 +60,28 @@ export class LineUpAirtableRepository implements LineUpRepository {
 
     if (isPlayerInLineUp) {
       lineUp.players = lineUp.players.filter((player: LineUpPlayer) => player.id !== user.id);
+      return await this.update(lineUp);
+    }
+
+    return Promise.resolve(lineUp);
+  }
+
+  async callInPlayer(lineUpId: string, user: User): Promise<LineUp> {
+    const lineUp = await this.getById(lineUpId);
+
+    if (!isUserConvoked(lineUp, user)) {
+      lineUp.convokedPlayers.push(user as LineUpPlayer);
+      return await this.update(lineUp);
+    }
+
+    return Promise.resolve(lineUp);
+  }
+
+  async callOffPlayer(lineUpId: string, user: User): Promise<LineUp> {
+    const lineUp = await this.getById(lineUpId);
+
+    if (isUserConvoked(lineUp, user)) {
+      lineUp.convokedPlayers = lineUp.convokedPlayers.filter((player: LineUpPlayer) => player.id !== user.id);
       return await this.update(lineUp);
     }
 

@@ -10,3 +10,5 @@ export interface Option {
 }
 
 export type Action = 'join' | 'leave';
+
+export type LineUpAction = 'callin' | 'calloff';

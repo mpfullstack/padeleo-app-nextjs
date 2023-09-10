@@ -13,10 +13,11 @@ import { useRouter } from 'next/router';
 import AlertDialog from '@/modules/common/components/Dialog/AlertDialog';
 import useCommonActions from '@/modules/common/hooks/useCommonActions';
 import JoinLeaveActionButton from '@/modules/common/components/Buttons/JoinLeaveActionButton';
+import { isAdmin } from '@/modules/users/utils';
 
 const Actions = ({ match, user, onUpdate, onDelete }: Props) => {
   const router = useRouter();
-  const isUserAdmin = !!user?.admin;
+  const isUserAdmin = isAdmin(user);
   const isClosed = getMatchStatus(match) === 'closed';
   const isPastMatch = new Date(match.startTime) < new Date();
   const userIsInMatch = isUserInMatch(match, user);

@@ -16,7 +16,7 @@ const PlayerSelector = ({ players, onChange }: Props) => {
 
   return (
     <StyledRow>
-      <Col xs={12}>
+      <Col xs={8}>
         <Select label="Jugador" options={options} onChange={(value: string) => handlePlayerChange(value)} />
       </Col>
     </StyledRow>

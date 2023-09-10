@@ -108,6 +108,8 @@ export const mapRecordToClub = (record: Record<FieldSet>): Club => {
 export const mapRecordToLineUp = (record: Record<FieldSet>): LineUp => {
   const playerIds = (record.get('players') as string[]) || [];
   const playersNicknames = (record.get('playersNicknames') as string[]) || [];
+  const convokedPlayerIds = (record.get('convokedPlayers') as string[]) || [];
+  const convokedPlayerNicknames = (record.get('convokedPlayerNicknames') as string[]) || [];
   return {
     id: record.id,
     clubId: record.get('clubId')?.toString() as string,
@@ -121,15 +123,22 @@ export const mapRecordToLineUp = (record: Record<FieldSet>): LineUp => {
         nickname: playersNicknames[i],
       } as LineUpPlayer;
     }),
+    convokedPlayers: convokedPlayerIds.map((playerId: string, i: number) => {
+      return {
+        id: playerId,
+        nickname: convokedPlayerNicknames[i],
+      } as LineUpPlayer;
+    }),
   };
 };
 
 export const mapLineUpToRecord = (lineUp: LineUp): LineUpRecord => {
-  const { id, players = [], clubName, ...data } = lineUp;
+  const { id, players = [], clubName, convokedPlayers = [], ...data } = lineUp;
   return {
     ...data,
     date: lineUp.date?.toString(),
     clubId: [lineUp.clubId],
     players: players.map((player: LineUpPlayer) => player.id) as string[],
+    convokedPlayers: convokedPlayers.map((player: LineUpPlayer) => player.id) as string[],
   };
 };

@@ -1,16 +1,31 @@
 import styled from 'styled-components';
-import { LineUpPlayer } from '@/modules/lineups/model';
+import { LineUp, LineUpPlayer } from '@/modules/lineups/model';
+import LineUpPlayerItem from './LineUpPlayerItem';
+import { User } from '@/modules/users/model';
 
-const LineUpPlayers = ({ players, totalPlayersAvailable }: Props) => {
+const LineUpPlayers = ({ user, lineUp, totalPlayersAvailable, onUpdate }: Props) => {
   return (
     <Wrapper>
       <Title>
         {`Apuntados`}
-        <Span>{` (${players.length} de ${totalPlayersAvailable})`}</Span>
+        <Span>{` (${lineUp.players.length} de ${totalPlayersAvailable})`}</Span>
+      </Title>
+      <Title>
+        {`Convocados`}
+        <Span>{` (${lineUp.convokedPlayers.length} de ${lineUp.players.length})`}</Span>
       </Title>
       <LineUpPlayersWrapper>
-        {players.map((player: LineUpPlayer) => {
-          return <LineUpPlayerItem key={player.id}>{player.nickname}</LineUpPlayerItem>;
+        {lineUp.players.map((player: LineUpPlayer, i: number) => {
+          return (
+            <LineUpPlayerItem
+              user={user}
+              lineUp={lineUp}
+              key={player.id}
+              position={i + 1}
+              player={player}
+              onUpdate={onUpdate}
+            />
+          );
         })}
       </LineUpPlayersWrapper>
     </Wrapper>
@@ -18,6 +33,7 @@ const LineUpPlayers = ({ players, totalPlayersAvailable }: Props) => {
 };
 
 const Wrapper = styled.div`
+  width: 100%;
   margin-bottom: 1rem;
 `;
 
@@ -29,18 +45,13 @@ const Span = styled.span`
   font-weight: normal;
 `;
 
-const LineUpPlayersWrapper = styled.ol`
-  margin: 0;
-  padding-left: 2.5rem;
-`;
-
-const LineUpPlayerItem = styled.li`
-  margin: 0.4rem 0;
-`;
+const LineUpPlayersWrapper = styled.div``;
 
 interface Props {
-  players: LineUpPlayer[];
+  user: User;
+  lineUp: LineUp;
   totalPlayersAvailable: number;
+  onUpdate: (lineUp: LineUp) => void;
 }
 
 export default LineUpPlayers;

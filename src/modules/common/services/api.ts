@@ -129,3 +129,9 @@ export const joinLineUp = (lineUpId: string, playerId?: string) =>
 
 export const leaveLineUp = (lineUpId: string, playerId?: string) =>
   put<ResponseSingleLineUpData, LineUp>(`${api.lineUpsUrl}/${lineUpId}/leave${playerId ? `/${playerId}` : ''}`);
+
+export const callInPlayer = (lineUpId: string, playerId?: string) =>
+  put<ResponseSingleLineUpData, LineUp>(`${api.lineUpsUrl}/${lineUpId}/callin${playerId ? `/${playerId}` : ''}`);
+
+export const callOffPlayer = (lineUpId: string, playerId?: string) =>
+  put<ResponseSingleLineUpData, LineUp>(`${api.lineUpsUrl}/${lineUpId}/calloff${playerId ? `/${playerId}` : ''}`);

@@ -10,7 +10,7 @@ const Item = ({ children, actions }: Props) => {
   );
 };
 
-const ItemWrapper = styled.div`
+export const ItemWrapper = styled.div`
   width: 100%;
   padding: 1.2rem 1.2rem;
   margin-bottom: 2rem;

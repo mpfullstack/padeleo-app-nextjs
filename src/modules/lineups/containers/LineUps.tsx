@@ -11,6 +11,7 @@ import LineUpsTabs, { Key } from '@/modules/lineups/components/LineUpsTabs';
 import LineUpItem from '@/modules/lineups/components/LineUpItem';
 import { LineUp, ResponseLineUpData } from '@/modules/lineups/model';
 import { updateLineUp } from '@/modules/lineups/utils';
+import { isAdmin } from '@/modules/users/utils';
 
 const LineUps = ({ user }: PropsFromRedux) => {
   const [tab, setTab] = useState<Key>('coming');
@@ -33,13 +34,13 @@ const LineUps = ({ user }: PropsFromRedux) => {
   );
 
   return (
-    <ContentWrapper admin={!!user?.admin}>
+    <ContentWrapper admin={isAdmin(user)}>
       <Title>{`Convocatorias`}</Title>
       <LineUpsTabs selected={tab} handleTabChange={(key: string) => setTab(key as Key)} />
       {data?.result?.map(lineUp => (
         <LineUpItem key={lineUp.id} lineUp={lineUp} onUpdate={onLineUpUpdated} onDelete={() => {}} user={user} />
       ))}
-      {user?.admin && <FloatingAddButton onClick={() => router.push(`/lineups/create`)} />}
+      {isAdmin(user) && <FloatingAddButton onClick={() => router.push(`/lineups/create`)} />}
     </ContentWrapper>
   );
 };
