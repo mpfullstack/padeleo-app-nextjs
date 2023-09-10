@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { User } from '@/modules/users/model';
-import { LineUp, LineUpPlayer } from '@/modules/lineups/model';
+import { LineUp } from '@/modules/lineups/model';
 import Item, { ItemWrapper } from '@/modules/common/components/Item';
 import theme from '@/theme/theme';
 import LineUpPlayerActions from './Actions';
@@ -10,10 +10,16 @@ import { isUserConvoked } from '../../model/utils';
 const LineUpPlayerItem = ({ user, lineUp, position, player, onUpdate }: Props) => {
   return (
     <PlayerItemWrapper>
-      <Item actions={<LineUpPlayerActions user={user} lineUp={lineUp} player={player as User} onUpdate={onUpdate} />}>
-        <Player>
-          <Position>{position}</Position>
-          <PlayerName>{player.nickname}</PlayerName>
+      <Item actions={<LineUpPlayerActions user={user} lineUp={lineUp} player={player} onUpdate={onUpdate} />}>
+        <Content>
+          <Details>
+            <Text>
+              <Position>{position}</Position>
+              <PlayerName>{player.nickname}</PlayerName>
+            </Text>
+            <Text>{`Conv. apuntadas: ${player.lineUpsJoinedCount}`}</Text>
+            <Text>{`Conv. jugadas: ${player.lineUpsConvokedCount}`}</Text>
+          </Details>
           <Status>
             {isUserConvoked(lineUp, player as User) ? (
               <Tag label={`Convocado`} color={theme.palette.success.main} />
@@ -21,7 +27,7 @@ const LineUpPlayerItem = ({ user, lineUp, position, player, onUpdate }: Props) =
               <Tag label={`Sin convocar`} color={theme.palette.warning.main} />
             )}
           </Status>
-        </Player>
+        </Content>
       </Item>
     </PlayerItemWrapper>
   );
@@ -39,10 +45,9 @@ const PlayerItemWrapper = styled.div`
   }
 `;
 
-const Player = styled.p`
+const Content = styled.div`
   width: 100%;
   display: flex;
-  margin-bottom: 0;
 `;
 
 const Position = styled.span`
@@ -62,14 +67,23 @@ const Status = styled.span`
 
 const PlayerName = styled.span`
   font-size: 1.6rem;
-  font-weight: 400;
+  font-weight: 700;
+`;
+
+const Details = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Text = styled.p`
+  margin: 0;
 `;
 
 interface Props {
   user: User;
   lineUp: LineUp;
   position: number;
-  player: LineUpPlayer;
+  player: User;
   onUpdate: (lineUp: LineUp) => void;
 }
 

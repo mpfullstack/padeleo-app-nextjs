@@ -81,6 +81,8 @@ export const userMapper = (record: Record<FieldSet>, userId?: string): User => {
     email: record.get('email') as string,
     nickname: record.get('nickname') as string,
     admin: record.get('admin') as boolean,
+    lineUpsJoinedCount: record.get('lineUpsJoinedCount') as number,
+    lineUpsConvokedCount: record.get('lineUpsConvokedCount') as number,
   };
 };
 

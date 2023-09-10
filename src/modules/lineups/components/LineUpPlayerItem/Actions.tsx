@@ -43,7 +43,7 @@ const Actions = ({ user, lineUp, player, onUpdate }: Props) => {
 
 const Wrapper = styled.div`
   display: flex;
-  margin-top: 1rem;
+  margin-top: 0;
   justify-content: right;
   button {
     font-size: 1.3rem;

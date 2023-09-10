@@ -26,13 +26,15 @@ const LineUpItem = ({ lineUp, user, onUpdate, onDelete }: Props) => {
   return (
     <Item actions={<Actions lineUp={lineUp} user={user} onUpdate={onUpdate} />}>
       <Content>
+        <MatchDate date={lineUp.date} format="EEEE dd/MM/yyyy - HH:mm'h'" />
         <Teams>{`${lineUp.homeTeam} - ${lineUp.awayTeam}`}</Teams>
         <Location>
           <Club>{`Club: `}</Club>
           {lineUp.clubName}
         </Location>
-        <MatchDate date={lineUp.date} format="EEEE dd/MM/yyyy - HH:mm'h'" />
-        <LineUpPlayers user={user as User} lineUp={lineUp} totalPlayersAvailable={players.length} onUpdate={onUpdate} />
+        {!!players.length && (
+          <LineUpPlayers user={user as User} lineUp={lineUp} availablePlayers={players} onUpdate={onUpdate} />
+        )}
         {isAdmin(user) && (
           <>
             <p>{`Añadir jugador`}</p>
@@ -54,9 +56,10 @@ const Content = styled.div`
 `;
 
 const Teams = styled.p`
-  font-size: 1.8rem;
+  font-size: 2rem;
   font-weight: 700;
   margin-bottom: 0;
+  margin-top: 0;
 `;
 
 const Location = styled.p`

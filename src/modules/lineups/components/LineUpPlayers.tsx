@@ -3,12 +3,12 @@ import { LineUp, LineUpPlayer } from '@/modules/lineups/model';
 import LineUpPlayerItem from './LineUpPlayerItem';
 import { User } from '@/modules/users/model';
 
-const LineUpPlayers = ({ user, lineUp, totalPlayersAvailable, onUpdate }: Props) => {
+const LineUpPlayers = ({ user, lineUp, availablePlayers, onUpdate }: Props) => {
   return (
     <Wrapper>
       <Title>
         {`Apuntados`}
-        <Span>{` (${lineUp.players.length} de ${totalPlayersAvailable})`}</Span>
+        <Span>{` (${lineUp.players.length} de ${availablePlayers.length})`}</Span>
       </Title>
       <Title>
         {`Convocados`}
@@ -22,7 +22,7 @@ const LineUpPlayers = ({ user, lineUp, totalPlayersAvailable, onUpdate }: Props)
               lineUp={lineUp}
               key={player.id}
               position={i + 1}
-              player={player}
+              player={availablePlayers.find((availablePlayer: User) => availablePlayer.id === player.id) as User}
               onUpdate={onUpdate}
             />
           );
@@ -45,12 +45,14 @@ const Span = styled.span`
   font-weight: normal;
 `;
 
-const LineUpPlayersWrapper = styled.div``;
+const LineUpPlayersWrapper = styled.div`
+  margin-top: 2rem;
+`;
 
 interface Props {
   user: User;
   lineUp: LineUp;
-  totalPlayersAvailable: number;
+  availablePlayers: User[];
   onUpdate: (lineUp: LineUp) => void;
 }
 
