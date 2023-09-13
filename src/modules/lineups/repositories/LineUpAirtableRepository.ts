@@ -1,5 +1,5 @@
 import { AirtableData } from '@/database/Airtable/Airtable';
-import { LineUp, LineUpPlayer } from '@/modules/lineups/model';
+import { LineUp, LineUpCouple, LineUpPlayer } from '@/modules/lineups/model';
 import { User } from '@/modules/users/model';
 import { isUserConvoked } from '../model/utils';
 
@@ -12,6 +12,7 @@ export interface LineUpRepository {
   removePlayer(lineUpId: string, user: User): Promise<LineUp>;
   callInPlayer(lineUpId: string, user: User): Promise<LineUp>;
   callOffPlayer(lineUpId: string, user: User): Promise<LineUp>;
+  getCouples(lineUpId: string): Promise<LineUpCouple[]>;
 }
 
 export class LineUpAirtableRepository implements LineUpRepository {
@@ -86,5 +87,9 @@ export class LineUpAirtableRepository implements LineUpRepository {
     }
 
     return Promise.resolve(lineUp);
+  }
+
+  async getCouples(lineUpId: string): Promise<LineUpCouple[]> {
+    return await this.database.getLineUpCouples(lineUpId);
   }
 }

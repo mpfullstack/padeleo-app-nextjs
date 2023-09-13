@@ -22,6 +22,16 @@ export interface LineUpPlayer {
   nickname: string;
 }
 
+export interface LineUpCouple {
+  playerIdA: string;
+  playerIdB: string;
+  playerScoreA: number;
+  playerScoreB: number;
+  lineUpId: string;
+}
+
 export type ResponseLineUpData = ResponseData<LineUp[]>;
 
 export type ResponseSingleLineUpData = ResponseData<LineUp>;
+
+export type ResponseLineUpCouplesData = ResponseData<LineUpCouple[]>;

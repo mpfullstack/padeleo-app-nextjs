@@ -5,7 +5,12 @@ import { User, ResponseUserData, ResponseSingleUserData } from '@/modules/users/
 import { ResponseData } from '@/modules/common/model';
 import { Key } from '@/modules/matches/components/MatchesTabs';
 import { ResponseResultsData, Result } from '@/modules/results/model';
-import { LineUp, ResponseLineUpData, ResponseSingleLineUpData } from '@/modules/lineups/model';
+import {
+  LineUp,
+  ResponseLineUpCouplesData,
+  ResponseLineUpData,
+  ResponseSingleLineUpData,
+} from '@/modules/lineups/model';
 
 const api = {
   matchesUrl: '/api/matches',
@@ -123,6 +128,9 @@ export const getReport = () => getText(api.reportsUrl);
 
 // LineUps API
 export const getLineUps = ([url, tab]: [string, Key]) => get<ResponseLineUpData>(url, { tab });
+
+export const getLineUpCouples = ([url, lineUpId]: [string, string]) =>
+  get<ResponseLineUpCouplesData>(`${url}/couples/${lineUpId}`);
 
 export const joinLineUp = (lineUpId: string, playerId?: string) =>
   put<ResponseSingleLineUpData, LineUp>(`${api.lineUpsUrl}/${lineUpId}/join${playerId ? `/${playerId}` : ''}`);
