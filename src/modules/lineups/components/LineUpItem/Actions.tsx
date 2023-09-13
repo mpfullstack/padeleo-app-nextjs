@@ -2,26 +2,19 @@ import styled from 'styled-components';
 import { Action } from '@/modules/common/model';
 import { User } from '@/modules/users/model';
 import { LineUp } from '@/modules/lineups/model';
-import { isUserInLineUp } from '@/modules/lineups/model/utils';
-import { joinLineUp, leaveLineUp } from '@/modules/common/services/api';
+import { isUserConvoked, isUserInLineUp } from '@/modules/lineups/model/utils';
 import JoinLeaveActionButton from '@/modules/common/components/Buttons/JoinLeaveActionButton';
+import { onJoinLeaveLineUpAction } from '../../utils';
 
 const Actions = ({ lineUp, user, onUpdate }: Props) => {
   const userIsInLineUp = isUserInLineUp(lineUp, user);
+  const userIsConvoked = isUserConvoked(lineUp, user);
   const canJoin = !userIsInLineUp;
   const isPastLineUp = new Date(lineUp.date) < new Date();
-  const canLeave = userIsInLineUp && !isPastLineUp;
+  const canLeave = userIsInLineUp && !isPastLineUp && !userIsConvoked;
 
   const onJoinLeaveAction = async (action: Action, onSuccess: () => void) => {
-    try {
-      const response = action === 'leave' ? await leaveLineUp(lineUp.id) : await joinLineUp(lineUp.id);
-      onUpdate(response.result as LineUp);
-      onSuccess();
-    } catch (e: any) {
-      // TODO: Handle ApiError, show Toast message
-      // e.status
-      // e.data.message
-    }
+    await onJoinLeaveLineUpAction(lineUp, action, onUpdate, onSuccess);
   };
 
   return (

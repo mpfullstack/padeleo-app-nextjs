@@ -6,9 +6,13 @@ import { isUserConvoked } from '@/modules/lineups/model/utils';
 import { isAdmin } from '@/modules/users/utils';
 import { callInPlayer, callOffPlayer } from '@/modules/common/services/api';
 import { Action } from '@/modules/common/model';
+import { LoadingButton } from '@/modules/common/components/Buttons/Buttons';
+import { onJoinLeaveLineUpAction } from '../../utils';
 
 const Actions = ({ user, lineUp, player, onUpdate }: Props) => {
-  const canJoin = !isUserConvoked(lineUp, player as User);
+  const userIsConvoked = isUserConvoked(lineUp, player as User);
+  const canLeave = userIsConvoked;
+  const canJoin = !canLeave;
 
   const onJoinLeaveAction = async (action: Action, onSuccess: () => void) => {
     try {
@@ -25,13 +29,21 @@ const Actions = ({ user, lineUp, player, onUpdate }: Props) => {
     }
   };
 
+  const onRemovePlayer = async (player: User) =>
+    await onJoinLeaveLineUpAction(lineUp, 'leave', onUpdate, undefined, player);
+
   return (
     <Wrapper>
+      {isAdmin(user) && !userIsConvoked && (
+        <LoadingButton color="error" onClick={() => onRemovePlayer(player)}>
+          {`Quitar`}
+        </LoadingButton>
+      )}
       {isAdmin(user) && (
         <JoinLeaveActionButton
           canJoin={canJoin}
           joinText="Convocar"
-          canLeave={!canJoin}
+          canLeave={canLeave}
           leaveText="Desconvocar"
           onClick={onJoinLeaveAction}
           size="small"
