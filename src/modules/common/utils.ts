@@ -30,3 +30,11 @@ export const downloadBlob = (blob: Blob, filename: string) => {
   // Comment out this line if you don't want an automatic download of the blob content
   a.click();
 };
+
+export const sort = <T>(items: T[], key: keyof T): T[] => {
+  return items.sort((a: T, b: T) => {
+    if (a[key] < b[key]) return -1;
+    if (a[key] > b[key]) return 1;
+    return 0;
+  });
+};

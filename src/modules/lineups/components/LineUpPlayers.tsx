@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { LineUp, LineUpPlayer } from '@/modules/lineups/model';
 import LineUpPlayerItem from './LineUpPlayerItem';
 import { User } from '@/modules/users/model';
+import { sort } from '@/modules/common/utils';
 
 const LineUpPlayers = ({ user, lineUp, availablePlayers, onUpdate }: Props) => {
   return (
@@ -15,7 +16,7 @@ const LineUpPlayers = ({ user, lineUp, availablePlayers, onUpdate }: Props) => {
         <Span>{` (${lineUp.convokedPlayers.length} de ${lineUp.players.length})`}</Span>
       </Title>
       <LineUpPlayersWrapper>
-        {lineUp.players.map((player: LineUpPlayer, i: number) => {
+        {sort(lineUp.players, 'nickname').map((player: LineUpPlayer, i: number) => {
           return (
             <LineUpPlayerItem
               user={user}

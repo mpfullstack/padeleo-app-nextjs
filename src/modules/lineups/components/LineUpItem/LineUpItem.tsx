@@ -9,10 +9,11 @@ import Actions from '@/modules/lineups/components/LineUpItem/Actions';
 import api, { getUsers, joinLineUp } from '@/modules/common/services/api';
 import PlayerSelector from '@/modules/users/components/PlayerSelector';
 import { isAdmin } from '@/modules/users/utils';
+import { sort } from '@/modules/common/utils';
 
 const LineUpItem = ({ lineUp, user, onUpdate, onDelete }: Props) => {
   const { data } = useSWR(api.usersUrl, getUsers);
-  const players = data?.result || [];
+  const players = sort(data?.result || [], 'nickname');
 
   const addPlayer = async (player: User) => {
     const response = await joinLineUp(lineUp.id, player.nickname);
