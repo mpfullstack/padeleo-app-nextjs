@@ -7,11 +7,21 @@ import { LoadingButton } from '@/modules/common/components/Buttons/Buttons';
 import { useLoading } from '@/modules/common/hooks/useLoading';
 import { LineUp, LineUpCouple, LineUpPlayer } from '@/modules/lineups/model';
 import api, { getLineUpCouples } from '@/modules/common/services/api';
+import TextField from '@/modules/common/components/Form/TextField';
 
 const LineUpCouplesEditor = ({ lineUp, onUpdate }: Props) => {
   const { data } = useSWR([api.lineUpsUrl, lineUp.id], getLineUpCouples);
 
   const lineUpCouples = data?.result || [];
+  const totalCouples = lineUp.convokedPlayers.length / 2;
+  const missingCouplesLength = data?.result ? totalCouples - lineUpCouples.length : 0;
+  let missingCouples: LineUpCouple[] = Array.from({ length: missingCouplesLength }, () => ({
+    playerIdA: '',
+    playerIdB: '',
+    playerScoreA: 0,
+    playerScoreB: 0,
+    lineUpId: lineUp.id,
+  }));
 
   const sortCouples = (lineUpCouples: LineUpCouple[]) => {
     return lineUpCouples.sort((coupleA: LineUpCouple, coupleB: LineUpCouple) => {
@@ -24,16 +34,18 @@ const LineUpCouplesEditor = ({ lineUp, onUpdate }: Props) => {
     });
   };
 
+  // const getPlayerPoints = (player: LineUpPlayer): number => {
+
+  // }
+
   const playerOptions = lineUp.convokedPlayers.map(
     (player: LineUpPlayer): Option => ({
       id: player.id as string,
-      value: player.nickname as string,
+      value: `${player.nickname}`,
     })
   );
 
   const [saveStatus, _] = useLoading();
-
-  // const totalCouples = lineUpCouples.length;
 
   const onSave = async () => {};
 
@@ -45,30 +57,36 @@ const LineUpCouplesEditor = ({ lineUp, onUpdate }: Props) => {
         <Grid item xs={12} />
       </Grid>
       <Grid container spacing={0}>
-        {sortCouples(lineUpCouples).map((couple: LineUpCouple, i: number) => {
-          return (
-            <Grid container key={`${couple.playerIdA}-${couple.playerIdB}-${i}`}>
-              <Grid item xs={3}>
-                <Select
-                  className="player-selector"
-                  key={`select-${couple.playerIdA}-${i}`}
-                  value={couple.playerIdA}
-                  options={playerOptions}
-                  onChange={(value: string) => handlePlayerPositionChange(value, i)}
-                />
+        {sortCouples(lineUpCouples)
+          .concat(missingCouples)
+          .map((couple: LineUpCouple, i: number) => {
+            return (
+              <Grid container key={`${couple.playerIdA}-${couple.playerIdB}-${i}`}>
+                <Grid item xs={2}>
+                  <Info>
+                    <span>{`P${i + 1}`}</span>
+                    <span>{`Puntos: ${couple.playerScoreA + couple.playerScoreB}`}</span>
+                  </Info>
+                </Grid>
+                <Grid item xs={5}>
+                  <PlayerSelector
+                    playerId={couple.playerIdA}
+                    playerScore={String(couple.playerScoreA)}
+                    playerOptions={playerOptions}
+                    onChange={(value: string) => handlePlayerPositionChange(value, i)}
+                  />
+                </Grid>
+                <Grid item xs={5}>
+                  <PlayerSelector
+                    playerId={couple.playerIdB}
+                    playerScore={String(couple.playerScoreB)}
+                    playerOptions={playerOptions}
+                    onChange={(value: string) => handlePlayerPositionChange(value, i)}
+                  />
+                </Grid>
               </Grid>
-              <Grid item xs={3}>
-                <Select
-                  className="player-selector"
-                  key={`select-${couple.playerIdB}-${i}`}
-                  value={couple.playerIdB}
-                  options={playerOptions}
-                  onChange={(value: string) => handlePlayerPositionChange(value, i)}
-                />
-              </Grid>
-            </Grid>
-          );
-        })}
+            );
+          })}
       </Grid>
       <Grid container className="actions">
         <Grid item>
@@ -78,6 +96,27 @@ const LineUpCouplesEditor = ({ lineUp, onUpdate }: Props) => {
     </LineUpCouplesEditorWrapper>
   );
 };
+
+const PlayerSelector = ({ playerId, playerScore, playerOptions, onChange }: PlayerSelectorProps) => {
+  return (
+    <Info>
+      <Select
+        className="player-selector"
+        value={playerId}
+        options={playerOptions}
+        onChange={(value: string) => onChange(value)}
+      />
+      <TextField id={playerId} label="Puntos" onChange={() => {}} value={playerScore} />
+    </Info>
+  );
+};
+
+interface PlayerSelectorProps {
+  playerId: string;
+  playerScore: string;
+  playerOptions: Option[];
+  onChange: (value: string) => void;
+}
 
 const LineUpCouplesEditorWrapper = styled.div`
   padding: 1rem;
@@ -99,6 +138,11 @@ const LineUpCouplesEditorWrapper = styled.div`
     display: flex;
     justify-content: flex-end;
   }
+`;
+
+const Info = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
 interface Props {
