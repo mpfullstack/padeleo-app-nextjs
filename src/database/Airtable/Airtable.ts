@@ -17,9 +17,9 @@ import {
   userSessionMapper,
   mapRecordToLineUp,
   mapLineUpToRecord,
-  mapRecordToLineUpCouple,
 } from '@/database/Airtable/helpers';
 import { LineUp, LineUpCouple } from '@/modules/lineups/model';
+import lineUpCouples from './lineUpCouples';
 
 export class AirtableData {
   private base: AirtableBase;
@@ -266,18 +266,14 @@ export class AirtableData {
   }
 
   getLineUpCouples(lineUpId: string) {
-    return new Promise<LineUpCouple[]>((resolve, reject) => {
-      const lineUpCouples: LineUpCouple[] = [];
-      this.base('LineUpCouples')
-        .select({
-          view: 'Grid view',
-          pageSize: 50,
-          filterByFormula: encodeURI(`lineUpId='${lineUpId}'`),
-        })
-        .firstPage()
-        .then(records => records.map(record => lineUpCouples.push(mapRecordToLineUpCouple(record))))
-        .then(() => resolve(lineUpCouples))
-        .catch(reject);
-    });
+    return lineUpCouples.get(this.base('LineUpCouples'), lineUpId);
+  }
+
+  deleteLineUpCouples(data: LineUpCouple[]): Promise<void> {
+    return lineUpCouples.delete(this.base('LineUpCouples'), data);
+  }
+
+  createLineUpCouples(lineUpCouplesToCreate: LineUpCouple[]): Promise<LineUpCouple[]> {
+    return lineUpCouples.create(this.base('LineUpCouples'), lineUpCouplesToCreate);
   }
 }

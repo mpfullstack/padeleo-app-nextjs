@@ -7,6 +7,7 @@ import { Key } from '@/modules/matches/components/MatchesTabs';
 import { ResponseResultsData, Result } from '@/modules/results/model';
 import {
   LineUp,
+  LineUpCouple,
   ResponseLineUpCouplesData,
   ResponseLineUpData,
   ResponseSingleLineUpData,
@@ -143,3 +144,6 @@ export const callInPlayer = (lineUpId: string, playerId?: string) =>
 
 export const callOffPlayer = (lineUpId: string, playerId?: string) =>
   put<ResponseSingleLineUpData, LineUp>(`${api.lineUpsUrl}/${lineUpId}/calloff${playerId ? `/${playerId}` : ''}`);
+
+export const updateLineUpCouples = (lineUpId: string, data: LineUpCouple[]) =>
+  post(`${api.lineUpsUrl}/couples/${lineUpId}`, data);

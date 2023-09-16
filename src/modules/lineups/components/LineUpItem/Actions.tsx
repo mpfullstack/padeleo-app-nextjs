@@ -31,7 +31,7 @@ const Actions = ({ lineUp, user, onUpdate }: Props) => {
         <JoinLeaveActionButton canJoin={canJoin} canLeave={canLeave} onClick={onJoinLeaveAction} />
       )}
       <Drawer anchor="bottom" open={drawerOpened} onClose={() => setDrawerOpen(false)}>
-        <LineUpCouplesEditor lineUp={lineUp} onUpdate={() => {}} />
+        <LineUpCouplesEditor lineUp={lineUp} />
       </Drawer>
     </Wrapper>
   );

@@ -36,4 +36,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       error: 'Not found',
     });
   }
+
+  if (req.method === 'POST') {
+    try {
+      await lineUpRepository.updateLineUpCouples(lineUpId as string, req.body);
+
+      return res.status(200).json({
+        success: true,
+      });
+    } catch (e: any) {
+      return res.status(e.statusCode).json({
+        success: false,
+        error: e.message,
+      });
+    }
+  }
 }

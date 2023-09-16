@@ -23,11 +23,20 @@ export interface LineUpPlayer {
 }
 
 export interface LineUpCouple {
+  id: string;
   playerIdA: string;
   playerIdB: string;
   playerScoreA: number;
   playerScoreB: number;
   lineUpId: string;
+}
+
+export interface LineUpCoupleRecord extends Omit<LineUpCouple, 'id' | 'playerIdA' | 'playerIdB' | 'lineUpId'> {
+  playerA: string[];
+  playerB: string[];
+  playerScoreA: number;
+  playerScoreB: number;
+  lineUp: string[];
 }
 
 export type ResponseLineUpData = ResponseData<LineUp[]>;

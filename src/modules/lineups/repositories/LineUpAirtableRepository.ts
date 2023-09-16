@@ -13,6 +13,7 @@ export interface LineUpRepository {
   callInPlayer(lineUpId: string, user: User): Promise<LineUp>;
   callOffPlayer(lineUpId: string, user: User): Promise<LineUp>;
   getCouples(lineUpId: string): Promise<LineUpCouple[]>;
+  updateLineUpCouples(lineUpId: string, lineUpCouples: LineUpCouple[]): Promise<LineUpCouple[]>;
 }
 
 export class LineUpAirtableRepository implements LineUpRepository {
@@ -91,5 +92,11 @@ export class LineUpAirtableRepository implements LineUpRepository {
 
   async getCouples(lineUpId: string): Promise<LineUpCouple[]> {
     return await this.database.getLineUpCouples(lineUpId);
+  }
+
+  async updateLineUpCouples(_: string, lineUpCouples: LineUpCouple[]) {
+    const lineUpCouplesToDelete = lineUpCouples.filter((lineUpCouple: LineUpCouple) => lineUpCouple.id);
+    lineUpCouplesToDelete.length && (await this.database.deleteLineUpCouples(lineUpCouplesToDelete));
+    return await this.database.createLineUpCouples(lineUpCouples);
   }
 }

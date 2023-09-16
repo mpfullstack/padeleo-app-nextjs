@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import MuiSelect, { SelectProps, SelectChangeEvent } from '@mui/material/Select';
 import styled from 'styled-components';
@@ -14,7 +15,7 @@ const Select = ({ options, onChange, value, className, label }: Props) => {
         {options.map((option: Option) => {
           return (
             <MenuItem key={option.id} value={option.id}>
-              <ItemText>{option.value}</ItemText>
+              {option.contentValue || <ItemText>{option.value}</ItemText>}
             </MenuItem>
           );
         })}
@@ -23,7 +24,7 @@ const Select = ({ options, onChange, value, className, label }: Props) => {
   );
 };
 
-const ItemText = styled.p`
+export const ItemText = styled.p`
   font-size: 1.5rem;
   margin: 0;
 `;
@@ -31,6 +32,7 @@ const ItemText = styled.p`
 export interface Option {
   id: string | number;
   value: string | undefined;
+  contentValue?: ReactNode;
 }
 
 interface Props extends Omit<SelectProps, 'onChange'> {
