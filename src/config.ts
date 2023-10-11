@@ -1,4 +1,3 @@
-import { NextConfig } from 'next';
 import getConfig from 'next/config';
 
 interface ServerConfig {

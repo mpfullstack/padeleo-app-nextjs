@@ -9,7 +9,7 @@ import { createMatch, updateMatch } from '@/modules/common/services/api';
 import { Option } from '@/modules/common/components/Form/Select';
 import CourtBooked from '@/modules/matches/components/MatchItem/CourtBooked';
 import MatchTime from '@/modules/matches/components/MatchItem/MatchTime';
-import MatchDate from '@/modules/matches/components/MatchItem/MatchDate';
+import MatchDate from '@/modules/common/components/Date';
 import { LoadingButton } from '@/modules/common/components/Buttons/Buttons';
 import { useRouter } from 'next/router';
 

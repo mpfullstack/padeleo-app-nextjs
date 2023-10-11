@@ -5,6 +5,13 @@ import { User, ResponseUserData, ResponseSingleUserData } from '@/modules/users/
 import { ResponseData } from '@/modules/common/model';
 import { Key } from '@/modules/matches/components/MatchesTabs';
 import { ResponseResultsData, Result } from '@/modules/results/model';
+import {
+  LineUp,
+  LineUpCouple,
+  ResponseLineUpCouplesData,
+  ResponseLineUpData,
+  ResponseSingleLineUpData,
+} from '@/modules/lineups/model';
 
 const api = {
   matchesUrl: '/api/matches',
@@ -15,6 +22,7 @@ const api = {
   isAuthenticated: '/api/auth',
   clubsUrl: '/api/clubs',
   reportsUrl: '/api/reports',
+  lineUpsUrl: '/api/lineups',
 };
 
 export default api;
@@ -118,3 +126,24 @@ export const getClubs = get<ResponseClubData>;
 
 // Reports API
 export const getReport = () => getText(api.reportsUrl);
+
+// LineUps API
+export const getLineUps = ([url, tab]: [string, Key]) => get<ResponseLineUpData>(url, { tab });
+
+export const getLineUpCouples = ([url, lineUpId]: [string, string]) =>
+  get<ResponseLineUpCouplesData>(`${url}/couples/${lineUpId}`);
+
+export const joinLineUp = (lineUpId: string, playerId?: string) =>
+  put<ResponseSingleLineUpData, LineUp>(`${api.lineUpsUrl}/${lineUpId}/join${playerId ? `/${playerId}` : ''}`);
+
+export const leaveLineUp = (lineUpId: string, playerId?: string) =>
+  put<ResponseSingleLineUpData, LineUp>(`${api.lineUpsUrl}/${lineUpId}/leave${playerId ? `/${playerId}` : ''}`);
+
+export const callInPlayer = (lineUpId: string, playerId?: string) =>
+  put<ResponseSingleLineUpData, LineUp>(`${api.lineUpsUrl}/${lineUpId}/callin${playerId ? `/${playerId}` : ''}`);
+
+export const callOffPlayer = (lineUpId: string, playerId?: string) =>
+  put<ResponseSingleLineUpData, LineUp>(`${api.lineUpsUrl}/${lineUpId}/calloff${playerId ? `/${playerId}` : ''}`);
+
+export const updateLineUpCouples = (lineUpId: string, data: LineUpCouple[]) =>
+  post(`${api.lineUpsUrl}/couples/${lineUpId}`, data);

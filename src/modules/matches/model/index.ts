@@ -31,5 +31,3 @@ export interface DateTime {
 export type ResponseMatchData = ResponseData<Match[]>;
 
 export type ResponseSingleMatchData = ResponseData<Match>;
-
-export type Action = 'join' | 'leave';

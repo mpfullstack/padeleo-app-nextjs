@@ -5,6 +5,7 @@ import { User } from '@/modules/users/model';
 import { Session } from '@/modules/sessions/model';
 import { Result } from '@/modules/results/model';
 import { Club } from '@/modules/clubs/model';
+import { LineUp, LineUpCouple, LineUpCoupleRecord, LineUpPlayer, LineUpRecord } from '@/modules/lineups/model';
 
 export const mapRecordToMatch = (record: Record<FieldSet>): Match => {
   const playerIds = (record.get('players') as string[]) || [];
@@ -80,6 +81,8 @@ export const userMapper = (record: Record<FieldSet>, userId?: string): User => {
     email: record.get('email') as string,
     nickname: record.get('nickname') as string,
     admin: record.get('admin') as boolean,
+    lineUpsJoinedCount: record.get('lineUpsJoinedCount') as number,
+    lineUpsConvokedCount: record.get('lineUpsConvokedCount') as number,
   };
 };
 
@@ -101,5 +104,64 @@ export const mapRecordToClub = (record: Record<FieldSet>): Club => {
   return {
     id: record.id,
     name: record.get('name') as string,
+  };
+};
+
+export const mapRecordToLineUp = (record: Record<FieldSet>): LineUp => {
+  const playerIds = (record.get('players') as string[]) || [];
+  const playersNicknames = (record.get('playersNicknames') as string[]) || [];
+  const convokedPlayerIds = (record.get('convokedPlayers') as string[]) || [];
+  const convokedPlayerNicknames = (record.get('convokedPlayerNicknames') as string[]) || [];
+  return {
+    id: record.id,
+    clubId: record.get('clubId')?.toString() as string,
+    clubName: record.get('clubName')?.toString() as string,
+    date: record.get('date') as string,
+    homeTeam: record.get('homeTeam') as string,
+    awayTeam: record.get('awayTeam') as string,
+    players: playerIds.map((playerId: string, i: number) => {
+      return {
+        id: playerId,
+        nickname: playersNicknames[i],
+      } as LineUpPlayer;
+    }),
+    convokedPlayers: convokedPlayerIds.map((playerId: string, i: number) => {
+      return {
+        id: playerId,
+        nickname: convokedPlayerNicknames[i],
+      } as LineUpPlayer;
+    }),
+  };
+};
+
+export const mapLineUpToRecord = (lineUp: LineUp): LineUpRecord => {
+  const { id, players = [], clubName, convokedPlayers = [], ...data } = lineUp;
+  return {
+    ...data,
+    date: lineUp.date?.toString(),
+    clubId: [lineUp.clubId],
+    players: players.map((player: LineUpPlayer) => player.id) as string[],
+    convokedPlayers: convokedPlayers.map((player: LineUpPlayer) => player.id) as string[],
+  };
+};
+
+export const mapRecordToLineUpCouple = (record: Record<FieldSet>): LineUpCouple => {
+  return {
+    id: record.id,
+    playerIdA: record.get('playerA')?.toString() as string,
+    playerIdB: record.get('playerB')?.toString() as string,
+    playerScoreA: record.get('playerScoreA') as number,
+    playerScoreB: record.get('playerScoreB') as number,
+    lineUpId: record.get('lineUpId')?.toString() as string,
+  };
+};
+
+export const mapLineUpCoupleToRecord = (lineUpCouple: LineUpCouple): LineUpCoupleRecord => {
+  const { id, playerIdA, playerIdB, lineUpId, ...data } = lineUpCouple;
+  return {
+    ...data,
+    playerA: [playerIdA],
+    playerB: [playerIdB],
+    lineUp: [lineUpId],
   };
 };

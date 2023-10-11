@@ -3,7 +3,7 @@ import { AirtableData } from '@/database/Airtable/Airtable';
 import { MatchAirtableRepository } from '@/modules/matches/repositories/MatchAirtableRepository';
 import { Match, ResponseSingleMatchData } from '@/modules/matches/model';
 import { getSession } from '@/modules/sessions/services/sessionService';
-import { Action } from '@/modules/matches/model';
+import { Action } from '@/modules/common/model';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ResponseSingleMatchData>) {
   const session = await getSession(req);
@@ -14,7 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   const [matchId, action] = params as [string, Action];
   const matchRepository = new MatchAirtableRepository(new AirtableData());
 
-  let match: Match;
+  let match: Match | undefined;
   if (req.method === 'PUT') {
     try {
       switch (action) {

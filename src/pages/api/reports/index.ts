@@ -7,11 +7,12 @@ import { ResponseReportData } from '@/modules/reports/model';
 import { User } from '@/modules/users/model';
 import { AirtableReporter } from '@/modules/reports/services/report';
 import { CSVExport } from '@/modules/reports/services/CSVExport';
+import { isAdmin } from '@/modules/users/utils';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ResponseReportData | string>) {
   const session = await getSession(req);
 
-  if (!session || !session.user?.admin) return res.status(401).json({ success: false });
+  if (!session || !isAdmin(session.user)) return res.status(401).json({ success: false });
 
   if (req.method === 'GET') {
     const airtableData = new AirtableData();

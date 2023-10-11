@@ -1,19 +1,23 @@
 import styled from 'styled-components';
-import { Action, Match } from '@/modules/matches/model';
-import { getMatchStatus, isUserInMatch } from '../../model/utils';
+import { Match } from '@/modules/matches/model';
+import { Action } from '@/modules/common/model';
+import { getMatchStatus, isUserInMatch } from '@/modules/matches/model/utils';
 import { Button, LoadingButton } from '@/modules/common/components/Buttons/Buttons';
 import Drawer from '@/modules/common/components/Drawer';
 import { User } from '@/modules/users/model';
 import { joinMatch, leaveMatch, deleteMatch } from '@/modules/common/services/api';
-import { useLoading } from '@/modules/common/hooks/useLoading';
+import { isLoading } from '@/modules/common/hooks/useLoading';
 import { useState } from 'react';
 import MatchResultsEditor from './MatchResult/MatchResultsEditor';
 import { useRouter } from 'next/router';
 import AlertDialog from '@/modules/common/components/Dialog/AlertDialog';
+import useCommonActions from '@/modules/common/hooks/useCommonActions';
+import JoinLeaveActionButton from '@/modules/common/components/Buttons/JoinLeaveActionButton';
+import { isAdmin } from '@/modules/users/utils';
 
 const Actions = ({ match, user, onUpdate, onDelete }: Props) => {
   const router = useRouter();
-  const isUserAdmin = !!user?.admin;
+  const isUserAdmin = isAdmin(user);
   const isClosed = getMatchStatus(match) === 'closed';
   const isPastMatch = new Date(match.startTime) < new Date();
   const userIsInMatch = isUserInMatch(match, user);
@@ -24,26 +28,15 @@ const Actions = ({ match, user, onUpdate, onDelete }: Props) => {
   const canDelete = isUserAdmin;
   const addOrModifyResultLabel = match.results?.length ? 'Editar resultado' : 'Añadir resultado';
 
+  const { deleteStatus, setDeleteStatus } = useCommonActions();
   const [drawerOpened, setDrawerOpen] = useState<boolean>(false);
-  const [leaveStatus, setLeaveStatus] = useLoading();
-  const [joinStatus, setJoinStatus] = useLoading();
-  const [deleteStatus, setDeleteStatus] = useLoading();
   const [dialogOpen, setDialogOpen] = useState<'delete' | ''>('');
 
-  const onClickAction = async (action: Action) => {
+  const onJoinLeaveAction = async (action: Action, onSuccess: () => void) => {
     try {
-      if (action === 'leave') {
-        setLeaveStatus('loading');
-        const response = await leaveMatch(match.id);
-        onUpdate(response.result as Match);
-        setLeaveStatus('success');
-      }
-      if (action === 'join') {
-        setJoinStatus('loading');
-        const response = await joinMatch(match.id);
-        onUpdate(response.result as Match);
-        setJoinStatus('success');
-      }
+      const response = action === 'leave' ? await leaveMatch(match.id) : await joinMatch(match.id);
+      onUpdate(response.result as Match);
+      onSuccess();
     } catch (e: any) {
       // TODO: Handle ApiError, show Toast message
       // e.status
@@ -72,21 +65,14 @@ const Actions = ({ match, user, onUpdate, onDelete }: Props) => {
 
   return (
     <Wrapper>
-      {canLeave && (
-        <LoadingButton loading={leaveStatus === 'loading'} color="secondary" onClick={() => onClickAction('leave')}>
-          {`Salir`}
-        </LoadingButton>
-      )}
-      {canJoin && (
-        <LoadingButton loading={joinStatus === 'loading'} onClick={() => onClickAction('join')}>
-          {`Me apunto`}
-        </LoadingButton>
+      {(canLeave || canJoin) && (
+        <JoinLeaveActionButton canJoin={canJoin} canLeave={canLeave} onClick={onJoinLeaveAction} />
       )}
       {canAddOrModifyResult && <Button onClick={() => setDrawerOpen(true)}>{addOrModifyResultLabel}</Button>}
       {canEdit && <Button onClick={() => router.push({ pathname: `/matches/${match.id}` })}>{`Editar`}</Button>}
       {canDelete && (
         <>
-          <LoadingButton color="error" loading={deleteStatus === 'loading'} onClick={() => setDialogOpen('delete')}>
+          <LoadingButton color="error" loading={isLoading(deleteStatus)} onClick={() => setDialogOpen('delete')}>
             {`Eliminar`}
           </LoadingButton>
           <AlertDialog

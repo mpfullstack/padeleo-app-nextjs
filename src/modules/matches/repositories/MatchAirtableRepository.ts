@@ -13,6 +13,7 @@ export interface MatchRepository {
   deleteById(id: string): Promise<void>;
   update(data: Match): Promise<Match>;
   addPlayer(matchId: string, user: User): Promise<Match>;
+  removePlayer(matchId: string, user: User): Promise<Match>;
 }
 
 export class MatchAirtableRepository implements MatchRepository {

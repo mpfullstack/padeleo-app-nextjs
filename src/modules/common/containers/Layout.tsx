@@ -112,6 +112,11 @@ const Logout = styled.div`
   }
 `;
 
+export const ContentWrapper = styled.div<{ admin: boolean }>`
+  width: 100%;
+  padding-bottom: ${({ admin }) => (admin ? '5rem' : '0')};
+`;
+
 const mapDispatchToProps = { ...userAccessActions };
 const mapStateToProps = (state: RootState) => ({ isLoggedIn: state.userAccess.isLoggedIn });
 const connector = connect(mapStateToProps, mapDispatchToProps);

@@ -34,7 +34,7 @@ interface StyledProps {
 }
 
 interface Props extends StyledProps {
-  icon: ReactElement;
+  icon?: ReactElement;
   label: string;
 }
 

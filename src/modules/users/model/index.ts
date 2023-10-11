@@ -8,6 +8,8 @@ export interface User {
   nickname?: string;
   phone?: string;
   admin?: boolean;
+  lineUpsJoinedCount?: number;
+  lineUpsConvokedCount?: number;
 }
 
 export type ResponseUserData = ResponseData<User[]>;

@@ -1,5 +1,5 @@
 import { format, addSeconds } from '@/modules/common/services/dates';
-import { Text } from './styles';
+import { Text } from '@/modules/common/components/styles';
 
 const MatchTime = ({ startTime, duration }: { startTime: string; duration: number }) => {
   return (

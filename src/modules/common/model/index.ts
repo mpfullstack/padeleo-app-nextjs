@@ -8,3 +8,7 @@ export interface Option {
   key: string;
   label: string;
 }
+
+export type Action = 'join' | 'leave';
+
+export type LineUpAction = 'callin' | 'calloff';

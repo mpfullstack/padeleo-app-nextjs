@@ -22,3 +22,5 @@ export const FloatinButton = ({ children, ...props }: FabProps) => {
     </MuiFloatingButton>
   );
 };
+
+export type ButtonSize = 'small' | 'medium' | 'large';

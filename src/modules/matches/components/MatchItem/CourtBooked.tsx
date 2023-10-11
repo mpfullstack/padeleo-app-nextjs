@@ -1,5 +1,5 @@
 import { useTheme } from '@mui/material';
-import { Text } from './styles';
+import { Text } from '@/modules/common/components/styles';
 import styled from 'styled-components';
 
 const CourtBooked = ({ booked }: { booked: boolean }) => {
